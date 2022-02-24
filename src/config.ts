@@ -35,7 +35,7 @@ text {
 .sponsor-avatar {
   cursor: pointer;
 }
-.sponsor-name {
+.tier-title {
   font-weight: 500;
   font-size: 20px;
 }

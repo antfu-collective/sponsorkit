@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { defineConfig, presets } from 'sponsorkit'
 
 export default defineConfig({

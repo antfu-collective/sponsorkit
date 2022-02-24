@@ -39,8 +39,12 @@ export class SvgComposer {
     return this
   }
 
-  addTitle(text: string) {
-    this.body += `<text x="${this.config.width / 2}" y="${this.height}" text-anchor="middle" class="sponsor-name">${text}</text>`
+  addTitle(text: string, classes = 'tier-title') {
+    return this.addText(text, classes)
+  }
+
+  addText(text: string, classes = 'text') {
+    this.body += `<text x="${this.config.width / 2}" y="${this.height}" text-anchor="middle" class="${classes}">${text}</text>`
     this.height += 20
     return this
   }
