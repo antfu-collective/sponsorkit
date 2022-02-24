@@ -30,6 +30,10 @@ cli.command(
     .option('name', {
       type: 'string',
     })
+    .option('outputDir', {
+      type: 'string',
+      alias: ['o', 'dir'],
+    })
     .strict()
     .help(),
   async(options) => {

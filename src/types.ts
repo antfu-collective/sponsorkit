@@ -80,7 +80,7 @@ export interface SponsorkitConfig {
   /**
    * Compose the SVG
    */
-  composeSvg?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => SvgComposer
+  customComposer?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => PromiseLike<void>
 
   /**
    * Tiers
@@ -123,4 +123,16 @@ export interface Tier {
     top?: number
     bottom?: number
   }
+  /**
+   * Replace the default composer with your own.
+   */
+  compose?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => PromiseLike<void>
+  /**
+   * Compose the SVG before the main composer.
+   */
+  composeBefore?: (composer: SvgComposer, tierSponsors: Sponsorship[], config: SponsorkitConfig) => void
+  /**
+   * Compose the SVG after the main composer.
+   */
+  composeAfter?: (composer: SvgComposer, tierSponsors: Sponsorship[], config: SponsorkitConfig) => void
 }

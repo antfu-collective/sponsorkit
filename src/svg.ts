@@ -45,6 +45,11 @@ export class SvgComposer {
     return this
   }
 
+  addRaw(svg: string) {
+    this.body += svg
+    return this
+  }
+
   addLine(sponsors: Sponsorship[], config: BadgePreset) {
     const offsetX = (this.config.width - sponsors.length * config.boxWidth) / 2 + (config.boxWidth - config.size) / 2
     this.body += sponsors

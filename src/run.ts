@@ -53,7 +53,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 
   t.info('Composing SVG...')
   const composer = new SvgComposer(config)
-  await (config.composeSvg || defaultComposer)(composer, sponsors, config)
+  await (config.customComposer || defaultComposer)(composer, sponsors, config)
   const svg = composer.generateSvg()
 
   if (config.formats?.includes('svg')) {
@@ -96,20 +96,27 @@ export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorsh
   tiers
     .forEach((t, i) => {
       const sponsors = partitions[i]
-      if (!sponsors.length)
-        return
-      const paddingTop = t.padding?.top ?? 20
-      const paddingBottom = t.padding?.bottom ?? 10
-      if (paddingTop)
-        composer.addSpan(paddingTop)
-      if (t.title) {
-        composer
-          .addTitle(t.title)
-          .addSpan(5)
+      t.composeBefore?.(composer, sponsors, config)
+      if (t.compose) {
+        t.compose(composer, sponsors, config)
       }
-      composer.addSponsorGrid(sponsors, t.preset || presets.base)
-      if (paddingBottom)
-        composer.addSpan(paddingBottom)
+      else {
+        if (sponsors.length) {
+          const paddingTop = t.padding?.top ?? 20
+          const paddingBottom = t.padding?.bottom ?? 10
+          if (paddingTop)
+            composer.addSpan(paddingTop)
+          if (t.title) {
+            composer
+              .addTitle(t.title)
+              .addSpan(5)
+          }
+          composer.addSponsorGrid(sponsors, t.preset || presets.base)
+          if (paddingBottom)
+            composer.addSpan(paddingBottom)
+        }
+      }
+      t.composeAfter?.(composer, sponsors, config)
     })
 
   composer.addSpan(config.padding?.bottom ?? 20)

@@ -1,16 +1,10 @@
-import fs from 'fs-extra'
 import { $fetch } from 'ohmyfetch'
 import type { Sponsorship } from './types'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
 
-const CACHE_FILE = '.cache.json'
-
 export async function fetchSponsors(token: string, login: string): Promise<Sponsorship[]> {
-  if (fs.existsSync(CACHE_FILE))
-    return await fs.readJSON(CACHE_FILE)
-
   const sponsors: any[] = []
   let cursor
   do {
