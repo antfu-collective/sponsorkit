@@ -78,6 +78,11 @@ export interface SponsorkitConfig {
   onSponsorsFetched?: (sponsors: Sponsorship[]) => PromiseLike<void>
 
   /**
+   * Hook to get or modify the SVG before writing.
+   */
+  onSvgGenerated?: (svg: string) => PromiseLike<string | void | undefined | null>
+
+  /**
    * Compose the SVG
    */
   customComposer?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => PromiseLike<void>

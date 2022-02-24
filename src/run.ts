@@ -54,7 +54,9 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   t.info('Composing SVG...')
   const composer = new SvgComposer(config)
   await (config.customComposer || defaultComposer)(composer, sponsors, config)
-  const svg = composer.generateSvg()
+  let svg = composer.generateSvg()
+
+  svg = await config.onSvgGenerated?.(svg) || svg
 
   if (config.formats?.includes('svg')) {
     const path = join(dir, `${config.name}.svg`)
