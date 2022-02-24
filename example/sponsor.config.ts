@@ -24,7 +24,7 @@ export default defineConfig({
       },
     },
     {
-      title: 'Sliver Sponsors',
+      title: 'Silver Sponsors',
       monthlyDollars: 100,
       preset: presets.large,
     },
