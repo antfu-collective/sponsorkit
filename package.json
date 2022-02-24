@@ -1,8 +1,11 @@
 {
   "name": "sponsorkit",
   "version": "0.0.2",
-  "description": "Toolkit for maintaining sponsors",
-  "keywords": [],
+  "description": "Toolkit for generating sponsors images",
+  "keywords": [
+    "sponsors",
+    "github-sponsors"
+  ],
   "homepage": "https://github.com/antfu/sponsorkit#readme",
   "bugs": {
     "url": "https://github.com/antfu/sponsorkit/issues"
@@ -26,7 +29,8 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
   "bin": {
     "sponsorkit": "./bin/sponsorkit.js"

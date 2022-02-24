@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/sponsorkit?color=a1b858&label=)](https://www.npmjs.com/package/sponsorkit)
 
-Toolkit for generating sponsors image.
+Toolkit for generating sponsors images.
 
 ## Usage
 
