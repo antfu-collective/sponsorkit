@@ -1,0 +1,70 @@
+{
+  "name": "sponsorkit",
+  "version": "0.0.0",
+  "description": "Toolkit for maintaining sponsors",
+  "keywords": [],
+  "homepage": "https://github.com/antfu/sponsorkit#readme",
+  "bugs": {
+    "url": "https://github.com/antfu/sponsorkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antfu/sponsorkit.git"
+  },
+  "funding": "https://github.com/sponsors/antfu",
+  "license": "MIT",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "sponsorkit": "./bin/sponsorkit.js"
+  },
+  "scripts": {
+    "build": "unbuild",
+    "stub": "unbuild --stub",
+    "dev": "esno src/cli.ts",
+    "lint": "eslint --ext .js,.ts .",
+    "prepublishOnly": "nr build",
+    "release": "bumpp --commit --push --tag && pnpm publish"
+  },
+  "dependencies": {
+    "consola": "^2.15.3",
+    "dotenv": "^16.0.0",
+    "fs-extra": "^10.0.1",
+    "image-data-uri": "^2.0.1",
+    "ohmyfetch": "^0.4.15",
+    "picocolors": "^1.0.0",
+    "sharp": "^0.30.1",
+    "unconfig": "^0.3.1",
+    "yargs": "^17.3.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^0.16.1",
+    "@antfu/ni": "^0.13.2",
+    "@antfu/utils": "^0.5.0",
+    "@types/fs-extra": "^9.0.13",
+    "@types/node": "^17.0.21",
+    "@types/sharp": "^0.29.5",
+    "@types/yargs": "^17.0.8",
+    "bumpp": "^7.1.1",
+    "eslint": "^8.9.0",
+    "esno": "^0.14.1",
+    "jiti": "^1.13.0",
+    "typescript": "^4.5.5",
+    "unbuild": "^0.6.9",
+    "vite": "^2.8.4",
+    "vitest": "^0.5.5"
+  }
+}
