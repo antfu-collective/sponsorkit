@@ -46,7 +46,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 
   await fs.ensureDir(dir)
   if (config.formats?.includes('json')) {
-    const path = join(dir, 'sponsors.json')
+    const path = join(dir, `${config.name}.json`)
     await fs.writeJSON(path, sponsors, { spaces: 2 })
     t.success(`Wrote to ${r(path)}`)
   }
@@ -57,13 +57,13 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   const svg = composer.generateSvg()
 
   if (config.formats?.includes('svg')) {
-    const path = join(dir, 'sponsors.svg')
+    const path = join(dir, `${config.name}.svg`)
     await fs.writeFile(path, svg, 'utf-8')
     t.success(`Wrote to ${r(path)}`)
   }
 
   if (config.formats?.includes('png')) {
-    const path = join(dir, 'sponsors.png')
+    const path = join(dir, `${config.name}.png`)
     await fs.writeFile(path, await svgToPng(svg))
     t.success(`Wrote to ${r(path)}`)
   }

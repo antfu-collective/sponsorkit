@@ -27,6 +27,9 @@ cli.command(
       default: false,
       type: 'boolean',
     })
+    .option('name', {
+      type: 'string',
+    })
     .strict()
     .help(),
   async(options) => {

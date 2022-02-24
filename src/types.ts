@@ -59,6 +59,13 @@ export interface SponsorkitConfig {
   outputDir?: string
 
   /**
+   * Name of exported files
+   *
+   * @default 'sponsors'
+   */
+  name?: string
+
+  /**
    * Output formats
    *
    * @default ['json', 'svg', 'png']

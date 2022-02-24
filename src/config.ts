@@ -47,6 +47,7 @@ export const defaultConfig: SponsorkitConfig = {
   cacheFile: '.cache.json',
   formats: ['json', 'svg', 'png'],
   tiers: defaultTiers,
+  name: 'sponsors',
   svgInlineCSS: defaultInlineCSS,
 }
 
