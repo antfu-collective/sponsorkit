@@ -6,7 +6,11 @@ export default defineConfig({
     {
       title: 'Backers',
       monthlyDollars: 10,
-      preset: presets.base,
+      compose: (composer, sponsors, config) => {
+        composer.addRaw(
+          '<-- custom svg -->',
+        )
+      },
     },
     {
       title: 'Sponsors',

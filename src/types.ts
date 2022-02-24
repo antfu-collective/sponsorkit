@@ -75,17 +75,17 @@ export interface SponsorkitConfig {
   /**
    * Hook to modify sponsors data before rendering.
    */
-  onSponsorsFetched?: (sponsors: Sponsorship[]) => PromiseLike<void>
+  onSponsorsFetched?: (sponsors: Sponsorship[]) => PromiseLike<void> | void
 
   /**
    * Hook to get or modify the SVG before writing.
    */
-  onSvgGenerated?: (svg: string) => PromiseLike<string | void | undefined | null>
+  onSvgGenerated?: (svg: string) => PromiseLike<string | void | undefined | null> | string | void | undefined | null
 
   /**
    * Compose the SVG
    */
-  customComposer?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => PromiseLike<void>
+  customComposer?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => PromiseLike<void> | void
 
   /**
    * Tiers
@@ -131,7 +131,7 @@ export interface Tier {
   /**
    * Replace the default composer with your own.
    */
-  compose?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => PromiseLike<void>
+  compose?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => void
   /**
    * Compose the SVG before the main composer.
    */
