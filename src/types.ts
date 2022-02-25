@@ -1,13 +1,20 @@
 import type { SvgComposer } from './svg'
 
 export interface BadgePreset {
-  size: number
   boxWidth: number
   boxHeight: number
-  displayName: boolean
-  sidePadding: number
-  textColor?: string
-  nameLength?: number
+  avatar: {
+    size: number
+    classes?: string
+  }
+  name?: false | {
+    color?: string
+    classes?: string
+    maxLength?: number
+  }
+  container?: {
+    sidePadding?: number
+  }
   classes?: string
 }
 
