@@ -31,24 +31,25 @@ import { defineConfig, presets } from 'sponsorkit'
 export default defineConfig({
   login: 'antfu',
   width: 800,
+  formats: ['json', 'svg', 'png'],
   tiers: [
     {
       title: 'Backers',
-      monthlyDollars: 10,
       preset: presets.base,
     },
     {
       title: 'Sponsors',
-      monthlyDollars: 50,
+      monthlyDollars: 10,
       preset: presets.medium,
     },
     {
       title: 'Silver Sponsors',
-      monthlyDollars: 100,
+      monthlyDollars: 50,
       preset: presets.large,
     },
     {
       title: 'Gold Sponsors',
+      monthlyDollars: 100,
       preset: presets.xl,
     },
   ],

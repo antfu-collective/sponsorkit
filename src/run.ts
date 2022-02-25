@@ -72,9 +72,9 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 }
 
 export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) {
-  const tiers = config.tiers!.sort((a, b) => (a.monthlyDollars ?? Infinity) - (b.monthlyDollars ?? Infinity))
+  const tiers = config.tiers!.sort((a, b) => (b.monthlyDollars ?? 0) - (a.monthlyDollars ?? 0))
 
-  const finalSponsors = config.tiers!.filter(i => i.monthlyDollars == null)
+  const finalSponsors = config.tiers!.filter(i => i.monthlyDollars == null || i.monthlyDollars === 0)
 
   if (finalSponsors.length !== 1)
     throw new Error(`There should be exactly one tier with no \`monthlyDollars\`, but got ${finalSponsors.length}`)
@@ -84,14 +84,11 @@ export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorsh
   sponsors
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
     .forEach((i) => {
-      let index = tiers.findIndex(t => i.monthlyDollars <= (t.monthlyDollars || Infinity))
+      let index = tiers.findIndex(t => i.monthlyDollars >= (t.monthlyDollars || 0)) || 0
       if (index === -1)
-        index = tiers.length - 1
+        index = 0
       partitions[index].push(i)
     })
-
-  partitions.reverse()
-  tiers.reverse()
 
   composer.addSpan(config.padding?.top ?? 20)
 

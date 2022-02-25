@@ -40,7 +40,7 @@ const large: BadgePreset = {
   avatar: {
     size: 70,
   },
-  boxWidth: 90,
+  boxWidth: 95,
   boxHeight: 115,
   container: {
     sidePadding: 20,

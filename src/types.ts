@@ -128,6 +128,9 @@ export interface SponsorkitConfig {
 }
 
 export interface Tier {
+  /**
+   * The lower bound of the tier (inclusive)
+   */
   monthlyDollars?: number
   title?: string
   preset?: BadgePreset
