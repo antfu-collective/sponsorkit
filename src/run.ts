@@ -84,7 +84,7 @@ export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorsh
   sponsors
     .sort((a, b) => a.createdAt.localeCompare(b.createdAt))
     .forEach((i) => {
-      let index = tiers.findIndex(t => i.monthlyDollars <= (t.monthlyDollars || Infinity))
+      let index = tiers.findIndex(t => i.monthlyDollars < (t.monthlyDollars || Infinity))
       if (index === -1)
         index = tiers.length - 1
       partitions[index].push(i)
