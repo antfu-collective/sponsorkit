@@ -12,7 +12,7 @@ export function generateBadge(
   preset: BadgePreset,
 ) {
   const size = preset.avatar.size
-  const { login, avatarUrl } = sponsor
+  const { login } = sponsor
   let name = (sponsor.name || sponsor.login).trim()
   const url = sponsor.linkUrl || `https://github.com/${sponsor.login}`
 
@@ -22,6 +22,13 @@ export function generateBadge(
     else
       name = `${name.slice(0, preset.name.maxLength - 3)}...`
   }
+
+  const avatarUrl = (size < 50
+    ? sponsor.avatarUrlLowRes
+    : size < 90
+      ? sponsor.avatarUrlMediumRes
+      : sponsor.avatarUrlHighRes
+  ) || sponsor.avatarUrl
 
   return `
 <a xlink:href="${url}" class="${preset.classes || 'sponsor-link'}" target="_blank" id="${login}">

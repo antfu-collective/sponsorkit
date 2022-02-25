@@ -7,8 +7,10 @@ import type { Sponsorship } from './types'
 export async function resolveAvatars(ships: Sponsorship[]) {
   return Promise.all(ships.map(async(ship) => {
     const data = await $fetch(ship.sponsor.avatarUrl, { responseType: 'arrayBuffer' })
-    const rounded = await round(data, ship.sponsor.type === 'User' ? 0.5 : 0.15)
-    ship.sponsor.avatarUrl = await imageDataURI.encode(rounded, 'PNG')
+    const radius = ship.sponsor.type === 'User' ? 0.5 : 0.15
+    ship.sponsor.avatarUrlHighRes = await imageDataURI.encode(await round(data, radius, 120), 'PNG')
+    ship.sponsor.avatarUrlMediumRes = await imageDataURI.encode(await round(data, radius, 80), 'PNG')
+    ship.sponsor.avatarUrlLowRes = await imageDataURI.encode(await round(data, radius, 50), 'PNG')
   }))
 }
 
@@ -33,7 +35,7 @@ export async function round(image: string | ArrayBuffer, radius = 0.5, size = 10
       input: rect,
       density: 72,
     }])
-    .png({ quality: 90 })
+    .png({ quality: 80, compressionLevel: 8 })
     .toBuffer()
 }
 
