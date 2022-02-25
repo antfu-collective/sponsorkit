@@ -19,6 +19,8 @@ Run:
 npx sponsorkit
 ```
 
+[Example Setup](./example/) | [GitHub Actions Setup](https://github.com/antfu/static/blob/master/.github/workflows/scheduler.yml) | [Generated SVG](https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg)
+
 ## Configurations
 
 Create `sponsorkit.config.js` file with:
