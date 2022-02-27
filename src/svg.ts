@@ -32,7 +32,7 @@ export function generateBadge(
 
   return `
 <a xlink:href="${url}" class="${preset.classes || 'sponsor-link'}" target="_blank" id="${login}">
-  ${preset.name ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsor-name'}" fill="${preset.name.color || 'currentColor'}">${name}</text>` : ''}
+  ${preset.name ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsor-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>` : ''}
   ${genSvgImage(x, y, size, avatarUrl)}
 </a>`.trim()
 }
@@ -96,4 +96,8 @@ ${this.body}
 </svg>
 `
   }
+}
+
+function encodeHtmlEntities(str: string) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
