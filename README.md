@@ -9,6 +9,7 @@ Toolkit for generating sponsors images.
 Create `.env` file with:
 
 ```ini
+; Token requires the `read:user` and `read:org` scopes.
 SPONSORKIT_TOKEN=your_github_token
 SPONSORKIT_LOGIN=your_github_username
 ```

@@ -17,6 +17,10 @@ export async function fetchSponsors(token: string, login: string): Promise<Spons
         'Content-Type': 'application/json',
       },
     }) as any
+
+    if (data.errors?.[0]?.type === 'INSUFFICIENT_SCOPES')
+      throw new Error('Token is missing the `read:user` and/or `read:org` scopes')
+
     sponsors.push(
       ...(data.data.user.sponsorshipsAsMaintainer.nodes || []),
     )
