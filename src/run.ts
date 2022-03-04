@@ -4,11 +4,11 @@ import consola from 'consola'
 import c from 'picocolors'
 import { version } from '../package.json'
 import { loadConfig } from './config'
-import { fetchSponsors } from './fetch'
 import { resolveAvatars, svgToPng } from './image'
 import { SvgComposer } from './svg'
 import { presets } from './presets'
 import type { SponsorkitConfig, Sponsorship } from './types'
+import { guessProviders, resolveProviders } from './providers'
 
 function r(path: string) {
   return `./${relative(process.cwd(), path)}`
@@ -18,42 +18,43 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   t.log(`\n${c.magenta(c.bold('SponsorKit'))} ${c.dim(`v${version}`)}\n`)
 
   const config = await loadConfig(inlineConfig)
-
-  if (!config.token || !config.login)
-    throw new Error('Environment variable SPONSORKIT_TOKEN & SPONSORKIT_LOGIN must be provided')
-
   const dir = resolve(process.cwd(), config.outputDir)
   const cacheFile = resolve(dir, config.cacheFile)
 
-  let sponsors: Sponsorship[]
+  const providers = resolveProviders(config.providers || guessProviders(config))
+
+  let allSponsors: Sponsorship[] = []
   if (!fs.existsSync(cacheFile) || config.force) {
-    t.info('Fetching sponsorships...')
-    sponsors = await fetchSponsors(config.token, config.login)
-    await config.onSponsorsFetched?.(sponsors)
-    t.success(`${sponsors.length} Sponsorships fetched`)
+    for (const i of providers) {
+      t.info(`Fetching sponsorships from ${i.name}...`)
+      const sponsors = await i.fetchSponsors(config)
+      await config.onSponsorsFetched?.(sponsors, i.name)
+      t.success(`${sponsors.length} sponsorships fetched from ${i.name}`)
+      allSponsors.push(...sponsors)
+    }
 
     t.info('Resolving avatars...')
-    await resolveAvatars(sponsors)
+    await resolveAvatars(allSponsors)
     t.success('Avatars resolved')
 
     await fs.ensureDir(dirname(cacheFile))
-    await fs.writeJSON(cacheFile, sponsors, { spaces: 2 })
+    await fs.writeJSON(cacheFile, allSponsors, { spaces: 2 })
   }
   else {
-    sponsors = await fs.readJSON(cacheFile)
+    allSponsors = await fs.readJSON(cacheFile)
     t.success(`Loaded from cache ${r(cacheFile)}`)
   }
 
   await fs.ensureDir(dir)
   if (config.formats?.includes('json')) {
     const path = join(dir, `${config.name}.json`)
-    await fs.writeJSON(path, sponsors, { spaces: 2 })
+    await fs.writeJSON(path, allSponsors, { spaces: 2 })
     t.success(`Wrote to ${r(path)}`)
   }
 
   t.info('Composing SVG...')
   const composer = new SvgComposer(config)
-  await (config.customComposer || defaultComposer)(composer, sponsors, config)
+  await (config.customComposer || defaultComposer)(composer, allSponsors, config)
   let svg = composer.generateSvg()
 
   svg = await config.onSvgGenerated?.(svg) || svg

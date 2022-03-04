@@ -1,5 +1,4 @@
 export * from './types'
-export * from './fetch'
 export * from './svg'
 export * from './image'
 export * from './config'

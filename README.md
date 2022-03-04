@@ -10,8 +10,8 @@ Create `.env` file with:
 
 ```ini
 ; Token requires the `read:user` and `read:org` scopes.
-SPONSORKIT_TOKEN=your_github_token
-SPONSORKIT_LOGIN=your_github_username
+SPONSORKIT_GITHUB_TOKEN=your_github_token
+SPONSORKIT_GITHUB_LOGIN=your_github_username
 ```
 
 Run:
@@ -30,7 +30,12 @@ Create `sponsorkit.config.js` file with:
 import { defineConfig, presets } from 'sponsorkit'
 
 export default defineConfig({
-  login: 'antfu',
+  // Providers configs
+  github: {
+    login: 'antfu',
+  },
+
+  // Rendering configs
   width: 800,
   formats: ['json', 'svg', 'png'],
   tiers: [

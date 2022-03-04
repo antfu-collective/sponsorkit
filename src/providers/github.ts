@@ -1,10 +1,25 @@
 import { $fetch } from 'ohmyfetch'
-import type { Sponsorship } from './types'
+import type { Provider, Sponsorship } from '../types'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
 
-export async function fetchSponsors(token: string, login: string): Promise<Sponsorship[]> {
+export const GitHubProvider: Provider = {
+  name: 'github',
+  fetchSponsors(config) {
+    return fetchGitHubSponsors(
+      config.github?.token || config.token!,
+      config.github?.login || config.login!,
+    )
+  },
+}
+
+export async function fetchGitHubSponsors(token: string, login: string): Promise<Sponsorship[]> {
+  if (!token)
+    throw new Error('GitHub token is required')
+  if (!login)
+    throw new Error('GitHub login is required')
+
   const sponsors: any[] = []
   let cursor
   do {

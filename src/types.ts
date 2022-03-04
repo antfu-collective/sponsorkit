@@ -18,6 +18,11 @@ export interface BadgePreset {
   classes?: string
 }
 
+export interface Provider {
+  name: string
+  fetchSponsors: (config: SponsorkitConfig) => Promise<Sponsorship[]>
+}
+
 export interface Sponsor {
   type: 'User' | 'Organization'
   login: string
@@ -40,21 +45,41 @@ export interface Sponsorship {
 
 export type OutputFormat = 'svg' | 'png' | 'json'
 
-export interface SponsorkitConfig {
+export type ProviderName = 'github'
+
+export interface ProvidersConfig {
+  github?: {
+    /**
+     * User id of your GitHub account.
+     *
+     * Will read from `SPONSORKIT_LOGIN` environment variable if not set.
+     */
+    login?: string
+    /**
+     * GitHub Token that have access to your sponsorships.
+     *
+     * Will read from `SPONSORKIT_TOKEN` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+     */
+    token?: string
+  }
+}
+
+export interface SponsorkitConfig extends ProvidersConfig {
   /**
-   * User id of your GitHub account.
-   *
-   * Will read from `SPONSORKIT_LOGIN` environment variable if not set.
+   * @deprecated use `github.login` instead
    */
   login?: string
   /**
-   * GitHub Token that have access to your sponsorships.
-   *
-   * Will read from `SPONSORKIT_TOKEN` environment variable if not set.
-   *
-   * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+   * @deprecated use `github.token` instead
    */
   token?: string
+
+  /**
+   * @default auto detect based on the config provided
+   */
+  providers?: ProviderName[]
 
   /**
    * By pass cache
@@ -85,7 +110,7 @@ export interface SponsorkitConfig {
   /**
    * Hook to modify sponsors data before rendering.
    */
-  onSponsorsFetched?: (sponsors: Sponsorship[]) => PromiseLike<void> | void
+  onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void> | void
 
   /**
    * Hook to get or modify the SVG before writing.
