@@ -2,7 +2,9 @@
 import { defineConfig, presets } from 'sponsorkit'
 
 export default defineConfig({
-  login: 'antfu',
+  github: {
+    login: 'antfu',
+  },
   tiers: [
     {
       title: 'Backers',
