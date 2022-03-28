@@ -37,10 +37,10 @@ export interface Sponsor {
 export interface Sponsorship {
   sponsor: Sponsor
   monthlyDollars: number
-  privacyLevel: 'PUBLIC' | 'PRIVATE'
-  tierName: string
-  createdAt: string
-  isOneTime: boolean
+  privacyLevel?: 'PUBLIC' | 'PRIVATE'
+  tierName?: string
+  createdAt?: string
+  isOneTime?: boolean
 }
 
 export type OutputFormat = 'svg' | 'png' | 'json'
