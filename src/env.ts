@@ -19,10 +19,5 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     outputDir: process.env.SPONSORKIT_DIR,
   }
 
-  for (const key of Object.keys(config) as (keyof SponsorkitConfig)[]) {
-    if (config[key] == null)
-      delete config[key]
-  }
-
   return config
 }

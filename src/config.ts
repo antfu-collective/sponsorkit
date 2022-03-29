@@ -55,7 +55,7 @@ export function defineConfig(config: SponsorkitConfig) {
   return config
 }
 
-export async function loadConfig(inlineConfig?: SponsorkitConfig) {
+export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
   const env = loadEnv()
 
   const { config = {} } = await _loadConfig<SponsorkitConfig>({
@@ -75,5 +75,10 @@ export async function loadConfig(inlineConfig?: SponsorkitConfig) {
     ...env,
     ...config,
     ...inlineConfig,
+    github: {
+      ...env.github,
+      ...config.github,
+      ...inlineConfig.github,
+    },
   } as Required<SponsorkitConfig>
 }
