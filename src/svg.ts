@@ -31,8 +31,8 @@ export function generateBadge(
   ) || sponsor.avatarUrl
 
   return `
-<a xlink:href="${url}" class="${preset.classes || 'sponsor-link'}" target="_blank" id="${login}">
-  ${preset.name ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsor-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>` : ''}
+<a xlink:href="${url}" class="${preset.classes || 'sponsorkit-link'}" target="_blank" id="${login}">
+  ${preset.name ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsorkit-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>` : ''}
   ${genSvgImage(x, y, size, avatarUrl)}
 </a>`.trim()
 }
@@ -48,7 +48,7 @@ export class SvgComposer {
     return this
   }
 
-  addTitle(text: string, classes = 'sponsor-tier-title') {
+  addTitle(text: string, classes = 'sponsorkit-tier-title') {
     return this.addText(text, classes)
   }
 
