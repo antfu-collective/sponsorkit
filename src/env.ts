@@ -19,5 +19,6 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     outputDir: process.env.SPONSORKIT_DIR,
   }
 
-  return config
+  // remove undefined keys
+  return JSON.parse(JSON.stringify(config))
 }
