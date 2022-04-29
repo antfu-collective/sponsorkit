@@ -16,7 +16,7 @@ export function guessProviders(config: SponsorkitConfig) {
 
   if (config.patreon && config.patreon.token)
     items.push('patreon')
-    
+
   // fallback
   if (!items.length)
     items.push('github')
