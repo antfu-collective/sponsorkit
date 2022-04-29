@@ -45,7 +45,7 @@ export interface Sponsorship {
 
 export type OutputFormat = 'svg' | 'png' | 'json'
 
-export type ProviderName = 'github'
+export type ProviderName = 'github' | 'patreon'
 
 export interface ProvidersConfig {
   github?: {
@@ -59,6 +59,16 @@ export interface ProvidersConfig {
      * GitHub Token that have access to your sponsorships.
      *
      * Will read from `SPONSORKIT_TOKEN` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+     */
+    token?: string
+  }
+  patreon?: {
+    /**
+     * Patreon Token that have access to your sponsorships.
+     *
+     * Will read from `SPONSORKIT_PATREON_TOKEN` environment variable if not set.
      *
      * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
      */
