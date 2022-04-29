@@ -9,7 +9,8 @@ export const PatreonProvider: Provider = {
 }
 
 export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]> {
-  if (!token) throw new Error('Patreon token is required')
+  if (!token)
+    throw new Error('Patreon token is required')
 
   // Get current authenticated user's campaign ID (Everyone has one default campaign)
   const userData = await $fetch(

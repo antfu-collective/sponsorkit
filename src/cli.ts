@@ -36,7 +36,7 @@ cli.command(
     })
     .strict()
     .help(),
-  async(options) => {
+  async (options) => {
     const config = options as SponsorkitConfig
 
     if (options._[0])

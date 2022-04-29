@@ -10,14 +10,16 @@
   "bugs": {
     "url": "https://github.com/antfu/sponsorkit/issues"
   },
+  "license": "MIT",
+  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/antfu/sponsorkit.git"
   },
   "funding": "https://github.com/sponsors/antfu",
-  "license": "MIT",
-  "author": "Anthony Fu <anthonyfu117@hotmail.com>",
-  "sideEffects": false,
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "require": "./dist/index.cjs",
@@ -25,9 +27,6 @@
       "types": "./dist/index.d.ts"
     }
   },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "files": [
     "dist",
     "bin"
@@ -35,11 +34,12 @@
   "bin": {
     "sponsorkit": "./bin/sponsorkit.js"
   },
+  "sideEffects": false,
   "scripts": {
     "build": "unbuild",
     "stub": "unbuild --stub",
     "dev": "esno src/cli.ts",
-    "lint": "eslint --ext .js,.ts .",
+    "lint": "eslint .",
     "prepublishOnly": "nr build",
     "release": "bumpp --commit --push --tag && pnpm publish"
   },

@@ -5,7 +5,7 @@ import sharp from 'sharp'
 import type { Sponsorship } from './types'
 
 export async function resolveAvatars(ships: Sponsorship[]) {
-  return Promise.all(ships.map(async(ship) => {
+  return Promise.all(ships.map(async (ship) => {
     const data = await $fetch(ship.sponsor.avatarUrl, { responseType: 'arrayBuffer' })
     const radius = ship.sponsor.type === 'User' ? 0.5 : 0.15
     ship.sponsor.avatarUrlHighRes = await imageDataURI.encode(await round(data, radius, 120), 'PNG')
