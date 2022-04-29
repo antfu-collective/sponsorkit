@@ -80,5 +80,10 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
       ...config.github,
       ...inlineConfig.github,
     },
+    patreon: {
+      ...env.patreon,
+      ...config.patreon,
+      ...inlineConfig.patreon,
+    },
   } as Required<SponsorkitConfig>
 }

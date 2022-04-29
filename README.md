@@ -9,10 +9,18 @@ Toolkit for generating sponsors images.
 Create `.env` file with:
 
 ```ini
+; GitHub provider.
 ; Token requires the `read:user` and `read:org` scopes.
 SPONSORKIT_GITHUB_TOKEN=your_github_token
 SPONSORKIT_GITHUB_LOGIN=your_github_username
+
+; Patreon provider.
+; Create API key at https://www.patreon.com/portal/registration/register-clients
+; and use the "Creator’s Access Token".
+SPONSORKIT_PATREON_TOKEN=your_patreon_token
 ```
+
+> Only one provider is required to be configured.
 
 Run:
 
