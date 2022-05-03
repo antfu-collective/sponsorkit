@@ -15,7 +15,7 @@ SPONSORKIT_GITHUB_TOKEN=your_github_token
 SPONSORKIT_GITHUB_LOGIN=your_github_username
 
 ; Patreon provider.
-; Create API key at https://www.patreon.com/portal/registration/register-clients
+; Create v2 API key at https://www.patreon.com/portal/registration/register-clients
 ; and use the "Creator’s Access Token".
 SPONSORKIT_PATREON_TOKEN=your_patreon_token
 ```
