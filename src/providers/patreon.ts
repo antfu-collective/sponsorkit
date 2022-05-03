@@ -39,15 +39,17 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
       responseType: 'json',
     })
     sponsors.push(
-      ...sponsorshipData.data.map((pledge: any) => ({
-        pledge,
-        patron: sponsorshipData.included.find(
-          (v: any) => v.id === pledge.relationships.patron.data.id,
-        ),
-        reward: sponsorshipData.included.find(
-          (v: any) => v.id === pledge.relationships.reward.data.id,
-        ),
-      })),
+      ...sponsorshipData.data
+        .filter((pledge: any) => !!pledge.relationships?.reward?.data)
+        .map((pledge: any) => ({
+          pledge,
+          patron: sponsorshipData.included.find(
+            (v: any) => v.id === pledge.relationships.patron.data.id,
+          ),
+          reward: sponsorshipData.included.find(
+            (v: any) => v.id === pledge.relationships.reward.data.id,
+          ),
+        })),
     )
     sponsorshipApi = sponsorshipData.links.next
   } while (sponsorshipApi)
