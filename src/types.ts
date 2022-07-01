@@ -52,17 +52,24 @@ export interface ProvidersConfig {
     /**
      * User id of your GitHub account.
      *
-     * Will read from `SPONSORKIT_LOGIN` environment variable if not set.
+     * Will read from `SPONSORKIT_GITHUB_LOGIN` environment variable if not set.
      */
     login?: string
     /**
      * GitHub Token that have access to your sponsorships.
      *
-     * Will read from `SPONSORKIT_TOKEN` environment variable if not set.
+     * Will read from `SPONSORKIT_GITHUB_TOKEN` environment variable if not set.
      *
      * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
      */
     token?: string
+    /**
+     * The account type for sponsorships.
+     * 
+     * Possible values are `user`(default) and `organization`.
+     * Will read from `SPONSORKIT_GITHUB_TYPE` environment variable if not set.
+     */
+    type?: string
   }
   patreon?: {
     /**
