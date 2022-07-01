@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import yargs from 'yargs'
 import { version } from '../package.json'
 import { run } from './run'
