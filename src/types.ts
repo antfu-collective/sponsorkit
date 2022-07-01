@@ -65,7 +65,7 @@ export interface ProvidersConfig {
     token?: string
     /**
      * The account type for sponsorships.
-     * 
+     *
      * Possible values are `user`(default) and `organization`.
      * Will read from `SPONSORKIT_GITHUB_TYPE` environment variable if not set.
      */

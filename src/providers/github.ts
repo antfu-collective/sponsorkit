@@ -10,7 +10,7 @@ export const GitHubProvider: Provider = {
     return fetchGitHubSponsors(
       config.github?.token || config.token!,
       config.github?.login || config.login!,
-      config.github?.type || 'user'
+      config.github?.type || 'user',
     )
   },
 }
