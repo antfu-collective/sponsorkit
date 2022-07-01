@@ -15,6 +15,7 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     github: {
       login: process.env.SPONSORKIT_GITHUB_LOGIN || process.env.GITHUB_LOGIN || getDeprecatedEnv('SPONSORKIT_LOGIN', 'SPONSORKIT_GITHUB_LOGIN'),
       token: process.env.SPONSORKIT_GITHUB_TOKEN || process.env.GITHUB_TOKEN || getDeprecatedEnv('SPONSORKIT_TOKEN', 'SPONSORKIT_GITHUB_TOKEN'),
+      type: process.env.SPONSORKIT_GITHUB_TYPE,
     },
     patreon: {
       token: process.env.SPONSORKIT_PATREON_TOKEN,

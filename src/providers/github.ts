@@ -10,20 +10,23 @@ export const GitHubProvider: Provider = {
     return fetchGitHubSponsors(
       config.github?.token || config.token!,
       config.github?.login || config.login!,
+      config.github?.type || 'user'
     )
   },
 }
 
-export async function fetchGitHubSponsors(token: string, login: string): Promise<Sponsorship[]> {
+export async function fetchGitHubSponsors(token: string, login: string, type: string): Promise<Sponsorship[]> {
   if (!token)
     throw new Error('GitHub token is required')
   if (!login)
     throw new Error('GitHub login is required')
+  if (!['user', 'organization'].includes(type))
+    throw new Error('GitHub type must be either `user` or `organization`')
 
   const sponsors: any[] = []
   let cursor
   do {
-    const query = makeQuery(login, cursor)
+    const query = makeQuery(login, type, cursor)
     const data = await $fetch(API, {
       method: 'POST',
       body: { query },
@@ -37,10 +40,10 @@ export async function fetchGitHubSponsors(token: string, login: string): Promise
       throw new Error('Token is missing the `read:user` and/or `read:org` scopes')
 
     sponsors.push(
-      ...(data.data.user.sponsorshipsAsMaintainer.nodes || []),
+      ...(data.data[type].sponsorshipsAsMaintainer.nodes || []),
     )
-    if (data.data.user.sponsorshipsAsMaintainer.pageInfo.hasNextPage)
-      cursor = data.data.user.sponsorshipsAsMaintainer.pageInfo.endCursor
+    if (data.data[type].sponsorshipsAsMaintainer.pageInfo.hasNextPage)
+      cursor = data.data[type].sponsorshipsAsMaintainer.pageInfo.endCursor
     else
       cursor = undefined
   } while (cursor)
@@ -62,9 +65,9 @@ export async function fetchGitHubSponsors(token: string, login: string): Promise
   return processed
 }
 
-export function makeQuery(login: string, cursor?: string) {
+export function makeQuery(login: string, type: string, cursor?: string) {
   return graphql`{
-  user(login: "${login}") {
+  ${type}(login: "${login}") {
     sponsorshipsAsMaintainer(first: 100${cursor ? ` after: "${cursor}"` : ''}) {
       totalCount
       pageInfo {

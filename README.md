@@ -41,6 +41,7 @@ export default defineConfig({
   // Providers configs
   github: {
     login: 'antfu',
+    type: 'user',
   },
 
   // Rendering configs
