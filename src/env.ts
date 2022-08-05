@@ -3,7 +3,7 @@ import type { SponsorkitConfig } from './types'
 
 function getDeprecatedEnv(name: string, replacement: string) {
   const value = process.env[name]
-  if (value !== null)
+  if (value)
     console.warn(`[sponsorkit] env.${name} is deprecated, use env.${replacement} instead`)
   return value
 }
