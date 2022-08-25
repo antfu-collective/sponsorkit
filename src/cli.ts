@@ -21,6 +21,10 @@ cli.command(
       type: 'number',
       default: 800,
     })
+    .option('fallbackAvatar', {
+      type: 'string',
+      alias: 'fallback',
+    })
     .option('force', {
       alias: 'f',
       default: false,

@@ -152,6 +152,11 @@ export interface SponsorkitConfig extends ProvidersConfig {
   width?: number
 
   /**
+   * Path to fallback avatar.
+   */
+  fallbackAvatar?: string
+
+  /**
    * Path to cache file
    *
    * @default './sponsorkit/.cache.json'
