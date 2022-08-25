@@ -18,6 +18,16 @@ SPONSORKIT_GITHUB_LOGIN=your_github_username
 ; Create v2 API key at https://www.patreon.com/portal/registration/register-clients
 ; and use the "Creator’s Access Token".
 SPONSORKIT_PATREON_TOKEN=your_patreon_token
+
+; OpenCollective provider.
+; Create an API key at https://opencollective.com/applications.
+SPONSORKIT_OPENCOLLECTIVE_KEY=your_opencollective_key
+; And provide the ID, slug or GitHub slug of your collective.
+SPONSORKIT_OPENCOLLECTIVE_ID=your_opencollective_collective_id
+; or
+SPONSORKIT_OPENCOLLECTIVE_SLUG=your_opencollective_collective_slug
+; or
+SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE=your_opencollective_collective_github_handle
 ```
 
 > Only one provider is required to be configured.
