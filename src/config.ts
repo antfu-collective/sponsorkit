@@ -1,5 +1,6 @@
 import { loadConfig as _loadConfig } from 'unconfig'
 import { loadEnv } from './env'
+import { FALLBACK_AVATAR } from './fallback'
 import { presets } from './presets'
 import type { SponsorkitConfig, Tier } from './types'
 
@@ -71,6 +72,7 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
   })
 
   return {
+    fallbackAvatar: FALLBACK_AVATAR,
     ...defaultConfig,
     ...env,
     ...config,
