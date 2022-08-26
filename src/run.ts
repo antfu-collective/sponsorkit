@@ -9,6 +9,7 @@ import { SvgComposer } from './svg'
 import { presets } from './presets'
 import type { SponsorkitConfig, Sponsorship } from './types'
 import { guessProviders, resolveProviders } from './providers'
+import { FALLBACK_AVATAR } from './fallback'
 
 function r(path: string) {
   return `./${relative(process.cwd(), path)}`
@@ -20,6 +21,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   const config = await loadConfig(inlineConfig)
   const dir = resolve(process.cwd(), config.outputDir)
   const cacheFile = resolve(dir, config.cacheFile)
+  const fallbackAvatar = await (config.fallbackAvatar ? fs.readFile(resolve(process.cwd(), config.fallbackAvatar)) : FALLBACK_AVATAR)
 
   const providers = resolveProviders(config.providers || guessProviders(config))
 
@@ -34,7 +36,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     }
 
     t.info('Resolving avatars...')
-    await resolveAvatars(allSponsors)
+    await resolveAvatars(allSponsors, fallbackAvatar)
     t.success('Avatars resolved')
 
     await fs.ensureDir(dirname(cacheFile))
