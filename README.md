@@ -20,9 +20,9 @@ SPONSORKIT_GITHUB_LOGIN=your_github_username
 SPONSORKIT_PATREON_TOKEN=your_patreon_token
 
 ; OpenCollective provider.
-; Create an API key at https://opencollective.com/applications.
+; Create an API key at https://opencollective.com/applications
 SPONSORKIT_OPENCOLLECTIVE_KEY=your_opencollective_key
-; And provide the ID, slug or GitHub slug of your collective.
+; and provide the ID, slug or GitHub handle of your collective.
 SPONSORKIT_OPENCOLLECTIVE_ID=your_opencollective_collective_id
 ; or
 SPONSORKIT_OPENCOLLECTIVE_SLUG=your_opencollective_collective_slug

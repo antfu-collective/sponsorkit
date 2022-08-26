@@ -86,6 +86,8 @@ export interface ProvidersConfig {
      * Api key of your OpenCollective account.
      *
      * Will read from `SPONSORKIT_OPENCOLLECTIVE_KEY` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
      */
     key?: string
     /**
