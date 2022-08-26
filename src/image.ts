@@ -2,11 +2,18 @@ import { $fetch } from 'ohmyfetch'
 // @ts-expect-error missing types
 import imageDataURI from 'image-data-uri'
 import sharp from 'sharp'
-import type { Sponsorship } from './types'
+import type { SponsorkitConfig, Sponsorship } from './types'
 
-export async function resolveAvatars(ships: Sponsorship[], fallback: Buffer) {
+export async function resolveAvatars(ships: Sponsorship[], fallbackAvatar: SponsorkitConfig['fallbackAvatar']) {
   return Promise.all(ships.map(async (ship) => {
-    const data = await $fetch(ship.sponsor.avatarUrl, { responseType: 'arrayBuffer' }).catch(() => fallback)
+    const data = await $fetch(ship.sponsor.avatarUrl, { responseType: 'arrayBuffer' })
+      .catch((e) => {
+        if (typeof fallbackAvatar === 'string')
+          return $fetch(fallbackAvatar, { responseType: 'arrayBuffer' })
+        if (fallbackAvatar)
+          return fallbackAvatar
+        throw e
+      })
     const radius = ship.sponsor.type === 'User' ? 0.5 : 0.15
     ship.sponsor.avatarUrlHighRes = await imageDataURI.encode(await round(data, radius, 120), 'PNG')
     ship.sponsor.avatarUrlMediumRes = await imageDataURI.encode(await round(data, radius, 80), 'PNG')

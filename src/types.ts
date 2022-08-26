@@ -152,9 +152,10 @@ export interface SponsorkitConfig extends ProvidersConfig {
   width?: number
 
   /**
-   * Path to fallback avatar.
+   * Url to fallback avatar.
+   * Setting false to disable fallback avatar.
    */
-  fallbackAvatar?: string
+  fallbackAvatar?: string | false | Buffer | Promise<Buffer>
 
   /**
    * Path to cache file
