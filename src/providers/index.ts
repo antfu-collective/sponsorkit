@@ -1,12 +1,14 @@
 import type { Provider, ProviderName, SponsorkitConfig } from '../types'
 import { GitHubProvider } from './github'
 import { PatreonProvider } from './patreon'
+import { OpenCollectiveProvider } from './opencollective'
 
 export * from './github'
 
 export const ProvidersMap = {
   github: GitHubProvider,
   patreon: PatreonProvider,
+  opencollective: OpenCollectiveProvider,
 }
 
 export function guessProviders(config: SponsorkitConfig) {
@@ -16,6 +18,9 @@ export function guessProviders(config: SponsorkitConfig) {
 
   if (config.patreon && config.patreon.token)
     items.push('patreon')
+
+  if (config.opencollective && (config.opencollective.id || config.opencollective.slug || config.opencollective.githubHandle))
+    items.push('opencollective')
 
   // fallback
   if (!items.length)
