@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/sponsorkit?color=a1b858&label=)](https://www.npmjs.com/package/sponsorkit)
 
-Toolkit for generating sponsors images.
+Toolkit for generating sponsors images. Supports **GitHub Sponsors**, **Patreon** and **OpenCollective**.
 
 ## Usage
 
@@ -11,23 +11,23 @@ Create `.env` file with:
 ```ini
 ; GitHub provider.
 ; Token requires the `read:user` and `read:org` scopes.
-SPONSORKIT_GITHUB_TOKEN=your_github_token
-SPONSORKIT_GITHUB_LOGIN=your_github_username
+SPONSORKIT_GITHUB_TOKEN=
+SPONSORKIT_GITHUB_LOGIN=
 
 ; Patreon provider.
 ; Create v2 API key at https://www.patreon.com/portal/registration/register-clients
 ; and use the "Creator’s Access Token".
-SPONSORKIT_PATREON_TOKEN=your_patreon_token
+SPONSORKIT_PATREON_TOKEN=
 
 ; OpenCollective provider.
 ; Create an API key at https://opencollective.com/applications
-SPONSORKIT_OPENCOLLECTIVE_KEY=your_opencollective_key
+SPONSORKIT_OPENCOLLECTIVE_KEY=
 ; and provide the ID, slug or GitHub handle of your collective.
-SPONSORKIT_OPENCOLLECTIVE_ID=your_opencollective_collective_id
+SPONSORKIT_OPENCOLLECTIVE_ID=
 ; or
-SPONSORKIT_OPENCOLLECTIVE_SLUG=your_opencollective_collective_slug
+SPONSORKIT_OPENCOLLECTIVE_SLUG=
 ; or
-SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE=your_opencollective_collective_github_handle
+SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE=
 ```
 
 > Only one provider is required to be configured.
