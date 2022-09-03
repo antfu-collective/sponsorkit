@@ -45,6 +45,8 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     t.success(`Loaded from cache ${r(cacheFile)}`)
   }
 
+  allSponsors = allSponsors.filter(s => config.filter?.(s) !== false)
+
   await fs.ensureDir(dir)
   if (config.formats?.includes('json')) {
     const path = join(dir, `${config.name}.json`)

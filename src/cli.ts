@@ -33,6 +33,9 @@ cli.command(
     .option('name', {
       type: 'string',
     })
+    .option('filter', {
+      type: 'string',
+    })
     .option('outputDir', {
       type: 'string',
       alias: ['o', 'dir'],
@@ -45,9 +48,32 @@ cli.command(
     if (options._[0])
       config.outputDir = options._[0] as string
 
-    await run(options)
+    if (options.filter)
+      config.filter = createFilterFromString(options.filter)
+
+    await run(config)
   })
 
 cli
   .help()
   .parse()
+
+/**
+ * Create filter function from templates like
+ * - `<10`
+ * - `>=10`
+ */
+function createFilterFromString(template: string): SponsorkitConfig['filter'] {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [_, op, value] = template.split(/([<>=]+)/)
+  const num = parseInt(value)
+  if (op === '<')
+    return s => s.monthlyDollars < num
+  if (op === '<=')
+    return s => s.monthlyDollars <= num
+  if (op === '>')
+    return s => s.monthlyDollars > num
+  if (op === '>=')
+    return s => s.monthlyDollars >= num
+  throw new Error(`Unable to parse filter template ${template}`)
+}

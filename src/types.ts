@@ -168,6 +168,11 @@ export interface SponsorkitConfig extends ProvidersConfig {
   customComposer?: (composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) => PromiseLike<void> | void
 
   /**
+   * Filter of sponsorships to render in the final image.
+   */
+  filter?: (sponsor: Sponsorship) => boolean | void
+
+  /**
    * Tiers
    */
   tiers?: Tier[]
