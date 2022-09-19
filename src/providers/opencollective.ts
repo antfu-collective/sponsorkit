@@ -38,10 +38,10 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
     }) as any
 
     sponsors.push(
-      ...(data.data.collective.members.nodes || []),
+      ...(data.data.collective?.members.nodes || []),
     )
-    if (data.data.collective.members.nodes.length !== 0)
-      offset += data.data.collective.members.nodes.length
+    if (data.data.collective?.members.nodes.length !== 0)
+      offset += data.data.collective?.members.nodes.length
     else
       offset = undefined
   } while (offset)

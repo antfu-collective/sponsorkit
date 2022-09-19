@@ -87,5 +87,10 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
       ...config.patreon,
       ...inlineConfig.patreon,
     },
+    opencollective: {
+      ...env.opencollective,
+      ...config.opencollective,
+      ...inlineConfig.opencollective,
+    },
   } as Required<SponsorkitConfig>
 }
