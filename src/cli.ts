@@ -1,10 +1,9 @@
-import yargs from 'yargs'
+import { scriptName } from 'yargs'
 import { version } from '../package.json'
 import { run } from './run'
 import type { SponsorkitConfig } from './types'
 
-const cli = yargs
-  .scriptName('sponsors-svg')
+const cli = scriptName('sponsors-svg')
   .usage('$0 [args]')
   .version(version)
   .strict()
