@@ -46,30 +46,30 @@
   },
   "dependencies": {
     "consola": "^2.15.3",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.0.3",
     "fs-extra": "^10.1.0",
     "image-data-uri": "^2.0.1",
-    "ohmyfetch": "^0.4.18",
+    "ohmyfetch": "^0.4.19",
     "picocolors": "^1.0.0",
-    "sharp": "^0.30.7",
-    "unconfig": "^0.3.5",
-    "yargs": "^17.5.1"
+    "sharp": "^0.31.1",
+    "unconfig": "^0.3.7",
+    "yargs": "^17.6.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.26.2",
-    "@antfu/ni": "^0.17.2",
+    "@antfu/eslint-config": "^0.27.0",
+    "@antfu/ni": "^0.18.2",
     "@antfu/utils": "^0.5.2",
     "@types/fs-extra": "^9.0.13",
-    "@types/node": "^18.7.13",
-    "@types/sharp": "^0.30.5",
-    "@types/yargs": "^17.0.11",
+    "@types/node": "^18.8.4",
+    "@types/sharp": "^0.31.0",
+    "@types/yargs": "^17.0.13",
     "bumpp": "^8.2.1",
-    "eslint": "^8.23.0",
+    "eslint": "^8.25.0",
     "esno": "^0.16.3",
-    "jiti": "^1.14.0",
-    "typescript": "^4.8.2",
-    "unbuild": "^0.8.9",
-    "vite": "^3.0.9",
-    "vitest": "^0.22.1"
+    "jiti": "^1.16.0",
+    "typescript": "^4.8.4",
+    "unbuild": "^0.8.11",
+    "vite": "^3.1.7",
+    "vitest": "^0.24.1"
   }
 }
