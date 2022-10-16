@@ -41,6 +41,12 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
     sponsors.push(
       ...sponsorshipData.data
         .filter((pledge: any) => !!pledge.relationships?.reward?.data)
+        .filter((pledge: any) => {
+          // Filter declined users
+          if (pledge.attributes.declined_since)
+            return new Date(pledge.attributes.declined_since).getTime() - new Date().getTime() > 0
+          return true
+        })
         .map((pledge: any) => ({
           pledge,
           patron: sponsorshipData.included.find(
