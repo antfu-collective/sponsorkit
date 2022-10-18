@@ -38,6 +38,8 @@ export async function fetchGitHubSponsors(token: string, login: string, type: st
 
     if (data.errors?.[0]?.type === 'INSUFFICIENT_SCOPES')
       throw new Error('Token is missing the `read:user` and/or `read:org` scopes')
+    else if (data.errors.length)
+      throw new Error(`GitHub API error:\n${JSON.stringify(data.errors, null, 2)}`)
 
     sponsors.push(
       ...(data.data[type].sponsorshipsAsMaintainer.nodes || []),
