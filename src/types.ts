@@ -41,6 +41,7 @@ export interface Sponsorship {
   tierName?: string
   createdAt?: string
   isOneTime?: boolean
+  provider?: ProviderName | string
 }
 
 export type OutputFormat = 'svg' | 'png' | 'json'
@@ -153,9 +154,14 @@ export interface SponsorkitConfig extends ProvidersConfig {
   formats?: OutputFormat[]
 
   /**
-   * Hook to modify sponsors data before rendering.
+   * Hook to modify sponsors data before fetching the avatars.
    */
   onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void> | void
+
+  /**
+   * Hook to modify sponsors data before rendering.
+   */
+  onSponsorsReady?: (sponsors: Sponsorship[]) => PromiseLike<void> | void
 
   /**
    * Hook to get or modify the SVG before writing.
