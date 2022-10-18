@@ -27,9 +27,9 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   if (!fs.existsSync(cacheFile) || config.force) {
     for (const i of providers) {
       t.info(`Fetching sponsorships from ${i.name}...`)
-      const sponsors = await i.fetchSponsors(config)
+      let sponsors = await i.fetchSponsors(config)
       sponsors.forEach(s => s.provider = i.name)
-      await config.onSponsorsFetched?.(sponsors, i.name)
+      sponsors = await config.onSponsorsFetched?.(sponsors, i.name) || sponsors
       t.success(`${sponsors.length} sponsorships fetched from ${i.name}`)
       allSponsors.push(...sponsors)
     }
@@ -46,8 +46,8 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     t.success(`Loaded from cache ${r(cacheFile)}`)
   }
 
-  await config.onSponsorsReady?.(allSponsors)
-  allSponsors = allSponsors.filter(s => config.filter?.(s) !== false)
+  allSponsors = await config.onSponsorsReady?.(allSponsors) || allSponsors
+  allSponsors = allSponsors.filter(s => config.filter?.(s, allSponsors) !== false)
 
   await fs.ensureDir(dir)
   if (config.formats?.includes('json')) {

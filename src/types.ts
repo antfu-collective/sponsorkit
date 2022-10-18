@@ -156,12 +156,12 @@ export interface SponsorkitConfig extends ProvidersConfig {
   /**
    * Hook to modify sponsors data before fetching the avatars.
    */
-  onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void> | void
+  onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
 
   /**
    * Hook to modify sponsors data before rendering.
    */
-  onSponsorsReady?: (sponsors: Sponsorship[]) => PromiseLike<void> | void
+  onSponsorsReady?: (sponsors: Sponsorship[]) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
 
   /**
    * Hook to get or modify the SVG before writing.
@@ -176,7 +176,7 @@ export interface SponsorkitConfig extends ProvidersConfig {
   /**
    * Filter of sponsorships to render in the final image.
    */
-  filter?: (sponsor: Sponsorship) => boolean | void
+  filter?: (sponsor: Sponsorship, all: Sponsorship[]) => boolean | void
 
   /**
    * Tiers
