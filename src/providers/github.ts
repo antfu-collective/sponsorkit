@@ -1,5 +1,6 @@
 import { $fetch } from 'ohmyfetch'
 import type { Provider, Sponsorship } from '../types'
+import getPastSponsors from 'get-past-sponsors'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
@@ -23,8 +24,9 @@ export async function fetchGitHubSponsors(token: string, login: string, type: st
   if (!['user', 'organization'].includes(type))
     throw new Error('GitHub type must be either `user` or `organization`')
 
-  const sponsors: any[] = []
+  const sponsors: Sponsorship[] = []
   let cursor
+
   do {
     const query = makeQuery(login, type, cursor)
     const data = await $fetch(API, {
@@ -65,6 +67,28 @@ export async function fetchGitHubSponsors(token: string, login: string, type: st
       tierName: raw.tier.name,
       createdAt: raw.createdAt,
     }))
+
+  try {
+    const pastSponsors = await getPastSponsors(login)
+    const baseDate = new Date();
+    processed.push(...pastSponsors.map(({username,avatar},index) => {
+      const createdAt = new Date(baseDate.getTime() - index * 1000 * 60 * 60 * 24 * 30).toUTCString();
+      return {
+        sponsor: {
+          __typename: undefined,
+          login: username,
+          name: undefined,
+          avatarUrl: avatar,
+          type: 'User'
+        },
+        isOneTime: undefined,
+        monthlyDollars: -1,
+        privacyLevel: undefined,
+        tierName: undefined,
+        createdAt
+      } as unknown as Sponsorship
+    }))
+  } catch (e) { }
 
   return processed
 }

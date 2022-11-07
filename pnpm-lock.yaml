@@ -17,6 +17,7 @@ importers:
       eslint: ^8.25.0
       esno: ^0.16.3
       fs-extra: ^10.1.0
+      get-past-sponsors: ^0.1.1
       image-data-uri: ^2.0.1
       jiti: ^1.16.0
       ohmyfetch: ^0.4.20
@@ -32,6 +33,7 @@ importers:
       consola: 2.15.3
       dotenv: 16.0.3
       fs-extra: 10.1.0
+      get-past-sponsors: 0.1.1
       image-data-uri: 2.0.1
       ohmyfetch: 0.4.20
       picocolors: 1.0.0
@@ -2447,6 +2449,12 @@ packages:
       has-symbols: 1.0.3
     dev: true
 
+  /get-past-sponsors/0.1.1:
+    resolution: {integrity: sha512-O8h+MqYUTWUBEqHATwISUhiVKqplnyzSWwHxFKcnTMnyImWc5Z5phOUJ0W2uxUEdt2ucmQPcwAfYFbs104LK0g==}
+    dependencies:
+      playwright: 1.27.1
+    dev: false
+
   /get-prototype-chain/1.0.1:
     resolution: {integrity: sha512-2m7WZ0jveIg/dAbCbpUxEToaJ8Dmti5EkgDP8YM3UpHUT6SAORjE2odP8XQGNVGXMHi8q8cCCoy3HTByTaTVTw==}
     engines: {node: '>=4.0.0'}
@@ -3498,6 +3506,21 @@ packages:
       mlly: 0.5.16
       pathe: 0.3.9
     dev: true
+
+  /playwright-core/1.27.1:
+    resolution: {integrity: sha512-9EmeXDncC2Pmp/z+teoVYlvmPWUC6ejSSYZUln7YaP89Z6lpAaiaAnqroUt/BoLo8tn7WYShcfaCh+xofZa44Q==}
+    engines: {node: '>=14'}
+    hasBin: true
+    dev: false
+
+  /playwright/1.27.1:
+    resolution: {integrity: sha512-xXYZ7m36yTtC+oFgqH0eTgullGztKSRMb4yuwLPl8IYSmgBM88QiB+3IWb1mRIC9/NNwcgbG0RwtFlg+EAFQHQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      playwright-core: 1.27.1
+    dev: false
 
   /pluralize/8.0.0:
     resolution: {integrity: sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==}

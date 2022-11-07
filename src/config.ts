@@ -6,6 +6,11 @@ import type { SponsorkitConfig, Tier } from './types'
 
 export const defaultTiers: Tier[] = [
   {
+    title: 'Past Sponsors',
+    monthlyDollars: -1,
+    preset: presets.small,
+  },
+  {
     title: 'Backers',
     preset: presets.base,
   },
