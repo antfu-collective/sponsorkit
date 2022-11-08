@@ -128,6 +128,11 @@ export interface SponsorkitConfig extends ProvidersConfig {
   providers?: ProviderName[]
 
   /**
+   * @default false whether to display the private sponsors
+   */
+  includePrivate?: boolean
+
+  /**
    * By pass cache
    */
   force?: boolean

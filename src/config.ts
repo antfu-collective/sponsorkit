@@ -54,7 +54,7 @@ export const defaultConfig: SponsorkitConfig = {
   formats: ['json', 'svg', 'png'],
   tiers: defaultTiers,
   name: 'sponsors',
-  svgInlineCSS: defaultInlineCSS,
+  svgInlineCSS: defaultInlineCSS
 }
 
 export function defineConfig(config: SponsorkitConfig) {
