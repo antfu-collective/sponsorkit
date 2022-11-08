@@ -46,15 +46,18 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     t.success(`Loaded from cache ${r(cacheFile)}`)
   }
 
-  allSponsors = await config.onSponsorsReady?.(allSponsors) || allSponsors
-  allSponsors = allSponsors.filter(s => config.filter?.(s, allSponsors) !== false)
-
   await fs.ensureDir(dir)
   if (config.formats?.includes('json')) {
     const path = join(dir, `${config.name}.json`)
     await fs.writeJSON(path, allSponsors, { spaces: 2 })
     t.success(`Wrote to ${r(path)}`)
   }
+
+  allSponsors = await config.onSponsorsReady?.(allSponsors) || allSponsors
+  if (config.filter)
+    allSponsors = allSponsors.filter(s => config.filter(s, allSponsors) !== false)
+  if (!config.includePrivate)
+    allSponsors = allSponsors.filter(s => s.privacyLevel !== 'PRIVATE')
 
   t.info('Composing SVG...')
   const composer = new SvgComposer(config)

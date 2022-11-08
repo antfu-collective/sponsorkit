@@ -76,7 +76,7 @@ export async function fetchGitHubSponsors(
 
   if (config.includePastSponsors) {
     try {
-      processed.push(...await getPastSponsors(login, { includePrivate: config.includePrivate }))
+      processed.push(...await getPastSponsors(login))
     }
     catch (e) {
       console.error('Failed to fetch past sponsors:', e)

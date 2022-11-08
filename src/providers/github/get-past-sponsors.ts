@@ -10,10 +10,10 @@ export interface GetPastSponsorsOptions {
   includePrivate?: boolean
 }
 
-function pickSponsorsInfo(html: string, filter?: (user: Sponsorship) => boolean): Sponsorship[] {
+function pickSponsorsInfo(html: string): Sponsorship[] {
   const root = parse(html)
   const baseDate = new Date()
-  let sponsors = root.querySelectorAll('div').map((el, index) => {
+  const sponsors = root.querySelectorAll('div').map((el, index) => {
     const isPublic = el.querySelector('img')
     const createdAt = new Date(baseDate.getTime() - index * 1000 * 60 * 60 * 24 * 30).toUTCString()
     const name = isPublic ? isPublic?.getAttribute('alt')?.replace('@', '') : 'Private Sponsor'
@@ -35,28 +35,17 @@ function pickSponsorsInfo(html: string, filter?: (user: Sponsorship) => boolean)
     } as unknown as Sponsorship
   })
 
-  if (filter)
-    sponsors = sponsors.filter(filter)
-
   return sponsors
 }
 
-export async function getPastSponsors(username: string, options: GetPastSponsorsOptions = {}): Promise<Sponsorship[]> {
-  const { includePrivate } = options
+export async function getPastSponsors(username: string): Promise<Sponsorship[]> {
   const allSponsors: Sponsorship[] = []
   let newSponsors = []
   let cursor = 1
 
   do {
     const content = await $fetch(`https://github.com/sponsors/${username}/sponsors_partial?filter=inactive&page=${cursor++}`, { method: 'GET' })
-    newSponsors = pickSponsorsInfo(content, (user) => {
-      const isPrivate = user.privacyLevel === 'PRIVATE'
-
-      if (isPrivate)
-        return !!includePrivate
-
-      return true
-    })
+    newSponsors = pickSponsorsInfo(content)
     allSponsors.push(...newSponsors)
   } while (newSponsors.length)
 
