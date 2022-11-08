@@ -17,7 +17,6 @@ importers:
       eslint: ^8.25.0
       esno: ^0.16.3
       fs-extra: ^10.1.0
-      get-past-sponsors: ^0.1.2
       image-data-uri: ^2.0.1
       jiti: ^1.16.0
       node-html-parser: ^6.1.1
@@ -34,7 +33,6 @@ importers:
       consola: 2.15.3
       dotenv: 16.0.3
       fs-extra: 10.1.0
-      get-past-sponsors: 0.1.2
       image-data-uri: 2.0.1
       node-html-parser: 6.1.1
       ohmyfetch: 0.4.20
@@ -1226,14 +1224,6 @@ packages:
 
   /core-util-is/1.0.2:
     resolution: {integrity: sha512-3lqz5YjWTYnW6dlDa5TLaTCcShfar1e40rmcJVwCBJC6mWlFuj0eCHIElmG1g5kyuJ/GD+8Wn4FFCcz4gJPfaQ==}
-    dev: false
-
-  /cross-fetch/3.1.5:
-    resolution: {integrity: sha512-lvb1SBsI0Z7GDwmuid+mU3kWVBwTVUbe7S0H52yaaAdQOXq2YktTCZdlAcNKFzE6QtRz0snpw9bNiPeOIkkQvw==}
-    dependencies:
-      node-fetch: 2.6.7
-    transitivePeerDependencies:
-      - encoding
     dev: false
 
   /cross-spawn/7.0.3:
@@ -2468,15 +2458,6 @@ packages:
       has-symbols: 1.0.3
     dev: true
 
-  /get-past-sponsors/0.1.2:
-    resolution: {integrity: sha512-PGYQzYUsBxTRzr9xzQCka2KWUeP1pKhI+hPfxxFjsCawsDgdZkda4k113i36QrXX5jhnrw+dNhTF4i4A9Rx7sA==}
-    dependencies:
-      cross-fetch: 3.1.5
-      node-html-parser: 6.1.1
-    transitivePeerDependencies:
-      - encoding
-    dev: false
-
   /get-prototype-chain/1.0.1:
     resolution: {integrity: sha512-2m7WZ0jveIg/dAbCbpUxEToaJ8Dmti5EkgDP8YM3UpHUT6SAORjE2odP8XQGNVGXMHi8q8cCCoy3HTByTaTVTw==}
     engines: {node: '>=4.0.0'}
@@ -3300,18 +3281,6 @@ packages:
 
   /node-fetch-native/0.1.8:
     resolution: {integrity: sha512-ZNaury9r0NxaT2oL65GvdGDy+5PlSaHTovT6JV5tOW07k1TQmgC0olZETa4C9KZg0+6zBr99ctTYa3Utqj9P/Q==}
-    dev: false
-
-  /node-fetch/2.6.7:
-    resolution: {integrity: sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==}
-    engines: {node: 4.x || >=6.0.0}
-    peerDependencies:
-      encoding: ^0.1.0
-    peerDependenciesMeta:
-      encoding:
-        optional: true
-    dependencies:
-      whatwg-url: 5.0.0
     dev: false
 
   /node-html-parser/6.1.1:
@@ -4153,10 +4122,6 @@ packages:
       punycode: 2.1.1
     dev: false
 
-  /tr46/0.0.3:
-    resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
-    dev: false
-
   /tsconfig-paths/3.14.1:
     resolution: {integrity: sha512-fxDhWnFSLt3VuTwtvJt5fpwxBHg5AdKWMsgcPOOIilyjymcYVZoCQF8fvFRezCNfblEXmi+PcM1eYHeOAgXCOQ==}
     dependencies:
@@ -4451,17 +4416,6 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
-
-  /webidl-conversions/3.0.1:
-    resolution: {integrity: sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==}
-    dev: false
-
-  /whatwg-url/5.0.0:
-    resolution: {integrity: sha512-saE57nupxk6v3HY35+jzBwYa0rKSy0XR8JSxZPwgLr7ys0IBzhGviA1/TUGJLmSVqs8pb9AnvICXEuOHLprYTw==}
-    dependencies:
-      tr46: 0.0.3
-      webidl-conversions: 3.0.1
-    dev: false
 
   /which-boxed-primitive/1.0.2:
     resolution: {integrity: sha512-bwZdv0AKLpplFY2KZRX6TvyuN7ojjr7lwkg6ml0roIy9YeuSr7JS372qlNW18UQYzgYK9ziGcerWqZOmEn9VNg==}
