@@ -20,6 +20,7 @@ importers:
       get-past-sponsors: ^0.1.2
       image-data-uri: ^2.0.1
       jiti: ^1.16.0
+      node-html-parser: ^6.1.1
       ohmyfetch: ^0.4.20
       picocolors: ^1.0.0
       sharp: ^0.31.1
@@ -35,6 +36,7 @@ importers:
       fs-extra: 10.1.0
       get-past-sponsors: 0.1.2
       image-data-uri: 2.0.1
+      node-html-parser: 6.1.1
       ohmyfetch: 0.4.20
       picocolors: 1.0.0
       sharp: 0.31.1

@@ -1,6 +1,6 @@
 import { $fetch } from 'ohmyfetch'
-import type { Provider, Sponsorship } from '../types'
-import getPastSponsors from 'get-past-sponsors'
+import type { Provider, Sponsorship } from '../../types'
+import getPastSponsors from './get-past-sponsors'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
