@@ -48,7 +48,7 @@
     "consola": "^2.15.3",
     "dotenv": "^16.0.3",
     "fs-extra": "^10.1.0",
-    "get-past-sponsors": "^0.1.1",
+    "get-past-sponsors": "^0.1.2",
     "image-data-uri": "^2.0.1",
     "ohmyfetch": "^0.4.20",
     "picocolors": "^1.0.0",
