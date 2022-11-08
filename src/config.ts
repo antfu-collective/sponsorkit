@@ -6,6 +6,11 @@ import type { SponsorkitConfig, Tier } from './types'
 
 export const defaultTiers: Tier[] = [
   {
+    title: 'Past Sponsors',
+    monthlyDollars: -1,
+    preset: presets.xs,
+  },
+  {
     title: 'Backers',
     preset: presets.base,
   },
@@ -49,6 +54,7 @@ export const defaultConfig: SponsorkitConfig = {
   formats: ['json', 'svg', 'png'],
   tiers: defaultTiers,
   name: 'sponsors',
+  includePrivate: false,
   svgInlineCSS: defaultInlineCSS,
 }
 
@@ -71,8 +77,11 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
     merge: true,
   })
 
-  return {
+  const hasNegativeTier = !!config.tiers?.find(tier => tier && tier.monthlyDollars! <= 0)
+
+  const resolved = {
     fallbackAvatar: FALLBACK_AVATAR,
+    includePastSponsors: hasNegativeTier,
     ...defaultConfig,
     ...env,
     ...config,
@@ -93,4 +102,6 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
       ...inlineConfig.opencollective,
     },
   } as Required<SponsorkitConfig>
+
+  return resolved
 }

@@ -49,6 +49,7 @@
     "dotenv": "^16.0.3",
     "fs-extra": "^10.1.0",
     "image-data-uri": "^2.0.1",
+    "node-html-parser": "^6.1.1",
     "ohmyfetch": "^0.4.20",
     "picocolors": "^1.0.0",
     "sharp": "^0.31.1",

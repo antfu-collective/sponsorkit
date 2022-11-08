@@ -1,11 +1,33 @@
 import type { BadgePreset } from './types'
 
+const none: BadgePreset = {
+  avatar: {
+    size: 0,
+  },
+  boxWidth: 0,
+  boxHeight: 0,
+  container: {
+    sidePadding: 0,
+  },
+}
+
 const base: BadgePreset = {
   avatar: {
     size: 40,
   },
   boxWidth: 48,
   boxHeight: 48,
+  container: {
+    sidePadding: 30,
+  },
+}
+
+const xs: BadgePreset = {
+  avatar: {
+    size: 25,
+  },
+  boxWidth: 30,
+  boxHeight: 30,
   container: {
     sidePadding: 30,
   },
@@ -65,6 +87,8 @@ const xl: BadgePreset = {
 }
 
 export const presets = {
+  none,
+  xs,
   small,
   base,
   medium,
