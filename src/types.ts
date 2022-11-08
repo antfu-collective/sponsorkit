@@ -128,9 +128,19 @@ export interface SponsorkitConfig extends ProvidersConfig {
   providers?: ProviderName[]
 
   /**
-   * @default false whether to display the private sponsors
+   * Whether to display the private sponsors
+   *
+   * @default false
    */
   includePrivate?: boolean
+
+  /**
+   * Whether to display the past sponsors
+   * Currently only works with GitHub provider
+   *
+   * @default auto detect based on tiers
+   */
+  includePastSponsors?: boolean
 
   /**
    * By pass cache

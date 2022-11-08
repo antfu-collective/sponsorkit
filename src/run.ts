@@ -105,7 +105,8 @@ export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorsh
         t.compose(composer, sponsors, config)
       }
       else {
-        if (sponsors.length) {
+        const preset = t.preset || presets.base
+        if (sponsors.length && preset.avatar.size) {
           const paddingTop = t.padding?.top ?? 20
           const paddingBottom = t.padding?.bottom ?? 10
           if (paddingTop)
@@ -115,7 +116,7 @@ export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorsh
               .addTitle(t.title)
               .addSpan(5)
           }
-          composer.addSponsorGrid(sponsors, t.preset || presets.base)
+          composer.addSponsorGrid(sponsors, preset)
           if (paddingBottom)
             composer.addSpan(paddingBottom)
         }

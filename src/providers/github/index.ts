@@ -1,28 +1,28 @@
 import { $fetch } from 'ohmyfetch'
-import type { Provider, Sponsorship } from '../../types'
+import type { Provider, SponsorkitConfig, Sponsorship } from '../../types'
 import { getPastSponsors } from './get-past-sponsors'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
 
-
-
 export const GitHubProvider: Provider = {
   name: 'github',
   fetchSponsors(config) {
-    const displayPast = !!config.tiers?.find(tier => tier?.monthlyDollars! <= 0)
     return fetchGitHubSponsors(
       config.github?.token || config.token!,
       config.github?.login || config.login!,
       config.github?.type || 'user',
-      displayPast,
-      config.includePrivate
+      config,
     )
   },
 }
 
-
-export async function fetchGitHubSponsors(token: string, login: string, type: string, past?: boolean, includePrivate?: boolean): Promise<Sponsorship[]> {
+export async function fetchGitHubSponsors(
+  token: string,
+  login: string,
+  type: string,
+  config: SponsorkitConfig,
+): Promise<Sponsorship[]> {
   if (!token)
     throw new Error('GitHub token is required')
   if (!login)
@@ -74,11 +74,14 @@ export async function fetchGitHubSponsors(token: string, login: string, type: st
       createdAt: raw.createdAt,
     }))
 
-  try {
-    if (past) {
-      processed.push(...await getPastSponsors(login, { includePrivate }))
+  if (config.includePastSponsors) {
+    try {
+      processed.push(...await getPastSponsors(login, { includePrivate: config.includePrivate }))
     }
-  } catch (e) { }
+    catch (e) {
+      console.error('Failed to fetch past sponsors:', e)
+    }
+  }
 
   return processed
 }

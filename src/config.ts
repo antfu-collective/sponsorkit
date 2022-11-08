@@ -8,7 +8,7 @@ export const defaultTiers: Tier[] = [
   {
     title: 'Past Sponsors',
     monthlyDollars: -1,
-    preset: presets.small,
+    preset: presets.xs,
   },
   {
     title: 'Backers',
@@ -54,7 +54,8 @@ export const defaultConfig: SponsorkitConfig = {
   formats: ['json', 'svg', 'png'],
   tiers: defaultTiers,
   name: 'sponsors',
-  svgInlineCSS: defaultInlineCSS
+  includePrivate: false,
+  svgInlineCSS: defaultInlineCSS,
 }
 
 export function defineConfig(config: SponsorkitConfig) {
@@ -76,8 +77,11 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
     merge: true,
   })
 
-  return {
+  const hasNegativeTier = !!config.tiers?.find(tier => tier && tier.monthlyDollars! <= 0)
+
+  const resolved = {
     fallbackAvatar: FALLBACK_AVATAR,
+    includePastSponsors: hasNegativeTier,
     ...defaultConfig,
     ...env,
     ...config,
@@ -98,4 +102,6 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
       ...inlineConfig.opencollective,
     },
   } as Required<SponsorkitConfig>
+
+  return resolved
 }

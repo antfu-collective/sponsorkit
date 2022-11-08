@@ -4,6 +4,11 @@ import { defineConfig, presets } from 'sponsorkit'
 export default defineConfig({
   tiers: [
     {
+      title: 'Past Sponsors',
+      monthlyDollars: -1,
+      preset: presets.xs,
+    },
+    {
       title: 'Backers',
       // to replace the entire tier rendering
       // compose: (composer, tierSponsors, config) => {
