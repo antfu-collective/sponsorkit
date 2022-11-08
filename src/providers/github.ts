@@ -5,6 +5,10 @@ import getPastSponsors from 'get-past-sponsors'
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
 
+const privateSponsorAvatar = `<svg aria-label="Private Sponsor" role="img" height="16" viewBox="0 0 16 16" version="1.1" width="16" data-view-component="true" class="octicon octicon-person color-fg-subtle">
+<path fill-rule="evenodd" d="M10.5 5a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0zm.061 3.073a4 4 0 10-5.123 0 6.004 6.004 0 00-3.431 5.142.75.75 0 001.498.07 4.5 4.5 0 018.99 0 .75.75 0 101.498-.07 6.005 6.005 0 00-3.432-5.142z"></path>
+</svg>`
+
 export const GitHubProvider: Provider = {
   name: 'github',
   fetchSponsors(config) {
@@ -71,14 +75,26 @@ export async function fetchGitHubSponsors(token: string, login: string, type: st
   try {
     const pastSponsors = await getPastSponsors(login)
     const baseDate = new Date();
-    processed.push(...pastSponsors.map(({username,avatar},index) => {
+    processed.push(...pastSponsors.map((sponsor, index) => {
+      let login;
+      let avatarUrl;
+
+      if('isPrivate' in sponsor){
+        login = 'Private Sponsor';
+        avatarUrl = privateSponsorAvatar;
+      }else{
+        login = sponsor.username;
+        avatarUrl = sponsor.avatar;
+      }
+
       const createdAt = new Date(baseDate.getTime() - index * 1000 * 60 * 60 * 24 * 30).toUTCString();
+
       return {
         sponsor: {
           __typename: undefined,
-          login: username,
+          login,
           name: undefined,
-          avatarUrl: avatar,
+          avatarUrl,
           type: 'User'
         },
         isOneTime: undefined,
