@@ -18,21 +18,23 @@ function pickSponsorsInfo(html: string): Sponsorship[] {
     const createdAt = new Date(baseDate.getTime() - index * 1000 * 60 * 60 * 24 * 30).toUTCString()
     const name = isPublic ? isPublic?.getAttribute('alt')?.replace('@', '') : 'Private Sponsor'
     const avatarUrl = isPublic ? isPublic?.getAttribute('src') : FALLBACK_AVATAR
+    const login = isPublic ? el.querySelector('a')?.getAttribute('href')?.replace('/', '') : 'undefined'
+    const type = el.querySelector('a')?.getAttribute('data-hovercard-type')?.replace(/^\S/, s => s.toUpperCase())
 
     return {
       sponsor: {
         __typename: undefined,
-        login: undefined,
+        login,
         name,
         avatarUrl,
-        type: 'User',
+        type,
       },
       isOneTime: undefined,
       monthlyDollars: -1,
       privacyLevel: isPublic ? 'PUBLIC' : 'PRIVATE',
       tierName: undefined,
       createdAt,
-    } as unknown as Sponsorship
+    } as Sponsorship
   })
 
   return sponsors
