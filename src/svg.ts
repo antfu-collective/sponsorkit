@@ -14,7 +14,7 @@ export function generateBadge(
   const size = preset.avatar.size
   const { login } = sponsor
   let name = (sponsor.name || sponsor.login).trim()
-  const url = sponsor.linkUrl || `https://github.com/${sponsor.login}`
+  const url = sponsor.linkUrl || sponsor.login ? `https://github.com/${sponsor.login}` : undefined
 
   if (preset.name && preset.name.maxLength && name.length > preset.name.maxLength) {
     if (name.includes(' '))
@@ -31,7 +31,7 @@ export function generateBadge(
   ) || sponsor.avatarUrl
 
   return `
-<a xlink:href="${url}" class="${preset.classes || 'sponsorkit-link'}" target="_blank" id="${login}">
+<a ${url ? `xlink:href="${url}"` : ''} class="${preset.classes || 'sponsorkit-link'}" target="_blank" id="${login}">
   ${preset.name ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsorkit-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>` : ''}
   ${genSvgImage(x, y, size, avatarUrl)}
 </a>`.trim()
