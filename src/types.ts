@@ -46,7 +46,7 @@ export interface Sponsorship {
 
 export type OutputFormat = 'svg' | 'png' | 'json'
 
-export type ProviderName = 'github' | 'patreon' | 'opencollective'
+export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian'
 
 export interface ProvidersConfig {
   github?: {
