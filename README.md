@@ -2,7 +2,7 @@
 
 [![NPM version](https://img.shields.io/npm/v/sponsorkit?color=a1b858&label=)](https://www.npmjs.com/package/sponsorkit)
 
-Toolkit for generating sponsors images. Supports **GitHub Sponsors**, **Patreon** and **OpenCollective**.
+Toolkit for generating sponsors images. Supports **GitHub Sponsors**, **Patreon**, **OpenCollective** and **Afdian**.
 
 ## Usage
 
@@ -28,6 +28,12 @@ SPONSORKIT_OPENCOLLECTIVE_ID=
 SPONSORKIT_OPENCOLLECTIVE_SLUG=
 ; or
 SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE=
+
+; Afdian provider.
+; Get user_id at https://afdian.net/dashboard/dev
+SPONSORKIT_AFDIAN_USER_ID=
+; Create token at https://afdian.net/dashboard/dev
+SPONSORKIT_AFDIAN_TOKEN=
 ```
 
 > Only one provider is required to be configured.
@@ -57,6 +63,9 @@ export default defineConfig({
     // ...
   },
   patreon: {
+    // ...
+  },
+  afdian: {
     // ...
   },
 
