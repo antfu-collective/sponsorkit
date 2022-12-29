@@ -54,6 +54,7 @@ export async function fetchAfdianSponsors(userId?: string, token?: string): Prom
     // all_sum_amount is based on cny
     monthlyDollars: parseFloat(raw.all_sum_amount) / 6.5,
     privacyLevel: 'PUBLIC',
+    tierName: 'Afdian',
     createdAt: new Date(raw.first_pay_time * 1000).toISOString(),
     // empty string means no plan, consider as one time sponsor
     isOneTime: Boolean(raw.current_plan.name),
