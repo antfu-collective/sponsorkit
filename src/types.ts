@@ -110,6 +110,22 @@ export interface ProvidersConfig {
      */
     githubHandle?: string
   }
+  afdian?: {
+    /**
+     * The userId of your Afdian.
+     *
+     * Will read from `SPONSORKIT_AFDIAN_USER_ID` environment variable if not set.
+     */
+    userId?: string
+    /**
+     * Afdian Token that have access to your sponsorships.
+     *
+     * Will read from `SPONSORKIT_AFDIAN_TOKEN` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+     */
+    token?: string
+  }
 }
 
 export interface SponsorkitConfig extends ProvidersConfig {
