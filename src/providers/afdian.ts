@@ -20,7 +20,7 @@ export async function fetchAfdianSponsors(userId?: string, token?: string): Prom
   let page = 1
   let pages = 1
   do {
-    const params = { page }
+    const params = JSON.stringify({ page })
     const ts = Math.round(+new Date() / 1000)
     const sign = md5(token, params, ts, userId)
     const sponsorshipData = await $fetch(sponsorshipApi, {
@@ -40,7 +40,7 @@ export async function fetchAfdianSponsors(userId?: string, token?: string): Prom
     if (sponsorshipData?.ec !== 200)
       break
     pages = sponsorshipData.data.total_page
-    sponsors.push(...sponsorshipData.list)
+    sponsors.push(...sponsorshipData.data.list)
   } while (page <= pages)
 
   const processed = sponsors.map((raw: any): Sponsorship => ({
@@ -64,6 +64,6 @@ export async function fetchAfdianSponsors(userId?: string, token?: string): Prom
   return processed
 }
 
-function md5(token: string, params: Record<string, any>, ts: number, userId: string) {
-  return createHash('md5').update(`${token}params${params}ts${Math.round(+new Date() / 1000)}user_id${userId}`).digest('hex')
+function md5(token: string, params: string, ts: number, userId: string) {
+  return createHash('md5').update(`${token}params${params}ts${ts}user_id${userId}`).digest('hex')
 }
