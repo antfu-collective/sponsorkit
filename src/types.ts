@@ -46,7 +46,7 @@ export interface Sponsorship {
 
 export type OutputFormat = 'svg' | 'png' | 'json'
 
-export type ProviderName = 'github' | 'patreon' | 'opencollective'
+export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian'
 
 export interface ProvidersConfig {
   github?: {
@@ -109,6 +109,22 @@ export interface ProvidersConfig {
      * Will read from `SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE` environment variable if not set.
      */
     githubHandle?: string
+  }
+  afdian?: {
+    /**
+     * The userId of your Afdian.
+     *
+     * Will read from `SPONSORKIT_AFDIAN_USER_ID` environment variable if not set.
+     */
+    userId?: string
+    /**
+     * Afdian Token that have access to your sponsorships.
+     *
+     * Will read from `SPONSORKIT_AFDIAN_TOKEN` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+     */
+    token?: string
   }
 }
 
