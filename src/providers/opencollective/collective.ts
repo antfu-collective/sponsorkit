@@ -1,22 +1,10 @@
 import { $fetch } from 'ohmyfetch'
-import type { Provider, Sponsorship } from '../types'
+import type { Sponsorship } from '../../types'
 
 const API = 'https://api.opencollective.com/graphql/v2/'
 const graphql = String.raw
 
-export const OpenCollectiveProvider: Provider = {
-  name: 'opencollective',
-  fetchSponsors(config) {
-    return fetchOpenCollectiveSponsors(
-      config.opencollective?.key,
-      config.opencollective?.id,
-      config.opencollective?.slug,
-      config.opencollective?.githubHandle,
-    )
-  },
-}
-
-export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slug?: string, githubHandle?: string): Promise<Sponsorship[]> {
+export async function fetchCollectiveSponsors(key?: string, id?: string, slug?: string, githubHandle?: string): Promise<Sponsorship[]> {
   if (!key)
     throw new Error('OpenCollective api key is required')
   if (!slug && !id && !githubHandle)
@@ -65,7 +53,7 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
   return processed
 }
 
-export function makeQuery(id?: string, slug?: string, githubHandle?: string, offset?: number) {
+function makeQuery(id?: string, slug?: string, githubHandle?: string, offset?: number) {
   return graphql`{
   collective(${id ? `id: "${id}", ` : ''}${slug ? `slug: "${slug}", ` : ''}${githubHandle ? `githubHandle: "${githubHandle}", ` : ''}, throwIfMissing: true) {
     members(limit: 100${offset ? ` offset: ${offset}` : ''} role: [BACKER]) {

@@ -25,6 +25,7 @@ export function loadEnv(): Partial<SponsorkitConfig> {
       id: process.env.SPONSORKIT_OPENCOLLECTIVE_ID || process.env.OPENCOLLECTIVE_ID,
       slug: process.env.SPONSORKIT_OPENCOLLECTIVE_SLUG || process.env.OPENCOLLECTIVE_SLUG,
       githubHandle: process.env.SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE || process.env.OPENCOLLECTIVE_GH_HANDLE,
+      type: process.env.SPONSORKIT_OPENCOLLECTIVE_TYPE || process.env.OPENCOLLECTIVE_TYPE,
     },
     afdian: {
       userId: process.env.SPONSORKIT_AFDIAN_USER_ID || process.env.AFDIAN_USER_ID,
