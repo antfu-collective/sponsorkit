@@ -92,23 +92,29 @@ export interface ProvidersConfig {
      */
     key?: string
     /**
-     * The id of your collective.
+     * The id of your account.
      *
      * Will read from `SPONSORKIT_OPENCOLLECTIVE_ID` environment variable if not set.
      */
     id?: string
     /**
-     * The slug of your collective.
+     * The slug of your account.
      *
      * Will read from `SPONSORKIT_OPENCOLLECTIVE_SLUG` environment variable if not set.
      */
     slug?: string
     /**
-     * The GitHub handle of your collective.
+     * The GitHub handle of your account.
      *
      * Will read from `SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE` environment variable if not set.
      */
     githubHandle?: string
+    /*
+    * The type of your account. (`collective` or `individual`)
+    *
+    * Will read from `SPONSORKIT_OPENCOLLECTIVE_TYPE` environment variable if not set.
+    */
+    type?: string
   }
   afdian?: {
     /**
