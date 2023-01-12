@@ -24,7 +24,7 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
     throw new Error('OpenCollective collective id or slug or GitHub handle is required')
 
   let collective = true
-  if (type !== 'collective')
+  if (type && type !== 'collective')
     collective = false
 
   const sponsors: any[] = []
@@ -42,11 +42,13 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
       },
     }) as any
 
-    sponsors.push(
-      ...(data.data.account?.transactions.nodes || []),
-    )
-    if (data.data.account?.transactions.nodes.length !== 0)
-      offset += data.data.account?.transactions.nodes.length
+    const nodes = collective
+      ? data.data.collective?.members.nodes
+      : data.data.account?.transactions.nodes
+
+    sponsors.push(...(nodes || []))
+    if ((nodes.length) !== 0)
+      offset += nodes.length
     else
       offset = undefined
   } while (offset)
@@ -60,16 +62,18 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
     const v = sponsors[i]
     const slug: string = collective ? v.account.slug : v.oppositeAccount.slug
 
-    if (slug in count) {
-      delete processed![count[slug].index]
+    if (!collective) {
+      if (slug in count) {
+        delete processed![count[slug].index]
 
-      count[slug].valueInCents += v.amount.valueInCents
-      count[slug].index = i
-    }
-    else {
-      count[slug] = {
-        index: i,
-        valueInCents: v.amount.valueInCents,
+        count[slug].valueInCents += v.amount.valueInCents
+        count[slug].index = i
+      }
+      else {
+        count[slug] = {
+          index: i,
+          valueInCents: v.amount.valueInCents,
+        }
       }
     }
 
@@ -81,10 +85,13 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
         avatarUrl: collective ? v.account.imageUrl : v.oppositeAccount.imageUrl,
         linkUrl: `https://opencollective.com/${slug}`,
       },
-      isOneTime: true,
-      monthlyDollars: (collective ? v.totalDonations.valueInCents : count[slug].valueInCents) / 100,
+      isOneTime: !v.tier || v.tier.type === 'DONATION',
+      monthlyDollars: (collective
+        ? (v.tier ? v.tier.amount.valueInCents : v.totalDonations.valueInCents)
+        : count[slug].valueInCents
+      ) / 100,
       privacyLevel: (collective ? v.account.isIncognito : v.oppositeAccount.isIncognito) ? 'PRIVATE' : 'PUBLIC',
-      tierName: collective ? v.tier.name || undefined : undefined,
+      tierName: collective ? (!v.tier ? '' : v.tier.name) : undefined,
       createdAt: v.createdAt,
     })
   }
@@ -94,8 +101,8 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
 
 function makeQuery(id?: string, slug?: string, githubHandle?: string, offset?: number, collective = true) {
   return graphql`{
-  ${collective ? 'collective' : 'account'}(${id ? `id: "${id}", ` : ''}${slug ? `slug: "${slug}", ` : ''}${githubHandle ? `githubHandle: "${githubHandle}", ` : ''}, throwIfMissing: true) {
-    ${collective ? 'members' : 'transactions'}(limit: 100${offset ? ` offset: ${offset}` : ''}${collective ? 'role: [BACKER]' : ''}) {
+  ${collective ? 'collective' : 'account'}(${id ? `id: "${id}", ` : ''}${slug ? `slug: "${slug}", ` : ''}${githubHandle ? `githubHandle: "${githubHandle}", ` : ''}throwIfMissing: true) {
+    ${collective ? 'members' : 'transactions'}(limit: 100${offset ? ` offset: ${offset}` : ''}${collective ? ' role: [BACKER]' : ''}) {
       offset
       limit
       totalCount
@@ -108,6 +115,9 @@ function makeQuery(id?: string, slug?: string, githubHandle?: string, offset?: n
         tier {
           name
           type
+          amount {
+            valueInCents
+          }
         }`
 : ''
         }
