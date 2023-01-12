@@ -15,10 +15,10 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     github: {
       login: process.env.SPONSORKIT_GITHUB_LOGIN || process.env.GITHUB_LOGIN || getDeprecatedEnv('SPONSORKIT_LOGIN', 'SPONSORKIT_GITHUB_LOGIN'),
       token: process.env.SPONSORKIT_GITHUB_TOKEN || process.env.GITHUB_TOKEN || getDeprecatedEnv('SPONSORKIT_TOKEN', 'SPONSORKIT_GITHUB_TOKEN'),
-      type: process.env.SPONSORKIT_GITHUB_TYPE,
+      type: process.env.SPONSORKIT_GITHUB_TYPE || process.env.GITHUB_TYPE,
     },
     patreon: {
-      token: process.env.SPONSORKIT_PATREON_TOKEN,
+      token: process.env.SPONSORKIT_PATREON_TOKEN || process.env.PATREON_TOKEN,
     },
     opencollective: {
       key: process.env.SPONSORKIT_OPENCOLLECTIVE_KEY || process.env.OPENCOLLECTIVE_KEY,
