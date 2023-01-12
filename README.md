@@ -22,12 +22,14 @@ SPONSORKIT_PATREON_TOKEN=
 ; OpenCollective provider.
 ; Create an API key at https://opencollective.com/applications
 SPONSORKIT_OPENCOLLECTIVE_KEY=
-; and provide the ID, slug or GitHub handle of your collective.
+; and provide the ID, slug or GitHub handle of your account.
 SPONSORKIT_OPENCOLLECTIVE_ID=
 ; or
 SPONSORKIT_OPENCOLLECTIVE_SLUG=
 ; or
 SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE=
+; If it is a personal account, set it to `person`. Otherwise not set or set to `collective`
+SPONSORKIT_OPENCOLLECTIVE_TYPE=
 
 ; Afdian provider.
 ; Get user_id at https://afdian.net/dashboard/dev
