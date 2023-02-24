@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { defineConfig, presets } from 'sponsorkit'
 
 export default defineConfig({
@@ -23,7 +22,7 @@ export default defineConfig({
       monthlyDollars: 10,
       preset: presets.medium,
       // to insert custom elements after the tier block
-      composeAfter: (composer, tierSponsors, config) => {
+      composeAfter: (composer, _tierSponsors, _config) => {
         composer.addSpan(10)
       },
     },

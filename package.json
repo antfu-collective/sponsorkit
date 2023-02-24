@@ -49,28 +49,28 @@
     "dotenv": "^16.0.3",
     "fs-extra": "^11.1.0",
     "image-data-uri": "^2.0.1",
-    "node-html-parser": "^6.1.4",
+    "node-html-parser": "^6.1.5",
     "ohmyfetch": "^0.4.21",
     "picocolors": "^1.0.0",
     "sharp": "^0.31.3",
     "unconfig": "^0.3.7",
-    "yargs": "^17.6.2"
+    "yargs": "^17.7.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.34.1",
-    "@antfu/ni": "^0.18.8",
+    "@antfu/eslint-config": "^0.35.2",
+    "@antfu/ni": "^0.20.0",
     "@antfu/utils": "^0.7.2",
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.11.18",
+    "@types/node": "^18.14.1",
     "@types/sharp": "^0.31.1",
-    "@types/yargs": "^17.0.19",
-    "bumpp": "^8.2.1",
-    "eslint": "^8.31.0",
+    "@types/yargs": "^17.0.22",
+    "bumpp": "^9.0.0",
+    "eslint": "^8.34.0",
     "esno": "^0.16.3",
-    "jiti": "^1.16.2",
-    "typescript": "^4.9.4",
-    "unbuild": "^1.0.2",
-    "vite": "^4.0.4",
-    "vitest": "^0.27.0"
+    "jiti": "^1.17.1",
+    "typescript": "^4.9.5",
+    "unbuild": "^1.1.2",
+    "vite": "^4.1.4",
+    "vitest": "^0.28.5"
   }
 }

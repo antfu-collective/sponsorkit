@@ -63,7 +63,6 @@ cli
  * - `>=10`
  */
 function createFilterFromString(template: string): SponsorkitConfig['filter'] {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_, op, value] = template.split(/([<>=]+)/)
   const num = parseInt(value)
   if (op === '<')

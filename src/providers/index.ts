@@ -49,7 +49,7 @@ export function resolveProviders(names: (ProviderName | Provider)[]) {
 export async function fetchSponsors(config: SponsorkitConfig) {
   const providers = resolveProviders(guessProviders(config))
   const sponsorships = await Promise.all(
-    providers.map((provider) => provider.fetchSponsors(config))
+    providers.map(provider => provider.fetchSponsors(config)),
   )
 
   return sponsorships.flat(1)
