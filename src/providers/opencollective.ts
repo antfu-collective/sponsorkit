@@ -83,6 +83,7 @@ export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slu
         type: (collective ? v.account.type : v.oppositeAccount.name) === 'INDIVIDUAL' ? 'User' : 'Organization',
         login: slug,
         avatarUrl: collective ? v.account.imageUrl : v.oppositeAccount.imageUrl,
+        websiteUrl: collective ? v.account.website : v.oppositeAccount.website,
         linkUrl: `https://opencollective.com/${slug}`,
       },
       isOneTime: !v.tier || v.tier.type === 'DONATION',
@@ -128,6 +129,7 @@ function makeQuery(id?: string, slug?: string, githubHandle?: string, offset?: n
           name
           slug
           type
+          website
           isIncognito
           imageUrl(height: 460, format: png)
         }

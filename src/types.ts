@@ -31,6 +31,7 @@ export interface Sponsor {
   avatarUrlHighRes?: string
   avatarUrlMediumRes?: string
   avatarUrlLowRes?: string
+  websiteUrl?: string
   linkUrl?: string
 }
 
