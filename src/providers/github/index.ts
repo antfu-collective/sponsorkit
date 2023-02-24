@@ -110,11 +110,13 @@ export function makeQuery(login: string, type: string, cursor?: string) {
             login
             name
             avatarUrl
+            websiteUrl
           }
           ...on User {
             login
             name
             avatarUrl
+            websiteUrl
           }
         }
       }
