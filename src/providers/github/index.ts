@@ -64,6 +64,7 @@ export async function fetchGitHubSponsors(
     .map((raw: any): Sponsorship => ({
       sponsor: {
         ...raw.sponsorEntity,
+        linkUrl: `https://github.com/${raw.sponsorEntity.login}`,
         __typename: undefined,
         type: raw.sponsorEntity.__typename,
       },
