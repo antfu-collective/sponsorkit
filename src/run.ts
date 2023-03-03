@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 import consola from 'consola'
 import c from 'picocolors'
 import { version } from '../package.json'
-import { loadConfig } from './config'
+import { loadConfig, partitionTiers } from './config'
 import { resolveAvatars, svgToPng } from './image'
 import { SvgComposer } from './svg'
 import { presets } from './presets'
@@ -80,29 +80,12 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 }
 
 export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) {
-  const tiers = config.tiers!.sort((a, b) => (b.monthlyDollars ?? 0) - (a.monthlyDollars ?? 0))
-
-  const finalSponsors = config.tiers!.filter(i => i.monthlyDollars == null || i.monthlyDollars === 0)
-
-  if (finalSponsors.length !== 1)
-    throw new Error(`There should be exactly one tier with no \`monthlyDollars\`, but got ${finalSponsors.length}`)
-
-  const partitions: Sponsorship[][] = Array.from({ length: tiers.length }, () => [])
-
-  sponsors
-    .sort((a, b) => a.createdAt!.localeCompare(b.createdAt!))
-    .forEach((i) => {
-      let index = tiers.findIndex(t => i.monthlyDollars >= (t.monthlyDollars || 0)) || 0
-      if (index === -1)
-        index = 0
-      partitions[index].push(i)
-    })
+  const tierPartitions = partitionTiers(sponsors, config.tiers!)
 
   composer.addSpan(config.padding?.top ?? 20)
 
-  tiers
-    .forEach((t, i) => {
-      const sponsors = partitions[i]
+  tierPartitions
+    .forEach(({ tier: t, sponsors }) => {
       t.composeBefore?.(composer, sponsors, config)
       if (t.compose) {
         t.compose(composer, sponsors, config)
