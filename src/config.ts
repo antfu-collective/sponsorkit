@@ -2,7 +2,7 @@ import { loadConfig as _loadConfig } from 'unconfig'
 import { loadEnv } from './env'
 import { FALLBACK_AVATAR } from './fallback'
 import { presets } from './presets'
-import type { SponsorkitConfig, Tier } from './types'
+import type { SponsorkitConfig, Sponsorship, Tier } from './types'
 
 export const defaultTiers: Tier[] = [
   {
@@ -109,4 +109,34 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
   } as Required<SponsorkitConfig>
 
   return resolved
+}
+
+export interface TierPartition {
+  monthlyDollars: number
+  tier: Tier
+  sponsors: Sponsorship[]
+}
+
+export function partitionTiers(sponsors: Sponsorship[], tiers: Tier[]) {
+  const tierMappings = tiers!.map<TierPartition>(tier => ({
+    monthlyDollars: tier.monthlyDollars ?? 0,
+    tier,
+    sponsors: [],
+  }))
+
+  tierMappings.sort((a, b) => b.monthlyDollars - a.monthlyDollars)
+
+  const finalSponsors = tierMappings.filter(i => i.monthlyDollars === 0)
+
+  if (finalSponsors.length !== 1)
+    throw new Error(`There should be exactly one tier with no \`monthlyDollars\`, but got ${finalSponsors.length}`)
+
+  sponsors
+    .sort((a, b) => Date.parse(a.createdAt!) - Date.parse(b.createdAt!))
+    .forEach((sponsor) => {
+      const tier = tierMappings.find(t => sponsor.monthlyDollars >= t.monthlyDollars) ?? tierMappings[0]
+      tier.sponsors.push(sponsor)
+    })
+
+  return tierMappings
 }
