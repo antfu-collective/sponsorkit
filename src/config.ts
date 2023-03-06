@@ -111,7 +111,7 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
   return resolved
 }
 
-interface TierPartition {
+export interface TierPartition {
   monthlyDollars: number
   tier: Tier
   sponsors: Sponsorship[]
