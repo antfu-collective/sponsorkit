@@ -46,6 +46,11 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     t.success(`Loaded from cache ${r(cacheFile)}`)
   }
 
+  // Sort
+  allSponsors.sort((a, b) => b.monthlyDollars - a.monthlyDollars // DESC amount
+    || (b.createdAt ? b.createdAt.localeCompare(a.createdAt ?? '') : (a.createdAt ? -1 : 0)) // DESC date
+    || b.sponsor.name.localeCompare(a.sponsor.name)) // ASC name
+
   await fs.ensureDir(dir)
   if (config.formats?.includes('json')) {
     const path = join(dir, `${config.name}.json`)
