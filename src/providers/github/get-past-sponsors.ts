@@ -1,5 +1,5 @@
 import { parse } from 'node-html-parser'
-import { $fetch } from 'ohmyfetch'
+import { $fetch } from 'ofetch'
 import { FALLBACK_AVATAR } from '../../fallback'
 import type { Sponsorship } from '../../types'
 
@@ -13,7 +13,7 @@ export interface GetPastSponsorsOptions {
 function pickSponsorsInfo(html: string): Sponsorship[] {
   const root = parse(html)
   const baseDate = new Date('2000-1-1')
-  const sponsors = root.querySelectorAll('div').map((el, index) => {
+  const sponsors = root.querySelectorAll('div').map((el) => {
     const isPublic = el.querySelector('img')
     const name = isPublic ? isPublic?.getAttribute('alt')?.replace('@', '') : 'Private Sponsor'
     const avatarUrl = isPublic ? isPublic?.getAttribute('src') : FALLBACK_AVATAR

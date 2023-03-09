@@ -1,7 +1,7 @@
 {
   "name": "sponsorkit",
   "version": "0.8.2",
-  "packageManager": "pnpm@7.0.0",
+  "packageManager": "pnpm@7.29.1",
   "description": "Toolkit for generating sponsors images",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
   "license": "MIT",
@@ -50,27 +50,27 @@
     "fs-extra": "^11.1.0",
     "image-data-uri": "^2.0.1",
     "node-html-parser": "^6.1.5",
-    "ohmyfetch": "^0.4.21",
+    "ofetch": "^1.0.1",
     "picocolors": "^1.0.0",
     "sharp": "^0.31.3",
     "unconfig": "^0.3.7",
     "yargs": "^17.7.1"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^0.35.2",
+    "@antfu/eslint-config": "^0.36.0",
     "@antfu/ni": "^0.20.0",
     "@antfu/utils": "^0.7.2",
     "@types/fs-extra": "^11.0.1",
-    "@types/node": "^18.14.1",
+    "@types/node": "^18.15.0",
     "@types/sharp": "^0.31.1",
     "@types/yargs": "^17.0.22",
     "bumpp": "^9.0.0",
-    "eslint": "^8.34.0",
+    "eslint": "^8.35.0",
     "esno": "^0.16.3",
-    "jiti": "^1.17.1",
+    "jiti": "^1.17.2",
     "typescript": "^4.9.5",
     "unbuild": "^1.1.2",
     "vite": "^4.1.4",
-    "vitest": "^0.28.5"
+    "vitest": "^0.29.2"
   }
 }

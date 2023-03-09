@@ -1,4 +1,4 @@
-import { $fetch } from 'ohmyfetch'
+import { $fetch } from 'ofetch'
 import type { Provider, SponsorkitConfig, Sponsorship } from '../../types'
 import { getPastSponsors } from './get-past-sponsors'
 

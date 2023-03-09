@@ -1,4 +1,4 @@
-import { $fetch } from 'ohmyfetch'
+import { $fetch } from 'ofetch'
 import type { Provider, Sponsorship } from '../types'
 
 export const OpenCollectiveProvider: Provider = {
