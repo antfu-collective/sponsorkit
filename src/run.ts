@@ -1,4 +1,4 @@
-import { dirname, join, relative, resolve } from 'path'
+import { dirname, join, relative, resolve } from 'node:path'
 import fs from 'fs-extra'
 import consola from 'consola'
 import c from 'picocolors'
@@ -47,9 +47,11 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   }
 
   // Sort
-  allSponsors.sort((a, b) => b.monthlyDollars - a.monthlyDollars // DESC amount
-    || (b.createdAt ? b.createdAt.localeCompare(a.createdAt ?? '') : (a.createdAt ? -1 : 0)) // DESC date
-    || b.sponsor.name.localeCompare(a.sponsor.name)) // ASC name
+  allSponsors.sort((a, b) =>
+    b.monthlyDollars - a.monthlyDollars // DESC amount
+    || Date.parse(b.createdAt!) - Date.parse(a.createdAt!) // DESC date
+    || (b.sponsor.login || b.sponsor.name).localeCompare(a.sponsor.login || a.sponsor.name), // ASC name
+  )
 
   await fs.ensureDir(dir)
   if (config.formats?.includes('json')) {

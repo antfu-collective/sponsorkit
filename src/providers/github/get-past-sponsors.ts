@@ -12,10 +12,9 @@ export interface GetPastSponsorsOptions {
 
 function pickSponsorsInfo(html: string): Sponsorship[] {
   const root = parse(html)
-  const baseDate = new Date()
+  const baseDate = new Date('2000-1-1')
   const sponsors = root.querySelectorAll('div').map((el, index) => {
     const isPublic = el.querySelector('img')
-    const createdAt = new Date(baseDate.getTime() - index * 1000 * 60 * 60 * 24 * 30).toUTCString()
     const name = isPublic ? isPublic?.getAttribute('alt')?.replace('@', '') : 'Private Sponsor'
     const avatarUrl = isPublic ? isPublic?.getAttribute('src') : FALLBACK_AVATAR
     const login = isPublic ? el.querySelector('a')?.getAttribute('href')?.replace('/', '') : undefined
@@ -33,7 +32,7 @@ function pickSponsorsInfo(html: string): Sponsorship[] {
       monthlyDollars: -1,
       privacyLevel: isPublic ? 'PUBLIC' : 'PRIVATE',
       tierName: undefined,
-      createdAt,
+      createdAt: baseDate.toUTCString(),
     } as Sponsorship
   })
 
