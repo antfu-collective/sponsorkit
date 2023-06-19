@@ -1,6 +1,6 @@
 import { dirname, join, relative, resolve } from 'node:path'
 import fs from 'fs-extra'
-import consola from 'consola'
+import { consola } from 'consola'
 import c from 'picocolors'
 import { version } from '../package.json'
 import { loadConfig, partitionTiers } from './config'

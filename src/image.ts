@@ -1,4 +1,6 @@
+import { Buffer } from 'node:buffer'
 import { $fetch } from 'ofetch'
+
 // @ts-expect-error missing types
 import imageDataURI from 'image-data-uri'
 import sharp from 'sharp'

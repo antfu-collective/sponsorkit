@@ -1,3 +1,4 @@
+import type { Buffer } from 'node:buffer'
 import type { SvgComposer } from './svg'
 
 export interface BadgePreset {
@@ -122,7 +123,7 @@ export interface ProvidersConfig {
      * The userId of your Afdian.
      *
      * Will read from `SPONSORKIT_AFDIAN_USER_ID` environment variable if not set.
-     * 
+     *
      * @see https://afdian.net/dashboard/dev
      */
     userId?: string
@@ -137,7 +138,7 @@ export interface ProvidersConfig {
     token?: string
     /**
      * Exchange rate of USD to CNY
-     * 
+     *
      * @default 6.5
      */
     exechangeRate?: number

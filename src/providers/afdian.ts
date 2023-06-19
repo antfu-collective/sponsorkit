@@ -15,9 +15,9 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
   const {
     userId,
     token,
-    exechangeRate = 6.5
+    exechangeRate = 6.5,
   } = options
-  
+
   if (!userId || !token)
     throw new Error('Afdian id and token are required')
 
@@ -58,7 +58,7 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
       linkUrl: `https://afdian.net/u/${raw.user.user_id}`,
     },
     // all_sum_amount is based on cny
-    monthlyDollars: parseFloat(raw.all_sum_amount) / exechangeRate,
+    monthlyDollars: Number.parseFloat(raw.all_sum_amount) / exechangeRate,
     privacyLevel: 'PUBLIC',
     tierName: 'Afdian',
     createdAt: new Date(raw.first_pay_time * 1000).toISOString(),

@@ -64,7 +64,7 @@ cli
  */
 function createFilterFromString(template: string): SponsorkitConfig['filter'] {
   const [_, op, value] = template.split(/([<>=]+)/)
-  const num = parseInt(value)
+  const num = Number.parseInt(value)
   if (op === '<')
     return s => s.monthlyDollars < num
   if (op === '<=')
