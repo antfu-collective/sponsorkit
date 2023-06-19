@@ -4,12 +4,15 @@ import { $fetch } from 'ofetch'
 // @ts-expect-error missing types
 import imageDataURI from 'image-data-uri'
 import sharp from 'sharp'
+import { consola } from 'consola'
 import type { SponsorkitConfig, Sponsorship } from './types'
 
-export async function resolveAvatars(ships: Sponsorship[], fallbackAvatar: SponsorkitConfig['fallbackAvatar']) {
+export async function resolveAvatars(ships: Sponsorship[], fallbackAvatar: SponsorkitConfig['fallbackAvatar'], t = consola) {
   return Promise.all(ships.map(async (ship) => {
     const data = await $fetch(ship.sponsor.avatarUrl, { responseType: 'arrayBuffer' })
       .catch((e) => {
+        t.error(`Failed to fetch avatar for ${ship.sponsor.login || ship.sponsor.name} [${ship.sponsor.avatarUrl}]`)
+        t.error(e)
         if (typeof fallbackAvatar === 'string')
           return $fetch(fallbackAvatar, { responseType: 'arrayBuffer' })
         if (fallbackAvatar)

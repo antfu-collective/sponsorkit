@@ -35,7 +35,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     }
 
     t.info('Resolving avatars...')
-    await resolveAvatars(allSponsors, config.fallbackAvatar)
+    await resolveAvatars(allSponsors, config.fallbackAvatar, t)
     t.success('Avatars resolved')
 
     await fs.ensureDir(dirname(cacheFile))
