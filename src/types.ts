@@ -122,6 +122,8 @@ export interface ProvidersConfig {
      * The userId of your Afdian.
      *
      * Will read from `SPONSORKIT_AFDIAN_USER_ID` environment variable if not set.
+     * 
+     * @see https://afdian.net/dashboard/dev
      */
     userId?: string
     /**
@@ -129,9 +131,16 @@ export interface ProvidersConfig {
      *
      * Will read from `SPONSORKIT_AFDIAN_TOKEN` environment variable if not set.
      *
+     * @see https://afdian.net/dashboard/dev
      * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
      */
     token?: string
+    /**
+     * Exchange rate of USD to CNY
+     * 
+     * @default 6.5
+     */
+    exechangeRate?: number
   }
 }
 

@@ -1,17 +1,23 @@
 import { createHash } from 'node:crypto'
 import { $fetch } from 'ofetch'
-import type { Provider, Sponsorship } from '../types'
+import type { Provider, SponsorkitConfig, Sponsorship } from '../types'
 
 // afdian api docs https://afdian.net/p/9c65d9cc617011ed81c352540025c377
 
 export const AfdianProvider: Provider = {
   name: 'afdian',
   fetchSponsors(config) {
-    return fetchAfdianSponsors(config.afdian?.userId, config.afdian?.token)
+    return fetchAfdianSponsors(config.afdian)
   },
 }
 
-export async function fetchAfdianSponsors(userId?: string, token?: string): Promise<Sponsorship[]> {
+export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = {}): Promise<Sponsorship[]> {
+  const {
+    userId,
+    token,
+    exechangeRate = 6.5
+  } = options
+  
   if (!userId || !token)
     throw new Error('Afdian id and token are required')
 
@@ -52,7 +58,7 @@ export async function fetchAfdianSponsors(userId?: string, token?: string): Prom
       linkUrl: `https://afdian.net/u/${raw.user.user_id}`,
     },
     // all_sum_amount is based on cny
-    monthlyDollars: parseFloat(raw.all_sum_amount) / 6.5,
+    monthlyDollars: parseFloat(raw.all_sum_amount) / exechangeRate,
     privacyLevel: 'PUBLIC',
     tierName: 'Afdian',
     createdAt: new Date(raw.first_pay_time * 1000).toISOString(),
