@@ -49,23 +49,32 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
     sponsors.push(...sponsorshipData.data.list)
   } while (page <= pages)
 
-  const processed = sponsors.map((raw: any): Sponsorship => ({
-    sponsor: {
-      type: 'User',
-      login: raw.user.user_id,
-      name: raw.user.name,
-      avatarUrl: raw.user.avatar,
-      linkUrl: `https://afdian.net/u/${raw.user.user_id}`,
-    },
-    // all_sum_amount is based on cny
-    monthlyDollars: Number.parseFloat(raw.all_sum_amount) / exechangeRate,
-    privacyLevel: 'PUBLIC',
-    tierName: 'Afdian',
-    createdAt: new Date(raw.first_pay_time * 1000).toISOString(),
-    // empty string means no plan, consider as one time sponsor
-    isOneTime: Boolean(raw.current_plan.name),
-    provider: 'afdian',
-  }))
+  const processed = sponsors.map((raw: any): Sponsorship => {
+    const current = raw.current_plan
+    const expireTime = current?.expire_time
+    const isExpired = expireTime ? expireTime < Date.now() / 1000 : true
+    return {
+      sponsor: {
+        type: 'User',
+        login: raw.user.user_id,
+        name: raw.user.name,
+        avatarUrl: raw.user.avatar,
+        linkUrl: `https://afdian.net/u/${raw.user.user_id}`,
+      },
+      // all_sum_amount is based on cny
+      monthlyDollars: isExpired
+        ? -1
+        : Number.parseFloat(raw.all_sum_amount) / exechangeRate,
+      privacyLevel: 'PUBLIC',
+      tierName: 'Afdian',
+      createdAt: new Date(raw.first_pay_time * 1000).toISOString(),
+      expireAt: expireTime ? new Date(expireTime * 1000).toISOString() : undefined,
+      // empty string means no plan, consider as one time sponsor
+      isOneTime: Boolean(raw.current_plan?.name),
+      provider: 'afdian',
+      raw,
+    }
+  })
 
   return processed
 }

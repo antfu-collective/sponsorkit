@@ -42,8 +42,13 @@ export interface Sponsorship {
   privacyLevel?: 'PUBLIC' | 'PRIVATE'
   tierName?: string
   createdAt?: string
+  expireAt?: string
   isOneTime?: boolean
   provider?: ProviderName | string
+  /**
+   * Raw data from provider
+   */
+  raw?: any
 }
 
 export type OutputFormat = 'svg' | 'png' | 'json'
