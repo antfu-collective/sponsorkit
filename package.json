@@ -62,7 +62,6 @@
     "@antfu/utils": "^0.7.4",
     "@types/fs-extra": "^11.0.1",
     "@types/node": "^18.16.18",
-    "@types/sharp": "^0.32.0",
     "@types/yargs": "^17.0.24",
     "bumpp": "^9.1.1",
     "eslint": "^8.43.0",
