@@ -23,6 +23,7 @@ function pickSponsorsInfo(html: string): Sponsorship[] {
     return {
       sponsor: {
         __typename: undefined,
+        linkUrl: `https://github.com/${name}`,
         login,
         name,
         avatarUrl,
