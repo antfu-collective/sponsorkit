@@ -79,7 +79,7 @@ export class SvgComposer {
   addSponsorGrid(sponsors: Sponsorship[], preset: BadgePreset) {
     const perLine = Math.floor((this.config.width - (preset.container?.sidePadding || 0) * 2) / preset.boxWidth)
 
-    new Array(Math.ceil(sponsors.length / perLine))
+    Array.from({ length: Math.ceil(sponsors.length / perLine) })
       .fill(0)
       .forEach((_, i) => {
         this.addSponsorLine(sponsors.slice(i * perLine, (i + 1) * perLine), preset)
