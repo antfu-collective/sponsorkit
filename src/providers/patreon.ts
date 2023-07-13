@@ -27,7 +27,7 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
   const userCampaignId = userData.data[0].id
 
   const sponsors: any[] = []
-  let sponsorshipApi = `https://www.patreon.com/api/oauth2/api/campaigns/${userCampaignId}/pledges?include=patron.null,reward.null&page%5Bcount%5D=100`
+  let sponsorshipApi = `https://www.patreon.com/api/oauth2/v2/campaigns/${userCampaignId}/members?include=user&fields%5Bmember%5D=currently_entitled_amount_cents,patron_status,pledge_relationship_start,lifetime_support_cents&fields%5Buser%5D=image_url,url,first_name,full_name&page%5Bcount%5D=100`
   do {
     // Get pledges from the campaign
     const sponsorshipData = await $fetch(sponsorshipApi, {
@@ -40,24 +40,18 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
     })
     sponsors.push(
       ...sponsorshipData.data
-        .filter((pledge: any) => !!pledge.relationships?.reward?.data)
-        .filter((pledge: any) => {
+        .filter((membership: any) => {
           // Filter declined users
-          if (pledge.attributes.declined_since)
-            return new Date(pledge.attributes.declined_since).getTime() - new Date().getTime() > 0
-          return true
+          return membership.attributes.patron_status !== 'declined_patron'
         })
-        .map((pledge: any) => ({
-          pledge,
+        .map((membership: any) => ({
+          membership,
           patron: sponsorshipData.included.find(
-            (v: any) => v.id === pledge.relationships.patron.data.id,
-          ),
-          reward: sponsorshipData.included.find(
-            (v: any) => v.id === pledge.relationships.reward.data.id,
+            (v: any) => v.id === membership.relationships.user.data.id,
           ),
         })),
     )
-    sponsorshipApi = sponsorshipData.links.next
+    sponsorshipApi = sponsorshipData.links?.next
   } while (sponsorshipApi)
 
   const processed = sponsors.map(
@@ -70,10 +64,10 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
         linkUrl: raw.patron.attributes.url,
       },
       isOneTime: false, // One-time pledges not supported
-      monthlyDollars: Math.floor(raw.pledge.attributes.amount_cents / 100),
+      monthlyDollars: raw.membership.attributes.patron_status === 'former_patron' ? -1 : Math.floor(raw.membership.attributes.currently_entitled_amount_cents / 100),
       privacyLevel: 'PUBLIC', // Patreon is all public
-      tierName: raw.reward.attributes.title,
-      createdAt: raw.pledge.attributes.created_at,
+      tierName: 'Patreon',
+      createdAt: raw.membership.attributes.pledge_relationship_start,
     }),
   )
 
