@@ -27,7 +27,7 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
   const userCampaignId = userData.data[0].id
 
   const sponsors: any[] = []
-  let sponsorshipApi = `https://www.patreon.com/api/oauth2/v2/campaigns/${userCampaignId}/members?include=currently_entitled_tiers,user&fields%5Bmember%5D=currently_entitled_amount_cents,patron_status,pledge_relationship_start,lifetime_support_cents&fields%5Btier%5D=amount_cents,created_at,description,discord_role_ids,edited_at,patron_count,published,published_at,requires_shipping,title,url&fields%5Buser%5D=image_url,url,first_name,full_name&page%5Bcount%5D=100`
+  let sponsorshipApi = `https://www.patreon.com/api/oauth2/v2/campaigns/${userCampaignId}/members?include=user&fields%5Bmember%5D=currently_entitled_amount_cents,patron_status,pledge_relationship_start,lifetime_support_cents&fields%5Buser%5D=image_url,url,first_name,full_name&page%5Bcount%5D=100`
   do {
     // Get pledges from the campaign
     const sponsorshipData = await $fetch(sponsorshipApi, {
