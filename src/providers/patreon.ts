@@ -41,8 +41,8 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
     sponsors.push(
       ...sponsorshipData.data
         .filter((membership: any) => {
-          // Filter declined users
-          return membership.attributes.patron_status !== 'declined_patron'
+          // Filter out "declined" and "never pledged" members
+          return membership.attributes.patron_status !== "declined_patron" && membership.attributes.patron_status !== null;
         })
         .map((membership: any) => ({
           membership,
