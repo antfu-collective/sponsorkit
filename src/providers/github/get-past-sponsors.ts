@@ -6,7 +6,7 @@ import type { Sponsorship } from '../../types'
 export interface GetPastSponsorsOptions {
   /**
    * @default false
-   * */
+   */
   includePrivate?: boolean
 }
 

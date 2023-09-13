@@ -61,6 +61,7 @@ cli
  * Create filter function from templates like
  * - `<10`
  * - `>=10`
+ * @param template
  */
 function createFilterFromString(template: string): SponsorkitConfig['filter'] {
   const [_, op, value] = template.split(/([<>=]+)/)
