@@ -44,7 +44,7 @@ export async function fetchAfdianMonthlySponsors(
     orders.push(...ordersData.data.list)
   } while (has_more === 1)
 
-  consola.info(`[sponsorkit] afdian: ${orders.length} orders found`)
+  consola.info(`afdian: ${orders.length} orders found`)
 
   const sponsors: Record<string, {
     plans: {
@@ -94,8 +94,7 @@ export async function fetchAfdianMonthlySponsors(
       // all_sum_amount is based on cny
       monthlyDollars: userData.plans.every((plan: any) => plan.isExpired)
         ? -1
-        // 60 seconds * 60 minutes * 24 hours * 30 days
-        : userData.plans.map(plan => plan.monthlyAmount / exechangeRate).reduce((acc, curr) => acc + curr, 0),
+        : userData.plans.filter(plan => !plan.isExpired).map(plan => plan.monthlyAmount / exechangeRate).reduce((acc, curr) => acc + curr, 0),
       privacyLevel: 'PUBLIC',
       tierName: 'Afdian',
       // ASC
