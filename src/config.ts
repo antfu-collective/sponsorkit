@@ -117,7 +117,7 @@ export interface TierPartition {
   sponsors: Sponsorship[]
 }
 
-export function partitionTiers(sponsors: Sponsorship[], tiers: Tier[]) {
+export function partitionTiers(sponsors: Sponsorship[], tiers: Tier[], includePastSponsors?: boolean) {
   const tierMappings = tiers!.map<TierPartition>(tier => ({
     monthlyDollars: tier.monthlyDollars ?? 0,
     tier,
@@ -133,6 +133,7 @@ export function partitionTiers(sponsors: Sponsorship[], tiers: Tier[]) {
 
   sponsors
     .sort((a, b) => Date.parse(a.createdAt!) - Date.parse(b.createdAt!))
+    .filter(s => s.monthlyDollars > 0 || includePastSponsors) // Past sponsors monthlyDollars is -1
     .forEach((sponsor) => {
       const tier = tierMappings.find(t => sponsor.monthlyDollars >= t.monthlyDollars) ?? tierMappings[0]
       tier.sponsors.push(sponsor)
