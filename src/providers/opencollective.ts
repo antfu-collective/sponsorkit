@@ -1,5 +1,10 @@
 import { $fetch } from 'ofetch'
-import type { Provider, SocialLink, Sponsorship } from '../types'
+import type { Provider, Sponsorship } from '../types'
+
+interface SocialLink {
+  type: string
+  url: string
+}
 
 export const OpenCollectiveProvider: Provider = {
   name: 'opencollective',
@@ -17,8 +22,13 @@ export const OpenCollectiveProvider: Provider = {
 const API = 'https://api.opencollective.com/graphql/v2/'
 const graphql = String.raw
 
-export async function fetchOpenCollectiveSponsors(key?: string, id?: string, slug?: string, githubHandle?: string,
-  includePastSponsors?: boolean): Promise<Sponsorship[]> {
+export async function fetchOpenCollectiveSponsors(
+  key?: string,
+  id?: string,
+  slug?: string,
+  githubHandle?: string,
+  includePastSponsors?: boolean,
+): Promise<Sponsorship[]> {
   if (!key)
     throw new Error('OpenCollective api key is required')
   if (!slug && !id && !githubHandle)
@@ -168,8 +178,8 @@ function createSponsorFromTransaction(transaction: any, excludeOrders: string[])
 
   let monthlyDollars: number = transaction.amount.value
   if (transaction.order?.status !== 'ACTIVE') {
-    const firsrDayOfCurrentMonth = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
-    if (new Date(transaction.createdAt) < firsrDayOfCurrentMonth)
+    const firstDayOfCurrentMonth = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
+    if (new Date(transaction.createdAt) < firstDayOfCurrentMonth)
       monthlyDollars = -1
   }
   else if (transaction.order?.frequency === 'MONTHLY') {
@@ -225,7 +235,14 @@ function makeAccountQueryPartial(id?: string, slug?: string, githubHandle?: stri
     throw new Error('OpenCollective collective id or slug or GitHub handle is required')
 }
 
-function makeTransactionsQuery(id?: string, slug?: string, githubHandle?: string, offset?: number, dateFrom?: Date, dateTo?: Date) {
+function makeTransactionsQuery(
+  id?: string,
+  slug?: string,
+  githubHandle?: string,
+  offset?: number,
+  dateFrom?: Date,
+  dateTo?: Date,
+) {
   const accountQueryPartial = makeAccountQueryPartial(id, slug, githubHandle)
   const dateFromParam = dateFrom ? `, dateFrom: "${dateFrom.toISOString()}"` : ''
   const dateToParam = dateTo ? `, dateTo: "${dateTo.toISOString()}"` : ''
@@ -272,7 +289,13 @@ function makeTransactionsQuery(id?: string, slug?: string, githubHandle?: string
   }`
 }
 
-function makeSubscriptionsQuery(id?: string, slug?: string, githubHandle?: string, offset?: number, activeOnly?: boolean) {
+function makeSubscriptionsQuery(
+  id?: string,
+  slug?: string,
+  githubHandle?: string,
+  offset?: number,
+  activeOnly?: boolean,
+) {
   const activeOrNot = activeOnly ? 'onlyActiveSubscriptions: true' : 'onlySubscriptions: true'
   return graphql`{
     account(${makeAccountQueryPartial(id, slug, githubHandle)}) {
@@ -346,8 +369,8 @@ function getAccountType(type: string): 'User' | 'Organization' {
 function getBestUrl(socialLinks: SocialLink[]): string | undefined {
   const urls = socialLinks
     .filter(i => i.type === 'WEBSITE' || i.type === 'GITHUB' || i.type === 'GITLAB' || i.type === 'TWITTER'
-      || i.type === 'FACEBOOK' || i.type === 'YOUTUBE' || i.type === 'INSTAGRAM'
-      || i.type === 'LINKEDIN' || i.type === 'DISCORD' || i.type === 'TUMBLR')
+    || i.type === 'FACEBOOK' || i.type === 'YOUTUBE' || i.type === 'INSTAGRAM'
+    || i.type === 'LINKEDIN' || i.type === 'DISCORD' || i.type === 'TUMBLR')
     .map(i => i.url)
 
   return urls[0]
