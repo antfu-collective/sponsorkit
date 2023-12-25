@@ -88,7 +88,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 }
 
 export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) {
-  const tierPartitions = partitionTiers(sponsors, config.tiers!)
+  const tierPartitions = partitionTiers(sponsors, config.tiers!, config.includePastSponsors)
 
   composer.addSpan(config.padding?.top ?? 20)
 
