@@ -1,6 +1,7 @@
 import { dirname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
-import fs from 'fs-extra'
+import fs from 'node:fs'
+import fsp from 'node:fs/promises'
 import { consola } from 'consola'
 import c from 'picocolors'
 import { version } from '../package.json'
@@ -39,11 +40,11 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     await resolveAvatars(allSponsors, config.fallbackAvatar, t)
     t.success('Avatars resolved')
 
-    await fs.ensureDir(dirname(cacheFile))
-    await fs.writeJSON(cacheFile, allSponsors, { spaces: 2 })
+    await fsp.mkdir(dirname(cacheFile), { recursive: true })
+    await fsp.writeFile(cacheFile, JSON.stringify(allSponsors, null, 2))
   }
   else {
-    allSponsors = await fs.readJSON(cacheFile)
+    allSponsors = JSON.parse(await fsp.readFile(cacheFile, 'utf-8'))
     t.success(`Loaded from cache ${r(cacheFile)}`)
   }
 
@@ -54,10 +55,10 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     || (b.sponsor.login || b.sponsor.name).localeCompare(a.sponsor.login || a.sponsor.name), // ASC name
   )
 
-  await fs.ensureDir(dir)
+  await fsp.mkdir(dir, { recursive: true })
   if (config.formats?.includes('json')) {
     const path = join(dir, `${config.name}.json`)
-    await fs.writeJSON(path, allSponsors, { spaces: 2 })
+    await fsp.writeFile(cacheFile, JSON.stringify(allSponsors, null, 2))
     t.success(`Wrote to ${r(path)}`)
   }
 
@@ -76,13 +77,13 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 
   if (config.formats?.includes('svg')) {
     const path = join(dir, `${config.name}.svg`)
-    await fs.writeFile(path, svg, 'utf-8')
+    await fsp.writeFile(path, svg, 'utf-8')
     t.success(`Wrote to ${r(path)}`)
   }
 
   if (config.formats?.includes('png')) {
     const path = join(dir, `${config.name}.png`)
-    await fs.writeFile(path, await svgToPng(svg))
+    await fsp.writeFile(path, await svgToPng(svg))
     t.success(`Wrote to ${r(path)}`)
   }
 }
