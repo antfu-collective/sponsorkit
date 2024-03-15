@@ -1,8 +1,6 @@
 import { Buffer } from 'node:buffer'
 import { $fetch } from 'ofetch'
-
-// @ts-expect-error missing types
-import imageDataURI from 'image-data-uri'
+import DatauriParser from 'datauri/parser'
 import sharp from 'sharp'
 import { consola } from 'consola'
 import type { SponsorkitConfig, Sponsorship } from './types'
@@ -20,9 +18,9 @@ export async function resolveAvatars(ships: Sponsorship[], fallbackAvatar: Spons
         throw e
       })
     const radius = ship.sponsor.type === 'User' ? 0.5 : 0.15
-    ship.sponsor.avatarUrlHighRes = await imageDataURI.encode(await round(data, radius, 120), 'PNG')
-    ship.sponsor.avatarUrlMediumRes = await imageDataURI.encode(await round(data, radius, 80), 'PNG')
-    ship.sponsor.avatarUrlLowRes = await imageDataURI.encode(await round(data, radius, 50), 'PNG')
+    ship.sponsor.avatarUrlHighRes = pngToDataUri(await round(data, radius, 120))
+    ship.sponsor.avatarUrlMediumRes = pngToDataUri(await round(data, radius, 80))
+    ship.sponsor.avatarUrlLowRes = pngToDataUri(await round(data, radius, 50))
   }))
 }
 
@@ -55,4 +53,10 @@ export function svgToPng(svg: string) {
   return sharp(Buffer.from(svg), { density: 150 })
     .png({ quality: 90 })
     .toBuffer()
+}
+
+const parser = new DatauriParser()
+
+function pngToDataUri(png: Buffer) {
+  return parser.format('.png', png).content
 }
