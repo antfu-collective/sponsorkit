@@ -1,6 +1,6 @@
 {
   "name": "sponsorkit",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "packageManager": "pnpm@8.12.1",
   "description": "Toolkit for generating sponsors images",
   "author": "Anthony Fu <anthonyfu117@hotmail.com>",
