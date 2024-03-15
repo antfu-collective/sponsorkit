@@ -1,8 +1,6 @@
 import { Buffer } from 'node:buffer'
 import { $fetch } from 'ofetch'
-
 import DatauriParser from 'datauri/parser'
-
 import sharp from 'sharp'
 import { consola } from 'consola'
 import type { SponsorkitConfig, Sponsorship } from './types'
