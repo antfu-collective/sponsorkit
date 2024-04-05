@@ -51,7 +51,8 @@ cli.command(
       config.filter = createFilterFromString(options.filter)
 
     await run(config)
-  })
+  },
+)
 
 cli
   .help()
