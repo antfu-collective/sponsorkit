@@ -1,4 +1,4 @@
-import type { BadgePreset, Sponsor, SponsorkitRenderOptions , Sponsorship } from '../types'
+import type { BadgePreset, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
 
 export function genSvgImage(x: number, y: number, size: number, url: string) {
   return `<image x="${x}" y="${y}" width="${size}" height="${size}" xlink:href="${url}"/>`
