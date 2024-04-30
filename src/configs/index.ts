@@ -1,68 +1,18 @@
 import { loadConfig as _loadConfig } from 'unconfig'
-import { loadEnv } from './env'
+import type { SponsorkitConfig, Sponsorship, Tier, TierPartition } from '../types'
 import { FALLBACK_AVATAR } from './fallback'
-import { presets } from './presets'
-import type { SponsorkitConfig, Sponsorship, Tier } from './types'
+import { loadEnv } from './env'
+import { defaultConfig } from './defaults'
 
-export const defaultTiers: Tier[] = [
-  {
-    title: 'Past Sponsors',
-    monthlyDollars: -1,
-    preset: presets.xs,
-  },
-  {
-    title: 'Backers',
-    preset: presets.base,
-  },
-  {
-    title: 'Sponsors',
-    monthlyDollars: 10,
-    preset: presets.medium,
-  },
-  {
-    title: 'Silver Sponsors',
-    monthlyDollars: 50,
-    preset: presets.large,
-  },
-  {
-    title: 'Gold Sponsors',
-    monthlyDollars: 100,
-    preset: presets.xl,
-  },
-]
+export * from './tier-presets'
+export * from './fallback'
+export * from './defaults'
 
-export const defaultInlineCSS = `
-text {
-  font-weight: 300;
-  font-size: 14px;
-  fill: #777777;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-.sponsorkit-link {
-  cursor: pointer;
-}
-.sponsorkit-tier-title {
-  font-weight: 500;
-  font-size: 20px;
-}
-`
-
-export const defaultConfig: SponsorkitConfig = {
-  width: 800,
-  outputDir: './sponsorkit',
-  cacheFile: '.cache.json',
-  formats: ['json', 'svg', 'png'],
-  tiers: defaultTiers,
-  name: 'sponsors',
-  includePrivate: false,
-  svgInlineCSS: defaultInlineCSS,
-}
-
-export function defineConfig(config: SponsorkitConfig) {
+export function defineConfig(config: SponsorkitConfig): SponsorkitConfig {
   return config
 }
 
-export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
+export async function loadConfig(inlineConfig: SponsorkitConfig = {}): Promise<Required<SponsorkitConfig>> {
   const env = loadEnv()
 
   const { config = {} } = await _loadConfig<SponsorkitConfig>({
@@ -111,13 +61,7 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}) {
   return resolved
 }
 
-export interface TierPartition {
-  monthlyDollars: number
-  tier: Tier
-  sponsors: Sponsorship[]
-}
-
-export function partitionTiers(sponsors: Sponsorship[], tiers: Tier[], includePastSponsors?: boolean) {
+export function partitionTiers(sponsors: Sponsorship[], tiers: Tier[], includePastSponsors?: boolean): TierPartition[] {
   const tierMappings = tiers!.map<TierPartition>(tier => ({
     monthlyDollars: tier.monthlyDollars ?? 0,
     tier,

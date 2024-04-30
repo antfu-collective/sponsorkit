@@ -1,4 +1,4 @@
-import { defineConfig, presets } from 'sponsorkit'
+import { defineConfig, tierPresets } from 'sponsorkit'
 
 export default defineConfig({
   // includePrivate: true,
@@ -6,7 +6,7 @@ export default defineConfig({
     {
       title: 'Past Sponsors',
       monthlyDollars: -1,
-      preset: presets.xs,
+      preset: tierPresets.xs,
     },
     {
       title: 'Backers',
@@ -20,7 +20,7 @@ export default defineConfig({
     {
       title: 'Sponsors',
       monthlyDollars: 10,
-      preset: presets.medium,
+      preset: tierPresets.medium,
       // to insert custom elements after the tier block
       composeAfter: (composer, _tierSponsors, _config) => {
         composer.addSpan(10)
@@ -29,12 +29,26 @@ export default defineConfig({
     {
       title: 'Silver Sponsors',
       monthlyDollars: 50,
-      preset: presets.large,
+      preset: tierPresets.large,
     },
     {
       title: 'Gold Sponsors',
       monthlyDollars: 100,
-      preset: presets.xl,
+      preset: tierPresets.xl,
+    },
+  ],
+
+  // Run multiple renders with different configurations
+  renders: [
+    {
+      name: 'sponsors',
+      width: 800,
+      formats: ['svg', 'png'],
+    },
+    {
+      name: 'sponsors-wide',
+      width: 1000,
+      formats: ['svg'],
     },
   ],
 })

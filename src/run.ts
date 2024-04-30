@@ -5,12 +5,20 @@ import fsp from 'node:fs/promises'
 import { consola } from 'consola'
 import c from 'picocolors'
 import { version } from '../package.json'
-import { loadConfig, partitionTiers } from './config'
-import { resolveAvatars, svgToPng } from './image'
-import { SvgComposer } from './svg'
-import { presets } from './presets'
-import type { SponsorkitConfig, Sponsorship } from './types'
+import { loadConfig } from './configs'
+import { resolveAvatars, svgToPng } from './processing/image'
+import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderOptions, SponsorkitRenderer, Sponsorship } from './types'
 import { guessProviders, resolveProviders } from './providers'
+import { tiersRenderer } from './renders/tiers'
+
+export {
+  // default
+  tiersRenderer as defaultRenderer,
+  tiersComposer as defaultComposer,
+
+  tiersRenderer,
+  tiersComposer,
+} from './renders/tiers'
 
 function r(path: string) {
   return `./${relative(process.cwd(), path)}`
@@ -19,11 +27,22 @@ function r(path: string) {
 export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   t.log(`\n${c.magenta(c.bold('SponsorKit'))} ${c.dim(`v${version}`)}\n`)
 
-  const config = await loadConfig(inlineConfig)
+  const fullConfig = await loadConfig(inlineConfig)
+  const config = fullConfig as Required<SponsorkitMainConfig>
   const dir = resolve(process.cwd(), config.outputDir)
   const cacheFile = resolve(dir, config.cacheFile)
 
   const providers = resolveProviders(config.providers || guessProviders(config))
+
+  if (config.renders?.length) {
+    const names = new Set<string>()
+    config.renders.forEach((renderOptions, idx) => {
+      const name = renderOptions.name || 'sponsors'
+      if (names.has(name))
+        throw new Error(`Duplicate render name: ${name} at index ${idx}`)
+      names.add(name)
+    })
+  }
 
   let allSponsors: Sponsorship[] = []
   if (!fs.existsSync(cacheFile) || config.force) {
@@ -55,69 +74,66 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     || (b.sponsor.login || b.sponsor.name).localeCompare(a.sponsor.login || a.sponsor.name), // ASC name
   )
 
-  await fsp.mkdir(dir, { recursive: true })
-  if (config.formats?.includes('json')) {
-    const path = join(dir, `${config.name}.json`)
-    await fsp.writeFile(cacheFile, JSON.stringify(allSponsors, null, 2))
-    t.success(`Wrote to ${r(path)}`)
+  if (config.renders?.length) {
+    t.info(`Generating with ${config.renders.length} renders...`)
+    for (const renderOptions of config.renders) {
+      await applyRenderer(
+        tiersRenderer,
+        config,
+        {
+          ...fullConfig,
+          ...renderOptions,
+        },
+        allSponsors,
+        t,
+      )
+    }
   }
-
-  allSponsors = await config.onSponsorsReady?.(allSponsors) || allSponsors
-  if (config.filter)
-    allSponsors = allSponsors.filter(s => config.filter(s, allSponsors) !== false)
-  if (!config.includePrivate)
-    allSponsors = allSponsors.filter(s => s.privacyLevel !== 'PRIVATE')
-
-  t.info('Composing SVG...')
-  const composer = new SvgComposer(config)
-  await (config.customComposer || defaultComposer)(composer, allSponsors, config)
-  let svg = composer.generateSvg()
-
-  svg = await config.onSvgGenerated?.(svg) || svg
-
-  if (config.formats?.includes('svg')) {
-    const path = join(dir, `${config.name}.svg`)
-    await fsp.writeFile(path, svg, 'utf-8')
-    t.success(`Wrote to ${r(path)}`)
-  }
-
-  if (config.formats?.includes('png')) {
-    const path = join(dir, `${config.name}.png`)
-    await fsp.writeFile(path, await svgToPng(svg))
-    t.success(`Wrote to ${r(path)}`)
+  else {
+    applyRenderer(
+      tiersRenderer,
+      config,
+      fullConfig,
+      allSponsors,
+      t,
+    )
   }
 }
 
-export async function defaultComposer(composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) {
-  const tierPartitions = partitionTiers(sponsors, config.tiers!, config.includePastSponsors)
+export async function applyRenderer(
+  renderer: SponsorkitRenderer,
+  config: Required<SponsorkitMainConfig>,
+  renderOptions: Required<SponsorkitRenderOptions>,
+  sponsors: Sponsorship[],
+  t = consola,
+) {
+  const logPrefix = c.dim(`[${renderOptions.name}]`)
+  const dir = resolve(process.cwd(), config.outputDir)
+  await fsp.mkdir(dir, { recursive: true })
+  if (renderOptions.formats?.includes('json')) {
+    const path = join(dir, `${renderOptions.name}.json`)
+    await fsp.writeFile(path, JSON.stringify(sponsors, null, 2))
+    t.success(`${logPrefix} Wrote to ${r(path)}`)
+  }
 
-  composer.addSpan(config.padding?.top ?? 20)
+  sponsors = await config.onSponsorsReady?.(sponsors) || sponsors
+  if (renderOptions.filter)
+    sponsors = sponsors.filter(s => renderOptions.filter(s, sponsors) !== false)
+  if (!renderOptions.includePrivate)
+    sponsors = sponsors.filter(s => s.privacyLevel !== 'PRIVATE')
 
-  tierPartitions
-    .forEach(({ tier: t, sponsors }) => {
-      t.composeBefore?.(composer, sponsors, config)
-      if (t.compose) {
-        t.compose(composer, sponsors, config)
-      }
-      else {
-        const preset = t.preset || presets.base
-        if (sponsors.length && preset.avatar.size) {
-          const paddingTop = t.padding?.top ?? 20
-          const paddingBottom = t.padding?.bottom ?? 10
-          if (paddingTop)
-            composer.addSpan(paddingTop)
-          if (t.title) {
-            composer
-              .addTitle(t.title)
-              .addSpan(5)
-          }
-          composer.addSponsorGrid(sponsors, preset)
-          if (paddingBottom)
-            composer.addSpan(paddingBottom)
-        }
-      }
-      t.composeAfter?.(composer, sponsors, config)
-    })
+  t.info(`${logPrefix} Composing SVG...`)
+  const svg = await renderer.renderSVG(renderOptions, sponsors)
 
-  composer.addSpan(config.padding?.bottom ?? 20)
+  if (renderOptions.formats?.includes('svg')) {
+    const path = join(dir, `${renderOptions.name}.svg`)
+    await fsp.writeFile(path, svg, 'utf-8')
+    t.success(`${logPrefix} Wrote to ${r(path)}`)
+  }
+
+  if (renderOptions.formats?.includes('png')) {
+    const path = join(dir, `${renderOptions.name}.png`)
+    await fsp.writeFile(path, await svgToPng(svg))
+    t.success(`${logPrefix} Wrote to ${r(path)}`)
+  }
 }

@@ -3,7 +3,7 @@ import { $fetch } from 'ofetch'
 import DatauriParser from 'datauri/parser'
 import sharp from 'sharp'
 import { consola } from 'consola'
-import type { SponsorkitConfig, Sponsorship } from './types'
+import type { SponsorkitConfig, Sponsorship } from '../types'
 
 export async function resolveAvatars(
   ships: Sponsorship[],

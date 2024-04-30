@@ -4,6 +4,11 @@
     "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "node",
+    "paths": {
+      "sponsorkit": [
+        "./src/index.ts"
+      ]
+    },
     "resolveJsonModule": true,
     "strict": true,
     "strictNullChecks": true,

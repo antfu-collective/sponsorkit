@@ -1,5 +1,4 @@
-import type { BadgePreset, Sponsor, Sponsorship } from './types'
-import type { SponsorkitConfig } from '.'
+import type { BadgePreset, Sponsor, SponsorkitRenderOptions , Sponsorship } from '../types'
 
 export function genSvgImage(x: number, y: number, size: number, url: string) {
   return `<image x="${x}" y="${y}" width="${size}" height="${size}" xlink:href="${url}"/>`
@@ -42,7 +41,7 @@ export class SvgComposer {
   height = 0
   body = ''
 
-  constructor(public readonly config: Required<SponsorkitConfig>) {}
+  constructor(public readonly config: Required<SponsorkitRenderOptions>) {}
 
   addSpan(height = 0) {
     this.height += height

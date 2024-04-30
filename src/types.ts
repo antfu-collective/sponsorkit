@@ -1,5 +1,5 @@
 import type { Buffer } from 'node:buffer'
-import type { SvgComposer } from './svg'
+import type { SvgComposer } from './processing/svg'
 
 export interface BadgePreset {
   boxWidth: number
@@ -17,6 +17,12 @@ export interface BadgePreset {
     sidePadding?: number
   }
   classes?: string
+}
+
+export interface TierPartition {
+  monthlyDollars: number
+  tier: Tier
+  sponsors: Sponsorship[]
 }
 
 export interface Provider {
@@ -150,48 +156,7 @@ export interface ProvidersConfig {
   }
 }
 
-export interface SponsorkitConfig extends ProvidersConfig {
-  /**
-   * @deprecated use `github.login` instead
-   */
-  login?: string
-  /**
-   * @deprecated use `github.token` instead
-   */
-  token?: string
-
-  /**
-   * @default auto detect based on the config provided
-   */
-  providers?: ProviderName[]
-
-  /**
-   * Whether to display the private sponsors
-   *
-   * @default false
-   */
-  includePrivate?: boolean
-
-  /**
-   * Whether to display the past sponsors
-   * Currently only works with GitHub provider
-   *
-   * @default auto detect based on tiers
-   */
-  includePastSponsors?: boolean
-
-  /**
-   * By pass cache
-   */
-  force?: boolean
-
-  /**
-   * Directory of output files.
-   *
-   * @default './sponsorkit'
-   */
-  outputDir?: string
-
+export interface SponsorkitRenderOptions {
   /**
    * Name of exported files
    *
@@ -205,16 +170,6 @@ export interface SponsorkitConfig extends ProvidersConfig {
    * @default ['json', 'svg', 'png']
    */
   formats?: OutputFormat[]
-
-  /**
-   * Hook to modify sponsors data before fetching the avatars.
-   */
-  onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
-
-  /**
-   * Hook to modify sponsors data before rendering.
-   */
-  onSponsorsReady?: (sponsors: Sponsorship[]) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
 
   /**
    * Hook to get or modify the SVG before writing.
@@ -244,19 +199,6 @@ export interface SponsorkitConfig extends ProvidersConfig {
   width?: number
 
   /**
-   * Url to fallback avatar.
-   * Setting false to disable fallback avatar.
-   */
-  fallbackAvatar?: string | false | Buffer | Promise<Buffer>
-
-  /**
-   * Path to cache file
-   *
-   * @default './sponsorkit/.cache.json'
-   */
-  cacheFile?: string
-
-  /**
    * Padding of image container
    */
   padding?: {
@@ -268,6 +210,86 @@ export interface SponsorkitConfig extends ProvidersConfig {
    * Inline CSS of generated SVG
    */
   svgInlineCSS?: string
+
+  /**
+   * Whether to display the private sponsors
+   *
+   * @default false
+   */
+  includePrivate?: boolean
+
+  /**
+   * Whether to display the past sponsors
+   * Currently only works with GitHub provider
+   *
+   * @default auto detect based on tiers
+   */
+  includePastSponsors?: boolean
+
+}
+
+export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptions {
+  /**
+   * @deprecated use `github.login` instead
+   */
+  login?: string
+
+  /**
+   * @deprecated use `github.token` instead
+   */
+  token?: string
+
+  /**
+   * @default auto detect based on the config provided
+   */
+  providers?: ProviderName[]
+
+  /**
+   * By pass cache
+   */
+  force?: boolean
+
+  /**
+   * Path to cache file
+   *
+   * @default './sponsorkit/.cache.json'
+   */
+  cacheFile?: string
+
+  /**
+   * Directory of output files.
+   *
+   * @default './sponsorkit'
+   */
+  outputDir?: string
+
+  /**
+   * Hook to modify sponsors data before fetching the avatars.
+   */
+  onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
+
+  /**
+   * Hook to modify sponsors data before rendering.
+   */
+  onSponsorsReady?: (sponsors: Sponsorship[]) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
+
+  /**
+   * Url to fallback avatar.
+   * Setting false to disable fallback avatar.
+   */
+  fallbackAvatar?: string | false | Buffer | Promise<Buffer>
+
+  /**
+   * Configs for multiple renders
+   */
+  renders?: SponsorkitRenderOptions[]
+}
+
+export type SponsorkitMainConfig = Omit<SponsorkitConfig, keyof SponsorkitRenderOptions>
+
+export interface SponsorkitRenderer {
+  name: string
+  renderSVG: (config: Required<SponsorkitRenderOptions>, sponsors: Sponsorship[]) => Promise<string>
 }
 
 export interface Tier {

@@ -1,4 +1,4 @@
-import type { BadgePreset } from './types'
+import type { BadgePreset } from '../types'
 
 const none: BadgePreset = {
   avatar: {
@@ -86,7 +86,7 @@ const xl: BadgePreset = {
   },
 }
 
-export const presets = {
+export const tierPresets = {
   none,
   xs,
   small,
@@ -95,3 +95,8 @@ export const presets = {
   large,
   xl,
 }
+
+/**
+ * @deprecated Use `tierPresets` instead
+ */
+export const presets = tierPresets

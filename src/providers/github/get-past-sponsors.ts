@@ -1,6 +1,6 @@
 import { parse } from 'node-html-parser'
 import { $fetch } from 'ofetch'
-import { FALLBACK_AVATAR } from '../../fallback'
+import { FALLBACK_AVATAR } from '../../configs/fallback'
 import type { Sponsorship } from '../../types'
 
 export interface GetPastSponsorsOptions {
