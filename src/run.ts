@@ -76,8 +76,8 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 
   if (config.renders?.length) {
     t.info(`Generating with ${config.renders.length} renders...`)
-    for (const renderOptions of config.renders) {
-      await applyRenderer(
+    await Promise.all(config.renders.map(renderOptions =>
+      applyRenderer(
         tiersRenderer,
         config,
         {
@@ -86,11 +86,11 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
         },
         allSponsors,
         t,
-      )
-    }
+      ),
+    ))
   }
   else {
-    applyRenderer(
+    await applyRenderer(
       tiersRenderer,
       config,
       fullConfig,
