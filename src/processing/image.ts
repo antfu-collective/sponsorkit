@@ -3,6 +3,8 @@ import { $fetch } from 'ofetch'
 import DatauriParser from 'datauri/parser'
 import sharp from 'sharp'
 import { consola } from 'consola'
+import pLimit from 'p-limit'
+import { version } from '../../package.json'
 import type { SponsorkitConfig, Sponsorship } from '../types'
 
 export async function resolveAvatars(
@@ -20,10 +22,17 @@ export async function resolveAvatars(
 
   const fallbackDataUri = fallbackAvatar && pngToDataUri(await round(fallbackAvatar, 0.5, 100))
 
-  return Promise.all(ships.map(async (ship) => {
+  const limit = pLimit(15)
+
+  return Promise.all(ships.map(ship => limit(async () => {
     const data = ship.privacyLevel === 'PRIVATE'
       ? fallbackAvatar
-      : await $fetch(ship.sponsor.avatarUrl, { responseType: 'arrayBuffer' })
+      : await $fetch(ship.sponsor.avatarUrl, {
+        responseType: 'arrayBuffer',
+        headers: {
+          'User-Agent': `Mozilla/5.0 Chrome/124.0.0.0 Safari/537.36 Sponsorkit/${version}`,
+        },
+      })
         .catch((e) => {
           t.error(`Failed to fetch avatar for ${ship.sponsor.login || ship.sponsor.name} [${ship.sponsor.avatarUrl}]`)
           t.error(e)
@@ -42,7 +51,7 @@ export async function resolveAvatars(
       ship.sponsor.avatarUrlMediumRes = pngToDataUri(await round(data, radius, 80))
       ship.sponsor.avatarUrlLowRes = pngToDataUri(await round(data, radius, 50))
     }
-  }))
+  })))
 }
 
 function toBuffer(ab: ArrayBuffer) {

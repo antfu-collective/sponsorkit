@@ -72,6 +72,9 @@ importers:
       jiti:
         specifier: ^1.21.0
         version: 1.21.0
+      p-limit:
+        specifier: ^5.0.0
+        version: 5.0.0
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
