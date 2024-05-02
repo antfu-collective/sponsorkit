@@ -200,7 +200,7 @@ export interface SponsorkitRenderOptions {
   /**
    * Width of the image.
    *
-   * @default 700
+   * @default 800
    */
   width?: number
 
