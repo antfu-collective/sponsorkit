@@ -9,7 +9,6 @@ import { loadConfig } from './configs'
 import { resolveAvatars, svgToPng } from './processing/image'
 import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderOptions, SponsorkitRenderer, Sponsorship } from './types'
 import { guessProviders, resolveProviders } from './providers'
-import { tiersRenderer } from './renders/tiers'
 import { builtinRenderers } from './renders'
 
 export {
