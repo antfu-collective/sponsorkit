@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-await import('../dist/cli.mjs')
+import '../dist/cli.mjs'

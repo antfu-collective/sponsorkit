@@ -1,9 +1,11 @@
-import { scriptName } from 'yargs'
+import process from 'node:process'
+import yargs from 'yargs'
 import { version } from '../package.json'
 import { run } from './run'
 import type { SponsorkitConfig } from './types'
 
-const cli = scriptName('sponsors-svg')
+const cli = yargs(process.argv.slice(2))
+  .scriptName('sponsors-svg')
   .usage('$0 [args]')
   .version(version)
   .strict()

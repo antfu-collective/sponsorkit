@@ -1,9 +1,7 @@
 import { Buffer } from 'node:buffer'
 import { $fetch } from 'ofetch'
-import DatauriParser from 'datauri/parser'
 import sharp from 'sharp'
 import { consola } from 'consola'
-import pLimit from 'p-limit'
 import { version } from '../../package.json'
 import type { SponsorkitConfig, Sponsorship } from '../types'
 
@@ -22,6 +20,7 @@ export async function resolveAvatars(
 
   const fallbackDataUri = fallbackAvatar && pngToDataUri(await round(fallbackAvatar, 0.5, 100))
 
+  const pLimit = await import('p-limit').then(r => r.default)
   const limit = pLimit(15)
 
   return Promise.all(ships.map(ship => limit(async () => {
@@ -104,8 +103,6 @@ export function svgToPng(svg: string) {
     .toBuffer()
 }
 
-const parser = new DatauriParser()
-
 export function pngToDataUri(png: Buffer) {
-  return parser.format('.png', png).content
+  return `data:image/png;base64,${png.toString('base64')}`
 }
