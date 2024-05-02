@@ -53,12 +53,18 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
     const current = raw.current_plan
     const expireTime = current?.expire_time
     const isExpired = expireTime ? expireTime < Date.now() / 1000 : true
+    let name = raw.user.name
+    if (name.startsWith('爱发电用户_'))
+      name = raw.user.user_id.slice(0, 5)
+    let avatarUrl = raw.user.avatar
+    if (avatarUrl.startsWith('https://pic1.afdiancdn.com/default/avatar/avatar-'))
+      avatarUrl = undefined
     return {
       sponsor: {
         type: 'User',
         login: raw.user.user_id,
-        name: raw.user.name,
-        avatarUrl: raw.user.avatar,
+        name,
+        avatarUrl,
         linkUrl: `https://afdian.net/u/${raw.user.user_id}`,
       },
       // all_sum_amount is based on cny

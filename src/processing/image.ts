@@ -24,7 +24,7 @@ export async function resolveAvatars(
   const limit = pLimit(15)
 
   return Promise.all(ships.map(ship => limit(async () => {
-    const data = ship.privacyLevel === 'PRIVATE'
+    const data = (ship.privacyLevel === 'PRIVATE' || !ship.sponsor.avatarUrl)
       ? fallbackAvatar
       : await $fetch(ship.sponsor.avatarUrl, {
         responseType: 'arrayBuffer',
