@@ -194,8 +194,14 @@ export interface SponsorkitRenderOptions {
    *
    * Only effective when using `tiers` renderer.
    */
-
   tiers?: Tier[]
+
+  /**
+   * Options for rendering circles
+   *
+   * Only effective when using `circles` renderer.
+   */
+  circles?: CircleRenderOptions
 
   /**
    * Width of the image.
@@ -310,6 +316,33 @@ export type SponsorkitMainConfig = Omit<SponsorkitConfig, keyof SponsorkitRender
 export interface SponsorkitRenderer {
   name: string
   renderSVG: (config: Required<SponsorkitRenderOptions>, sponsors: Sponsorship[]) => Promise<string>
+}
+
+export interface CircleRenderOptions {
+  /**
+   * Min radius for sponsors
+   *
+   * @default 10
+   */
+  radiusMin?: number
+  /**
+   * Max radius for sponsors
+   *
+   * @default 300
+   */
+  radiusMax?: number
+  /**
+   * Radius for past sponsors
+   *
+   * @default 5
+   */
+  radiusPast?: number
+  /**
+   * Custom function to calculate the weight of the sponsor.
+   *
+   * When provided, `radiusMin`, `radiusMax` and `radiusPast` will be ignored.
+   */
+  weightInterop?: (sponsor: Sponsorship, maxAmount: number) => number
 }
 
 export interface Tier {

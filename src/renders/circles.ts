@@ -1,29 +1,32 @@
-import type { Sponsor, SponsorkitRenderer } from '../types'
+import type { Sponsor, SponsorkitRenderer, Sponsorship } from '../types'
 import { SvgComposer, generateBadge } from '../processing/svg'
 import { base64ToArrayBuffer, pngToDataUri, round } from '../processing/image'
 
 export const circlesRenderer: SponsorkitRenderer = {
   name: 'sponsorkit:circles',
-  async renderSVG(config, _sponsors) {
+  async renderSVG(config, sponsors) {
     const { hierarchy, pack } = await import('d3-hierarchy')
     const composer = new SvgComposer(config)
 
-    const amountMax = Math.max(..._sponsors.map(sponsor => sponsor.monthlyDollars))
-    const RADIUS_MIN = 10
-    const RADIUS_MAX = 300
-    const RADIUS_PAST = 6
+    const amountMax = Math.max(...sponsors.map(sponsor => sponsor.monthlyDollars))
+    const {
+      radiusMax = 300,
+      radiusMin = 10,
+      radiusPast = 5,
+      weightInterop = defaultInterop,
+    } = config.circles || {}
 
-    let sponsors = _sponsors
-      .map((sponsor, idx) => ({
-        id: `sponsor-${idx}`,
-        ...sponsor,
-      }))
+    function defaultInterop(sponsor: Sponsorship) {
+      return sponsor.monthlyDollars < 0
+        ? radiusPast
+        : lerp(radiusMin, radiusMax, (Math.max(0.1, sponsor.monthlyDollars || 0) / amountMax) ** 0.9)
+    }
 
     if (!config.includePastSponsors)
       sponsors = sponsors.filter(sponsor => sponsor.monthlyDollars > 0)
 
     const root = hierarchy({ ...sponsors[0], children: sponsors, id: 'root' })
-      .sum(d => d.monthlyDollars < 0 ? RADIUS_PAST : lerp(RADIUS_MIN, RADIUS_MAX, (Math.max(0.1, d.monthlyDollars || 0) / amountMax) ** 0.9))
+      .sum(d => weightInterop(d, amountMax))
       .sort((a, b) => (b.value || 0) - (a.value || 0))
 
     const p = pack<typeof sponsors[0]>()
@@ -32,35 +35,31 @@ export const circlesRenderer: SponsorkitRenderer = {
     const circles = p(root as any).descendants().slice(1)
 
     for (const circle of circles) {
-      const id = circle.data.id
-      const sponsor = sponsors.find(s => s.id === id)
-      if (sponsor) {
-        composer.addRaw(generateBadge(
-          circle.x - circle.r,
-          circle.y - circle.r,
-          await getRoundedAvatars(sponsor.sponsor),
-          {
-            name: false,
-            boxHeight: circle.r * 2,
-            boxWidth: circle.r * 2,
-            avatar: {
-              size: circle.r * 2,
-            },
+      composer.addRaw(generateBadge(
+        circle.x - circle.r,
+        circle.y - circle.r,
+        await getRoundedAvatars(circle.data.sponsor),
+        {
+          name: false,
+          boxHeight: circle.r * 2,
+          boxWidth: circle.r * 2,
+          avatar: {
+            size: circle.r * 2,
           },
-        ))
-      }
+        },
+      ))
     }
 
     composer.height = config.width
 
-    function lerp(a: number, b: number, t: number) {
-      if (t < 0)
-        return a
-      return a + (b - a) * t
-    }
-
     return composer.generateSvg()
   },
+}
+
+function lerp(a: number, b: number, t: number) {
+  if (t < 0)
+    return a
+  return a + (b - a) * t
 }
 
 async function getRoundedAvatars(sponsor: Sponsor) {
