@@ -1,5 +1,6 @@
 {
   "name": "sponsorkit",
+  "type": "module",
   "version": "0.11.2",
   "packageManager": "pnpm@9.0.6",
   "description": "Toolkit for generating sponsors images",
@@ -22,15 +23,14 @@
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": "./dist/index.mjs"
     }
   },
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.mjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "bin": {
-    "sponsorkit": "./bin/sponsorkit.js"
+    "sponsorkit": "./bin/sponsorkit.mjs"
   },
   "files": [
     "bin",
