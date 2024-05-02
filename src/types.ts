@@ -35,6 +35,7 @@ export interface Sponsor {
   login: string
   name: string
   avatarUrl: string
+  avatarBuffer?: string
   avatarUrlHighRes?: string
   avatarUrlMediumRes?: string
   avatarUrlLowRes?: string
@@ -165,16 +166,18 @@ export interface SponsorkitRenderOptions {
   name?: string
 
   /**
+   * Renderer to use
+   *
+   * @default 'tiers'
+   */
+  renderer?: 'tiers' | 'circles'
+
+  /**
    * Output formats
    *
    * @default ['json', 'svg', 'png']
    */
   formats?: OutputFormat[]
-
-  /**
-   * Hook to get or modify the SVG before writing.
-   */
-  onSvgGenerated?: (svg: string) => PromiseLike<string | void | undefined | null> | string | void | undefined | null
 
   /**
    * Compose the SVG
@@ -188,7 +191,10 @@ export interface SponsorkitRenderOptions {
 
   /**
    * Tiers
+   *
+   * Only effective when using `tiers` renderer.
    */
+
   tiers?: Tier[]
 
   /**
@@ -226,6 +232,15 @@ export interface SponsorkitRenderOptions {
    */
   includePastSponsors?: boolean
 
+  /**
+   * Hook to modify sponsors data before rendering.
+   */
+  onBeforeRenderer?: (sponsors: Sponsorship[]) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
+
+  /**
+   * Hook to get or modify the SVG before writing.
+   */
+  onSvgGenerated?: (svg: string) => PromiseLike<string | void | undefined | null> | string | void | undefined | null
 }
 
 export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptions {
@@ -264,9 +279,14 @@ export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptio
   outputDir?: string
 
   /**
-   * Hook to modify sponsors data before fetching the avatars.
+   * Hook to modify sponsors data for each provider.
    */
   onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
+
+  /**
+   * Hook to modify merged sponsors data before fetching the avatars.
+   */
+  onSponsorsAllFetched?: (sponsors: Sponsorship[]) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
 
   /**
    * Hook to modify sponsors data before rendering.

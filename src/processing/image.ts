@@ -37,6 +37,7 @@ export async function resolveAvatars(
 
     if (data) {
       const radius = ship.sponsor.type === 'Organization' ? 0.1 : 0.5
+      ship.sponsor.avatarBuffer = arrayBufferToBase64(data)
       ship.sponsor.avatarUrlHighRes = pngToDataUri(await round(data, radius, 120))
       ship.sponsor.avatarUrlMediumRes = pngToDataUri(await round(data, radius, 80))
       ship.sponsor.avatarUrlLowRes = pngToDataUri(await round(data, radius, 50))
@@ -51,6 +52,25 @@ function toBuffer(ab: ArrayBuffer) {
     buf[i] = view[i]
 
   return buf
+}
+
+export function base64ToArrayBuffer(base64: string) {
+  const binaryString = atob(base64)
+  const len = binaryString.length
+  const bytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++)
+    bytes[i] = binaryString.charCodeAt(i)
+
+  return bytes.buffer
+}
+
+export function arrayBufferToBase64(buffer: ArrayBuffer) {
+  let binary = ''
+  const bytes = new Uint8Array(buffer)
+  const len = bytes.byteLength
+  for (let i = 0; i < len; i++)
+    binary += String.fromCharCode(bytes[i])
+  return btoa(binary)
 }
 
 export async function round(image: string | ArrayBuffer, radius = 0.5, size = 100) {
@@ -77,6 +97,6 @@ export function svgToPng(svg: string) {
 
 const parser = new DatauriParser()
 
-function pngToDataUri(png: Buffer) {
+export function pngToDataUri(png: Buffer) {
   return parser.format('.png', png).content
 }

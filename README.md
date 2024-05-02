@@ -73,6 +73,7 @@ export default defineConfig({
 
   // Rendering configs
   width: 800,
+  renderer: 'tiers' | 'circles',
   formats: ['json', 'svg', 'png'],
   tiers: [
     // Past sponsors, currently only supports GitHub

@@ -10,6 +10,7 @@ import { resolveAvatars, svgToPng } from './processing/image'
 import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderOptions, SponsorkitRenderer, Sponsorship } from './types'
 import { guessProviders, resolveProviders } from './providers'
 import { tiersRenderer } from './renders/tiers'
+import { builtinRenderers } from './renders'
 
 export {
   // default
@@ -55,6 +56,8 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
       allSponsors.push(...sponsors)
     }
 
+    allSponsors = await config.onSponsorsAllFetched?.(allSponsors) || allSponsors
+
     t.info('Resolving avatars...')
     await resolveAvatars(allSponsors, config.fallbackAvatar, t)
     t.success('Avatars resolved')
@@ -74,24 +77,29 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     || (b.sponsor.login || b.sponsor.name).localeCompare(a.sponsor.login || a.sponsor.name), // ASC name
   )
 
+  allSponsors = await config.onSponsorsReady?.(allSponsors) || allSponsors
+
   if (config.renders?.length) {
     t.info(`Generating with ${config.renders.length} renders...`)
-    await Promise.all(config.renders.map(renderOptions =>
-      applyRenderer(
-        tiersRenderer,
+    await Promise.all(config.renders.map(async (renderOptions) => {
+      const mergedOptions = {
+        ...fullConfig,
+        ...renderOptions,
+      }
+      const renderer = builtinRenderers[mergedOptions.renderer || 'tiers']
+      await applyRenderer(
+        renderer,
         config,
-        {
-          ...fullConfig,
-          ...renderOptions,
-        },
+        mergedOptions,
         allSponsors,
         t,
-      ),
-    ))
+      )
+    }))
   }
   else {
+    const renderer = builtinRenderers[fullConfig.renderer || 'tiers']
     await applyRenderer(
-      tiersRenderer,
+      renderer,
       config,
       fullConfig,
       allSponsors,
@@ -107,6 +115,9 @@ export async function applyRenderer(
   sponsors: Sponsorship[],
   t = consola,
 ) {
+  sponsors = [...sponsors]
+  sponsors = await renderOptions.onBeforeRenderer?.(sponsors) || sponsors
+
   const logPrefix = c.dim(`[${renderOptions.name}]`)
   const dir = resolve(process.cwd(), config.outputDir)
   await fsp.mkdir(dir, { recursive: true })
@@ -116,14 +127,14 @@ export async function applyRenderer(
     t.success(`${logPrefix} Wrote to ${r(path)}`)
   }
 
-  sponsors = await config.onSponsorsReady?.(sponsors) || sponsors
   if (renderOptions.filter)
     sponsors = sponsors.filter(s => renderOptions.filter(s, sponsors) !== false)
   if (!renderOptions.includePrivate)
     sponsors = sponsors.filter(s => s.privacyLevel !== 'PRIVATE')
 
   t.info(`${logPrefix} Composing SVG...`)
-  const svg = await renderer.renderSVG(renderOptions, sponsors)
+  let svg = await renderer.renderSVG(renderOptions, sponsors)
+  svg = await renderOptions.onSvgGenerated?.(svg) || svg
 
   if (renderOptions.formats?.includes('svg')) {
     const path = join(dir, `${renderOptions.name}.svg`)

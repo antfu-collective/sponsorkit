@@ -8,9 +8,7 @@ export const tiersRenderer: SponsorkitRenderer = {
   async renderSVG(config, sponsors) {
     const composer = new SvgComposer(config)
     await (config.customComposer || tiersComposer)(composer, sponsors, config)
-    let svg = composer.generateSvg()
-    svg = await config.onSvgGenerated?.(svg) || svg
-    return svg
+    return composer.generateSvg()
   },
 }
 

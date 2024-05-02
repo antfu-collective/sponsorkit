@@ -50,5 +50,11 @@ export default defineConfig({
       width: 1000,
       formats: ['svg'],
     },
+    {
+      renderer: 'circles',
+      name: 'sponsors-circles',
+      width: 1000,
+      includePastSponsors: true,
+    },
   ],
 })
