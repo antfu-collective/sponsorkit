@@ -2,44 +2,31 @@ import nock from 'nock'
 import { expect, it } from 'vitest'
 import { fetchPolarSponsors } from '../src/providers/polar'
 
+function createFakeSubscription(props: { status: 'active' | 'inactive', price: number }) {
+  return {
+    user: {
+      public_name: 'user',
+      avatar_url: 'avatar',
+      github_username: 'login',
+    },
+    subscription_tier: { type: 'individual' },
+    status: props.status,
+    created_at: '2021-10-01',
+    subscription: { price: { price_amount: props.price } },
+    price: props.price === 0
+      ? null
+      : { created_at: '2024-05-01T20:51:56.335096Z', id: 'e7143e00-221a-40f8-8904-b3284e1325a9', price_amount: props.price, price_currency: 'usd' },
+  }
+}
+
 it('works fine', async () => {
   nock('https://api.polar.sh')
     .get('/api/v1/subscriptions/subscriptions/search')
     .query({ page: 1 })
     .reply(200, {
       items: [
-        /**
-         * Active subscription
-         */
-        {
-          user: { public_name: 'user', avatar_url: 'avatar', github_username: 'login' },
-          subscription_tier: { type: 'individual' },
-          status: 'active',
-          created_at: '2021-10-01',
-          subscription: { price: { price_amount: 100 } },
-          price: {
-            created_at: '2024-05-01T20:51:56.335096Z',
-            id: 'e7143e00-221a-40f8-8904-b3284e1325a9',
-            price_amount: 1500,
-            price_currency: 'usd',
-          },
-        },
-        /**
-         * Inactive subscription ( past sponsor )
-         */
-        {
-          user: { public_name: 'user', avatar_url: 'avatar', github_username: 'login' },
-          subscription_tier: { type: 'individual' },
-          status: 'inactive',
-          created_at: '2021-10-01',
-          subscription: { price: { price_amount: 100 } },
-          price: {
-            created_at: '2024-05-01T20:51:56.335096Z',
-            id: 'e7143e00-221a-40f8-8904-b3284e1325a9',
-            price_amount: 1500,
-            price_currency: 'usd',
-          },
-        },
+        createFakeSubscription({ status: 'active', price: 100 }),
+        createFakeSubscription({ status: 'inactive', price: 100 }),
       ],
       pagination: { max_page: 1 },
     })
@@ -65,4 +52,42 @@ it('works fine', async () => {
       monthlyDollars: -1,
     },
   ])
+})
+
+it('fetch all pages', async () => {
+  nock('https://api.polar.sh')
+    .get('/api/v1/subscriptions/subscriptions/search')
+    .query({ page: 1 })
+    .reply(200, {
+      items: [createFakeSubscription({ status: 'active', price: 100 })],
+      pagination: { max_page: 2 },
+    })
+
+  nock('https://api.polar.sh')
+    .get('/api/v1/subscriptions/subscriptions/search')
+    .query({ page: 2 })
+    .reply(200, {
+      items: [createFakeSubscription({ status: 'active', price: 100 })],
+      pagination: { max_page: 2 },
+    })
+
+  const result = await fetchPolarSponsors('token')
+  expect(result.length).toBe(2)
+})
+
+it('throw error if no token', async () => {
+  await expect(fetchPolarSponsors('')).rejects.toThrow('Polar token is required')
+})
+
+it('filter out free subscriptions', async () => {
+  nock('https://api.polar.sh')
+    .get('/api/v1/subscriptions/subscriptions/search')
+    .query({ page: 1 })
+    .reply(200, {
+      items: [createFakeSubscription({ status: 'active', price: 0 })],
+      pagination: { max_page: 1 },
+    })
+
+  const result = await fetchPolarSponsors('token')
+  expect(result).toEqual([])
 })
