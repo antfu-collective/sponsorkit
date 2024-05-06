@@ -161,6 +161,9 @@ export interface ProvidersConfig {
      * Polar token that have access to your sponsorships.
      *
      * Will read from `SPONSORKIT_POLAR_TOKEN` environment variable if not set.
+     *
+     * @see https://polar.sh/settings
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
      */
     token?: string
   }
