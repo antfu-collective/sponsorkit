@@ -32,11 +32,12 @@ export async function fetchPolarSponsors(token: string): Promise<Sponsorship[]> 
     page += 1
   } while (page <= pages)
 
-  /**
-   * People can subscribe for free on Polar : the price is null in this case
-   * so we filter out those subscriptions
-   */
-  return subscriptions.filter(sub => !!sub.price)
+  return subscriptions
+    /**
+     * - People can subscribe for free on Polar : the price is null in this case
+     * - We also only keep `active` subscriptions. Still not sure what `inactive` means
+     */
+    .filter(sub => !!sub.price && sub.status === 'active')
     .map(sub => ({
       sponsor: {
         name: sub.user.public_name,
