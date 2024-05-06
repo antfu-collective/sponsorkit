@@ -37,19 +37,23 @@ export async function fetchPolarSponsors(token: string): Promise<Sponsorship[]> 
      * - People can subscribe for free on Polar : the price is null in this case
      * - We also only keep `active` subscriptions. Still not sure what `inactive` means
      */
-    .filter(sub => !!sub.price && sub.status === 'active')
-    .map(sub => ({
-      sponsor: {
-        name: sub.user.public_name,
-        avatarUrl: sub.user.avatar_url,
-        login: sub.user.github_username,
-        type: sub.subscription_tier.type === 'individual' ? 'User' : 'Organization',
-      },
-      isOneTime: false,
-      provider: 'polar',
-      privacyLevel: 'PUBLIC',
-      createdAt: new Date(sub.created_at).toISOString(),
-      tierName: sub.subscription_tier.name,
-      monthlyDollars: sub.price.price_amount / 100,
-    }))
+    .filter(sub => !!sub.price)
+    .map((sub) => {
+      const isActive = sub.status === 'active'
+
+      return {
+        sponsor: {
+          name: sub.user.public_name,
+          avatarUrl: sub.user.avatar_url,
+          login: sub.user.github_username,
+          type: sub.subscription_tier.type === 'individual' ? 'User' : 'Organization',
+        },
+        isOneTime: false,
+        provider: 'polar',
+        privacyLevel: 'PUBLIC',
+        createdAt: new Date(sub.created_at).toISOString(),
+        tierName: isActive ? sub.subscription_tier.name : undefined,
+        monthlyDollars: isActive ? sub.sub.price.price_amount / 100 : -1,
+      }
+    })
 }
