@@ -3,6 +3,7 @@ import { GitHubProvider } from './github'
 import { PatreonProvider } from './patreon'
 import { OpenCollectiveProvider } from './opencollective'
 import { AfdianProvider } from './afdian'
+import { PolarProvider } from './polar'
 
 export * from './github'
 
@@ -11,6 +12,7 @@ export const ProvidersMap = {
   patreon: PatreonProvider,
   opencollective: OpenCollectiveProvider,
   afdian: AfdianProvider,
+  polar: PolarProvider,
 }
 
 export function guessProviders(config: SponsorkitConfig) {
@@ -26,6 +28,9 @@ export function guessProviders(config: SponsorkitConfig) {
 
   if (config.afdian && config.afdian.userId && config.afdian.token)
     items.push('afdian')
+
+  if (config.polar && config.polar.token)
+    items.push('polar')
 
   // fallback
   if (!items.length)

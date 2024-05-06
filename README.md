@@ -10,6 +10,7 @@ Supports:
 - [**Patreon**](https://www.patreon.com/)
 - [**OpenCollective**](https://opencollective.com/)
 - [**Afdian**](https://afdian.net/)
+- [**Polar**](https://polar.sh/)
 
 ## Usage
 
@@ -43,6 +44,10 @@ SPONSORKIT_OPENCOLLECTIVE_TYPE=
 SPONSORKIT_AFDIAN_USER_ID=
 ; Create token at https://afdian.net/dashboard/dev
 SPONSORKIT_AFDIAN_TOKEN=
+
+; Polar provider.
+; Get your token at https://polar.sh/settings
+SPONSORKIT_POLAR_TOKEN=
 ```
 
 > Only one provider is required to be configured.
@@ -75,6 +80,9 @@ export default defineConfig({
     // ...
   },
   afdian: {
+    // ...
+  },
+  polar: {
     // ...
   },
 

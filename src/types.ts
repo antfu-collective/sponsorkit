@@ -60,7 +60,7 @@ export interface Sponsorship {
 
 export type OutputFormat = 'svg' | 'png' | 'json'
 
-export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian'
+export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar'
 
 export interface ProvidersConfig {
   github?: {
@@ -154,6 +154,15 @@ export interface ProvidersConfig {
      * @default 6.5
      */
     exechangeRate?: number
+  }
+
+  polar?: {
+    /**
+     * Polar token that have access to your sponsorships.
+     *
+     * Will read from `SPONSORKIT_POLAR_TOKEN` environment variable if not set.
+     */
+    token?: string
   }
 }
 
