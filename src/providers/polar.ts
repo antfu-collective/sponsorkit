@@ -35,7 +35,6 @@ export async function fetchPolarSponsors(token: string): Promise<Sponsorship[]> 
   return subscriptions
     /**
      * - People can subscribe for free on Polar : the price is null in this case
-     * - We also only keep `active` subscriptions. Still not sure what `inactive` means
      */
     .filter(sub => !!sub.price)
     .map((sub) => {
