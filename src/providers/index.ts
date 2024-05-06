@@ -40,15 +40,16 @@ export function guessProviders(config: SponsorkitConfig) {
 }
 
 export function resolveProviders(names: (ProviderName | Provider)[]) {
-  return Array.from(new Set(names)).map((i) => {
-    if (typeof i === 'string') {
-      const provider = ProvidersMap[i]
-      if (!provider)
-        throw new Error(`Unknown provider: ${i}`)
-      return provider
-    }
-    return i
-  })
+  return Array.from(new Set(names))
+    .map((i) => {
+      if (typeof i === 'string') {
+        const provider = ProvidersMap[i]
+        if (!provider)
+          throw new Error(`Unknown provider: ${i}`)
+        return provider
+      }
+      return i
+    })
 }
 
 export async function fetchSponsors(config: SponsorkitConfig) {

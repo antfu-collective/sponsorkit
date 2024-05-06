@@ -275,7 +275,7 @@ export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptio
   /**
    * @default auto detect based on the config provided
    */
-  providers?: ProviderName[]
+  providers?: (ProviderName | Provider)[]
 
   /**
    * By pass cache
