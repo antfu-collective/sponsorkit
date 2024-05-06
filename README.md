@@ -2,7 +2,14 @@
 
 [![NPM version](https://img.shields.io/npm/v/sponsorkit?color=a1b858&label=)](https://www.npmjs.com/package/sponsorkit)
 
-Toolkit for generating sponsors images. Supports **GitHub Sponsors**, **Patreon**, **OpenCollective** and **Afdian**.
+Toolkit for fetching sponsors info and generating sponsors images.
+
+Supports:
+
+- [**GitHub Sponsors**](https://github.com/sponsors)
+- [**Patreon**](https://www.patreon.com/)
+- [**OpenCollective**](https://opencollective.com/)
+- [**Afdian**](https://afdian.net/)
 
 ## Usage
 
@@ -48,7 +55,7 @@ npx sponsorkit
 
 [Example Setup](./example/) | [GitHub Actions Setup](https://github.com/antfu/static/blob/master/.github/workflows/scheduler.yml) | [Generated SVG](https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg)
 
-## Configurations
+### Configurations
 
 Create `sponsorkit.config.js` file with:
 
@@ -73,7 +80,7 @@ export default defineConfig({
 
   // Rendering configs
   width: 800,
-  renderer: 'tiers' | 'circles',
+  renderer: 'tiers', // or 'circles'
   formats: ['json', 'svg', 'png'],
   tiers: [
     // Past sponsors, currently only supports GitHub
@@ -108,7 +115,7 @@ export default defineConfig({
 
 Also check [the example](./example/).
 
-## Utils
+### Programmatic Utilities
 
 You can also use SponsorKit programmatically:
 
@@ -120,14 +127,21 @@ const sponsors = await fetchSponsors(token, login)
 
 Check the type definition or source code for more utils available.
 
-## Renderers
+### Renderers
 
 We provide two renderers built-in:
 
 - `tiers`: Render sponsors in tiers.
 - `circles`: Render sponsors in packed circles.
 
-### Tiers Renderer
+#### Tiers Renderer
+
+```ts
+export default defineConfig({
+  renderer: 'tiers',
+  // ...
+})
+```
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg">
@@ -135,13 +149,57 @@ We provide two renderers built-in:
   </a>
 </p>
 
-### Circles Renderer
+#### Circles Renderer
+
+```ts
+export default defineConfig({
+  renderer: 'circles',
+  // ...
+})
+```
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.circles.svg">
     <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.circles.svg'/>
   </a>
 </p>
+
+### Multiple Renders
+
+We also support rendering multiple images at once with different configurations, via `renders` field:
+
+```ts
+import { defineConfig, tierPresets } from 'sponsorkit'
+
+export default defineConfig({
+  // Providers configs
+  github: { /* ... */ },
+
+  // Default configs
+  width: 800,
+  tiers: [
+    /* ... */
+  ],
+
+  // Define multiple renders, each will inherit the top-level configs
+  renders: [
+    {
+      name: 'sponsors.tiers',
+      formats: ['svg'],
+    },
+    {
+      name: 'sponsors.wide',
+      width: 1200,
+    },
+    {
+      name: 'sponsors.circles',
+      renderer: 'circles',
+      width: 600,
+    },
+    // ...
+  ],
+})
+```
 
 ## License
 
