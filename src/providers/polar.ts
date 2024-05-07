@@ -52,7 +52,7 @@ export async function fetchPolarSponsors(token: string): Promise<Sponsorship[]> 
         privacyLevel: 'PUBLIC',
         createdAt: new Date(sub.created_at).toISOString(),
         tierName: isActive ? sub.subscription_tier.name : undefined,
-        monthlyDollars: isActive ? sub.sub.price.price_amount / 100 : -1,
+        monthlyDollars: isActive ? sub.subscription.price.price_amount / 100 : -1,
       }
     })
 }
