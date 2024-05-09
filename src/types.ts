@@ -307,6 +307,23 @@ export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptio
   replaceAvatars?: Record<string, string> | (((sponsor: Sponsorship) => string) | Record<string, string>)[]
 
   /**
+   * Merge multiple sponsors, useful for combining sponsors from different providers.
+   *
+   * @example
+   * ```js
+   * mergeSponsors: [
+   *   // Array of sponsor matchers
+   *   [{ login: 'antfu', provider: 'github' }, { login: 'antfu', provider: 'patreon' }],
+   *   // custom functions to find matched sponsors
+   *   (sponsor, allSponsors) => {
+   *     return allSponsors.filter(s => s.sponsor.login === sponsor.sponsor.login)
+   *   }
+   * ]
+   * ```
+   */
+  mergeSponsors?: (SponsorMatcher[] | ((sponsor: Sponsorship, allSponsors: Sponsorship[]) => Sponsorship[] | void))[]
+
+  /**
    * Hook to modify sponsors data for each provider.
    */
   onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
@@ -331,6 +348,10 @@ export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptio
    * Configs for multiple renders
    */
   renders?: SponsorkitRenderOptions[]
+}
+
+export interface SponsorMatcher extends Partial<Pick<Sponsor, 'login' | 'name' | 'type'>> {
+  provider?: ProviderName | string
 }
 
 export type SponsorkitMainConfig = Omit<SponsorkitConfig, keyof SponsorkitRenderOptions>

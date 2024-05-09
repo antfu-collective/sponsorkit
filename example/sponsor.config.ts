@@ -46,6 +46,14 @@ export default defineConfig({
   //   ...
   // },
 
+  // Merge sponsors from different platforms
+  // mergeSponsors: [
+  //   [
+  //     { login: 'patak-dev', provider: 'github' },
+  //     { login: 'patak', provider: 'opencollective' },
+  //   ],
+  // ],
+
   // Run multiple renders with different configurations
   renders: [
     {

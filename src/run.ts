@@ -4,10 +4,11 @@ import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import { consola } from 'consola'
 import c from 'picocolors'
+import { notNullish } from '@antfu/utils'
 import { version } from '../package.json'
 import { loadConfig } from './configs'
 import { resolveAvatars, svgToPng } from './processing/image'
-import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderOptions, SponsorkitRenderer, Sponsorship } from './types'
+import type { SponsorMatcher, SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderOptions, SponsorkitRenderer, Sponsorship } from './types'
 import { guessProviders, resolveProviders } from './providers'
 import { builtinRenderers } from './renders'
 
@@ -49,6 +50,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
 
   let allSponsors: Sponsorship[] = []
   if (!fs.existsSync(cacheFile) || config.force) {
+    // Fetch sponsors
     for (const i of providers) {
       t.info(`Fetching sponsorships from ${i.name}...`)
       let sponsors = await i.fetchSponsors(config)
@@ -58,7 +60,97 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
       allSponsors.push(...sponsors)
     }
 
+    // Custom hook
     allSponsors = await config.onSponsorsAllFetched?.(allSponsors) || allSponsors
+
+    // Merge sponsors
+    {
+      const sponsorsMergeMap = new Map<Sponsorship, Set<Sponsorship>>()
+
+      function pushGroup(group: Sponsorship[]) {
+        const existingSets = new Set(group.map(s => sponsorsMergeMap.get(s)).filter(notNullish))
+        let set: Set<Sponsorship>
+        if (existingSets.size === 1) {
+          set = [...existingSets.values()][0]
+        }
+        else if (existingSets.size === 0) {
+          set = new Set(group)
+        }
+        // Multiple sets, merge them into one
+        else {
+          set = new Set()
+          for (const s of existingSets) {
+            for (const i of s)
+              set.add(i)
+          }
+        }
+
+        for (const s of group) {
+          set.add(s)
+          sponsorsMergeMap.set(s, set)
+        }
+      }
+
+      function matchSponsor(sponsor: Sponsorship, matcher: SponsorMatcher) {
+        if (matcher.provider && sponsor.provider !== matcher.provider)
+          return false
+        if (matcher.login && sponsor.sponsor.login !== matcher.login)
+          return false
+        if (matcher.name && sponsor.sponsor.name !== matcher.name)
+          return false
+        if (matcher.type && sponsor.sponsor.type !== matcher.type)
+          return false
+        return true
+      }
+
+      for (const rule of config.mergeSponsors || []) {
+        if (typeof rule === 'function') {
+          for (const ship of allSponsors) {
+            const result = rule(ship, allSponsors)
+            if (result)
+              pushGroup(result)
+          }
+        }
+        else {
+          const group = rule.flatMap((matcher) => {
+            const matched = allSponsors.filter(s => matchSponsor(s, matcher))
+            if (!matched.length)
+              t.warn(`No sponsor matched for ${JSON.stringify(matcher)}`)
+            return matched
+          })
+          pushGroup(group)
+        }
+      }
+
+      function mergeSponsors(main: Sponsorship, sponsors: Sponsorship[]) {
+        const all = [main, ...sponsors]
+        main.isOneTime = all.every(s => s.isOneTime)
+        main.expireAt = all.map(s => s.expireAt).filter(notNullish).sort((a, b) => b.localeCompare(a))[0]
+        main.createdAt = all.map(s => s.createdAt).filter(notNullish).sort((a, b) => a.localeCompare(b))[0]
+        main.monthlyDollars = all.every(s => s.monthlyDollars === -1)
+          ? -1
+          : all.filter(s => s.monthlyDollars > 0).reduce((a, b) => a + b.monthlyDollars, 0)
+        main.provider = '[multiple]'
+        return main
+      }
+
+      const removeSponsors = new Set<Sponsorship>()
+      const groups = new Set(sponsorsMergeMap.values())
+      for (const group of groups) {
+        if (group.size === 1)
+          continue
+        const sorted = [...group]
+          .sort((a, b) => allSponsors.indexOf(a) - allSponsors.indexOf(b))
+
+        t.info(`Merging ${sorted.map(i => `@${i.sponsor.login}(${i.provider})`).join(' + ')}`)
+
+        for (const s of sorted.slice(1))
+          removeSponsors.add(s)
+        mergeSponsors(sorted[0], sorted.slice(1))
+      }
+
+      allSponsors = allSponsors.filter(s => !removeSponsors.has(s))
+    }
 
     // Links and avatars replacements
     allSponsors.forEach((ship) => {
@@ -182,7 +274,7 @@ export async function applyRenderer(
 }
 
 function normalizeReplacements(replaces: SponsorkitMainConfig['replaceLinks']) {
-  const array = (Array.isArray(replaces) ? replaces : [replaces]).filter(Boolean)
+  const array = (Array.isArray(replaces) ? replaces : [replaces]).filter(notNullish)
   const entries = array.map((i) => {
     if (!i)
       return []
