@@ -13,7 +13,7 @@ export function generateBadge(
   const size = preset.avatar.size
   const { login } = sponsor
   let name = (sponsor.name || sponsor.login).trim()
-  const url = sponsor.linkUrl
+  const url = sponsor.websiteUrl || sponsor.linkUrl
 
   if (preset.name && preset.name.maxLength && name.length > preset.name.maxLength) {
     if (name.includes(' '))
