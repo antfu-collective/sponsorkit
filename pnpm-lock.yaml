@@ -11,6 +11,9 @@ importers:
 
   .:
     dependencies:
+      '@antfu/utils':
+        specifier: ^0.7.7
+        version: 0.7.7
       consola:
         specifier: ^3.2.3
         version: 3.2.3
@@ -48,9 +51,6 @@ importers:
       '@antfu/ni':
         specifier: ^0.21.12
         version: 0.21.12
-      '@antfu/utils':
-        specifier: ^0.7.7
-        version: 0.7.7
       '@types/d3-hierarchy':
         specifier: ^3.1.7
         version: 3.1.7
