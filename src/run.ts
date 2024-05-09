@@ -44,6 +44,9 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     })
   }
 
+  const linksReplacements = normalizeReplacements(config.replaceLinks)
+  const avatarsReplacements = normalizeReplacements(config.replaceAvatars)
+
   let allSponsors: Sponsorship[] = []
   if (!fs.existsSync(cacheFile) || config.force) {
     for (const i of providers) {
@@ -56,6 +59,36 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     }
 
     allSponsors = await config.onSponsorsAllFetched?.(allSponsors) || allSponsors
+
+    // Links and avatars replacements
+    allSponsors.forEach((ship) => {
+      for (const r of linksReplacements) {
+        if (typeof r === 'function') {
+          const result = r(ship)
+          if (result) {
+            ship.sponsor.linkUrl = result
+            break
+          }
+        }
+        else if (r[0] === ship.sponsor.linkUrl) {
+          ship.sponsor.linkUrl = r[1]
+          break
+        }
+      }
+      for (const r of avatarsReplacements) {
+        if (typeof r === 'function') {
+          const result = r(ship)
+          if (result) {
+            ship.sponsor.avatarUrl = result
+            break
+          }
+        }
+        else if (r[0] === ship.sponsor.avatarUrl) {
+          ship.sponsor.avatarUrl = r[1]
+          break
+        }
+      }
+    })
 
     t.info('Resolving avatars...')
     await resolveAvatars(allSponsors, config.fallbackAvatar, t)
@@ -146,4 +179,16 @@ export async function applyRenderer(
     await fsp.writeFile(path, await svgToPng(svg))
     t.success(`${logPrefix} Wrote to ${r(path)}`)
   }
+}
+
+function normalizeReplacements(replaces: SponsorkitMainConfig['replaceLinks']) {
+  const array = (Array.isArray(replaces) ? replaces : [replaces]).filter(Boolean)
+  const entries = array.map((i) => {
+    if (!i)
+      return []
+    if (typeof i === 'function')
+      return [i]
+    return Object.entries(i) as [string, string][]
+  }).flat()
+  return entries
 }

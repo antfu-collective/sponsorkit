@@ -38,6 +38,14 @@ export default defineConfig({
     },
   ],
 
+  // Replace links and avatars
+  // replaceLinks: {
+  //   'https://github.com/antfu': 'https://antfu.me',
+  // },
+  // replaceAvatars: {
+  //   ...
+  // },
+
   // Run multiple renders with different configurations
   renders: [
     {

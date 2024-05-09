@@ -297,6 +297,16 @@ export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptio
   outputDir?: string
 
   /**
+   * Replace links in the sponsors data.
+   */
+  replaceLinks?: Record<string, string> | (((sponsor: Sponsorship) => string) | Record<string, string>)[]
+
+  /**
+   * Replace avatar link in the sponsors data.
+   */
+  replaceAvatars?: Record<string, string> | (((sponsor: Sponsorship) => string) | Record<string, string>)[]
+
+  /**
    * Hook to modify sponsors data for each provider.
    */
   onSponsorsFetched?: (sponsors: Sponsorship[], provider: ProviderName | string) => PromiseLike<void | Sponsorship[]> | void | Sponsorship[]
