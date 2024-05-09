@@ -41,6 +41,20 @@ export interface Sponsor {
   avatarUrlLowRes?: string
   websiteUrl?: string
   linkUrl?: string
+  /**
+   * Map of logins of other social accounts
+   *
+   * @example
+   * ```json
+   * {
+   *   'github': 'antfu',
+   *   'opencollective': 'antfu',
+   * }
+   * ```
+   *
+   * This would allow us to merge sponsors from different platforms.
+   */
+  socialLogins?: Record<string, string>
 }
 
 export interface Sponsorship {
@@ -322,6 +336,14 @@ export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptio
    * ```
    */
   mergeSponsors?: (SponsorMatcher[] | ((sponsor: Sponsorship, allSponsors: Sponsorship[]) => Sponsorship[] | void))[]
+
+  /**
+   * Merge sponsorships from same sponsor on different providers,
+   * based on their connection account on each platform.
+   *
+   * @default false
+   */
+  sponsorsAutoMerge?: boolean
 
   /**
    * Hook to modify sponsors data for each provider.

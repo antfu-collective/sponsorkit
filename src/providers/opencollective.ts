@@ -66,7 +66,9 @@ export async function fetchOpenCollectiveSponsors(
   offset = 0
   do {
     const now: Date = new Date()
-    const dateFrom: Date | undefined = includePastSponsors ? undefined : new Date(now.getFullYear(), now.getMonth(), 1)
+    const dateFrom: Date | undefined = includePastSponsors
+      ? undefined
+      : new Date(now.getFullYear(), now.getMonth(), 1)
     const query = makeTransactionsQuery(id, slug, githubHandle, offset, dateFrom)
     const data = await $fetch(API, {
       method: 'POST',
@@ -156,6 +158,7 @@ function createSponsorFromOrder(order: any): [string, Sponsorship] | undefined {
       avatarUrl: order.fromAccount.imageUrl,
       websiteUrl: getBestUrl(order.fromAccount.socialLinks),
       linkUrl: `https://opencollective.com/${slug}`,
+      socialLogins: getSocialLogins(order.fromAccount.socialLinks, slug),
     },
     isOneTime: order.frequency === 'ONETIME',
     monthlyDollars,
@@ -197,6 +200,7 @@ function createSponsorFromTransaction(transaction: any, excludeOrders: string[])
       avatarUrl: transaction.fromAccount.imageUrl,
       websiteUrl: getBestUrl(transaction.fromAccount.socialLinks),
       linkUrl: `https://opencollective.com/${slug}`,
+      socialLogins: getSocialLogins(transaction.fromAccount.socialLinks, slug),
     },
     isOneTime: transaction.order?.frequency === 'ONETIME',
     monthlyDollars,
@@ -276,6 +280,7 @@ function makeTransactionsQuery(
             id
             slug
             type
+            githubHandle
             socialLinks {
               url
               type
@@ -374,4 +379,18 @@ function getBestUrl(socialLinks: SocialLink[]): string | undefined {
     .map(i => i.url)
 
   return urls[0]
+}
+
+function getSocialLogins(socialLinks: SocialLink[] = [], opencollectiveLogin: string): Record<string, string> {
+  const socialLogins: Record<string, string> = {}
+  for (const link of socialLinks) {
+    if (link.type === 'GITHUB') {
+      const login = link.url.match(/github\.com\/([^\/]*)/)?.[1]
+      if (login)
+        socialLogins.github = login
+    }
+  }
+  if (opencollectiveLogin)
+    socialLogins.opencollective = opencollectiveLogin
+  return socialLogins
 }

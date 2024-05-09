@@ -46,6 +46,9 @@ export async function fetchPolarSponsors(token: string): Promise<Sponsorship[]> 
           avatarUrl: sub.user.avatar_url,
           login: sub.user.github_username,
           type: sub.subscription_tier.type === 'individual' ? 'User' : 'Organization',
+          socialLogins: {
+            github: sub.user.github_username,
+          },
         },
         isOneTime: false,
         provider: 'polar',

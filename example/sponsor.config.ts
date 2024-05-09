@@ -46,7 +46,10 @@ export default defineConfig({
   //   ...
   // },
 
-  // Merge sponsors from different platforms
+  // Automatically Merge sponsors from different platforms
+  sponsorsAutoMerge: true,
+
+  // Manually merge sponsors from different platforms
   // mergeSponsors: [
   //   [
   //     { login: 'patak-dev', provider: 'github' },

@@ -122,6 +122,18 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
         }
       }
 
+      if (config.sponsorsAutoMerge) {
+        for (const ship of allSponsors) {
+          if (!ship.sponsor.socialLogins)
+            continue
+          for (const [provider, login] of Object.entries(ship.sponsor.socialLogins)) {
+            const matched = allSponsors.filter(s => s.sponsor.login === login && s.provider === provider)
+            if (matched)
+              pushGroup([ship, ...matched])
+          }
+        }
+      }
+
       function mergeSponsors(main: Sponsorship, sponsors: Sponsorship[]) {
         const all = [main, ...sponsors]
         main.isOneTime = all.every(s => s.isOneTime)
@@ -130,7 +142,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
         main.monthlyDollars = all.every(s => s.monthlyDollars === -1)
           ? -1
           : all.filter(s => s.monthlyDollars > 0).reduce((a, b) => a + b.monthlyDollars, 0)
-        main.provider = '[multiple]'
+        main.provider = [...new Set(all.map(s => s.provider))].join('+')
         return main
       }
 
@@ -142,7 +154,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
         const sorted = [...group]
           .sort((a, b) => allSponsors.indexOf(a) - allSponsors.indexOf(b))
 
-        t.info(`Merging ${sorted.map(i => `@${i.sponsor.login}(${i.provider})`).join(' + ')}`)
+        t.info(`Merging ${sorted.map(i => c.cyan(`@${i.sponsor.login}(${i.provider})`)).join(' + ')}`)
 
         for (const s of sorted.slice(1))
           removeSponsors.add(s)
