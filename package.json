@@ -47,7 +47,7 @@
     "release": "bumpp && pnpm publish"
   },
   "dependencies": {
-    "@antfu/utils": "^0.7.7",
+    "@antfu/utils": "^0.7.8",
     "consola": "^3.2.3",
     "d3-hierarchy": "^3.1.2",
     "dotenv": "^16.4.5",
@@ -60,10 +60,10 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.16.2",
+    "@antfu/eslint-config": "^2.17.0",
     "@antfu/ni": "^0.21.12",
     "@types/d3-hierarchy": "^3.1.7",
-    "@types/node": "^20.12.10",
+    "@types/node": "^20.12.11",
     "@types/yargs": "^17.0.32",
     "bumpp": "^9.4.1",
     "eslint": "^9.2.0",
