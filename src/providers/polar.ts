@@ -4,11 +4,11 @@ import type { Provider, Sponsorship } from '../types'
 export const PolarProvider: Provider = {
   name: 'polar',
   fetchSponsors(config) {
-    return fetchPolarSponsors(config.polar?.token || config.token!)
+    return fetchPolarSponsors(config.polar?.token || config.token!, config.polar?.organization)
   },
 }
 
-export async function fetchPolarSponsors(token: string): Promise<Sponsorship[]> {
+export async function fetchPolarSponsors(token: string, organization?: string): Promise<Sponsorship[]> {
   if (!token)
     throw new Error('Polar token is required')
 
@@ -25,7 +25,13 @@ export async function fetchPolarSponsors(token: string): Promise<Sponsorship[]> 
   let pages = 1
   const subscriptions = []
   do {
-    const subs = await apiFetch('/subscriptions/subscriptions/search', { params: { page } })
+    const params: Record<string, any> = { page }
+    if (organization) {
+      params.organization_name = organization
+      // Polar only supports GitHub for now
+      params.platform = 'github'
+    }
+    const subs = await apiFetch('/subscriptions/subscriptions/search', { params })
     subscriptions.push(...subs.items)
 
     pages = subs.pagination.max_page
