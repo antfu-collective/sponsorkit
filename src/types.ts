@@ -180,6 +180,12 @@ export interface ProvidersConfig {
      * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
      */
     token?: string
+    /**
+     * The name of the organization to fetch sponsorships from. If not set, it will fetch the sponsorships of the user.
+     *
+     * Will read from `SPONSORKIT_POLAR_ORGANIZATION` environment variable if not set.
+     */
+    organization?: string
   }
 }
 

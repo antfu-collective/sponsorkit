@@ -48,6 +48,9 @@ SPONSORKIT_AFDIAN_TOKEN=
 ; Polar provider.
 ; Get your token at https://polar.sh/settings
 SPONSORKIT_POLAR_TOKEN=
+; The name of the organization to fetch sponsorships from.
+; If not set, it will fetch the sponsorships of the user.
+SPONSORKIT_POLAR_ORGANIZATION=
 ```
 
 > Only one provider is required to be configured.
