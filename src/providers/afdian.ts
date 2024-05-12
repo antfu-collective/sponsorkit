@@ -16,6 +16,8 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
     userId,
     token,
     exechangeRate = 6.5,
+    includePurchases = true,
+    purchaseEffectivity = 30,
   } = options
 
   if (!userId || !token)
@@ -46,6 +48,24 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
     if (sponsorshipData?.ec !== 200)
       break
     pages = sponsorshipData.data.total_page
+    if (!includePurchases) {
+      sponsorshipData.data.list = sponsorshipData.data.list.filter((sponsor: any) => {
+        const current = sponsor.current_plan
+        if (!current || current.product_type === 0)
+          return true
+        return false
+      })
+    }
+    if (purchaseEffectivity > 0) {
+      sponsorshipData.data.list = sponsorshipData.data.list.map((sponsor: any) => {
+        const current = sponsor.current_plan
+        if (!current || current.product_type === 0)
+          return sponsor
+        const expireTime = current.update_time + purchaseEffectivity * 24 * 3600
+        sponsor.current_plan.expire_time = expireTime
+        return sponsor
+      })
+    }
     sponsors.push(...sponsorshipData.data.list)
   } while (page <= pages)
 
