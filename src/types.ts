@@ -168,6 +168,16 @@ export interface ProvidersConfig {
      * @default 6.5
      */
     exechangeRate?: number
+    /**
+     * Include one-time purchases
+     * @default true
+     */
+    includePurchases?: boolean
+    /**
+     * One-time purchase effectivity period in days
+     * @default 30
+     */
+    purchaseEffectivity?: number
   }
 
   polar?: {
