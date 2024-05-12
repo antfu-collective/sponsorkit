@@ -53,9 +53,17 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
         const current = sponsor.current_plan
         if (!current || current.product_type === 0)
           return true
-        // if the purchase is expired, ignore it
+        return false
+      })
+    }
+    if (purchaseEffectivity > 0) {
+      sponsorshipData.data.list = sponsorshipData.data.list.map((sponsor: any) => {
+        const current = sponsor.current_plan
+        if (!current || current.product_type === 0)
+          return sponsor
         const expireTime = current.update_time + purchaseEffectivity * 24 * 3600
-        return expireTime > Date.now() / 1000
+        sponsor.current_plan.expire_time = expireTime
+        return sponsor
       })
     }
     sponsors.push(...sponsorshipData.data.list)
