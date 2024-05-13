@@ -76,9 +76,7 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
     let name = raw.user.name
     if (name.startsWith('爱发电用户_'))
       name = raw.user.user_id.slice(0, 5)
-    let avatarUrl = raw.user.avatar
-    if (avatarUrl.startsWith('https://pic1.afdiancdn.com/default/avatar/avatar-'))
-      avatarUrl = undefined
+    const avatarUrl = raw.user.avatar
     return {
       sponsor: {
         type: 'User',
