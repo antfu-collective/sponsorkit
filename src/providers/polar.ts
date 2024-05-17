@@ -51,7 +51,7 @@ export async function fetchPolarSponsors(token: string, organization?: string): 
           name: sub.user.public_name,
           avatarUrl: sub.user.avatar_url,
           login: sub.user.github_username,
-          type: sub.subscription_tier.type === 'individual' ? 'User' : 'Organization',
+          type: sub.product.type === 'individual' ? 'User' : 'Organization',
           socialLogins: {
             github: sub.user.github_username,
           },
@@ -60,7 +60,7 @@ export async function fetchPolarSponsors(token: string, organization?: string): 
         provider: 'polar',
         privacyLevel: 'PUBLIC',
         createdAt: new Date(sub.created_at).toISOString(),
-        tierName: isActive ? sub.subscription_tier.name : undefined,
+        tierName: isActive ? sub.product.name : undefined,
         monthlyDollars: isActive ? sub.price.price_amount / 100 : -1,
       }
     })
