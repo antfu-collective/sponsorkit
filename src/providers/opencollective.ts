@@ -385,7 +385,7 @@ function getSocialLogins(socialLinks: SocialLink[] = [], opencollectiveLogin: st
   const socialLogins: Record<string, string> = {}
   for (const link of socialLinks) {
     if (link.type === 'GITHUB') {
-      const login = link.url.match(/github\.com\/([^\/]*)/)?.[1]
+      const login = link.url.match(/github\.com\/([^/]*)/)?.[1]
       if (login)
         socialLogins.github = login
     }
