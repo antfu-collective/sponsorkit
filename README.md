@@ -68,7 +68,7 @@ npx sponsorkit
 Create `sponsorkit.config.js` file with:
 
 ```ts
-import { defineConfig, presets } from 'sponsorkit'
+import { defineConfig, tierPresets } from 'sponsorkit'
 
 export default defineConfig({
   // Providers configs
@@ -98,27 +98,27 @@ export default defineConfig({
     {
       title: 'Past Sponsors',
       monthlyDollars: -1,
-      preset: presets.xs,
+      preset: tierPresets.xs,
     },
     // Default tier
     {
       title: 'Backers',
-      preset: presets.base,
+      preset: tierPresets.base,
     },
     {
       title: 'Sponsors',
       monthlyDollars: 10,
-      preset: presets.medium,
+      preset: tierPresets.medium,
     },
     {
       title: 'Silver Sponsors',
       monthlyDollars: 50,
-      preset: presets.large,
+      preset: tierPresets.large,
     },
     {
       title: 'Gold Sponsors',
       monthlyDollars: 100,
-      preset: presets.xl,
+      preset: tierPresets.xl,
     },
   ],
 })
