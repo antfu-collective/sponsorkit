@@ -1,5 +1,6 @@
 import { $fetch } from 'ofetch'
 import type { Provider, SponsorkitConfig, Sponsorship } from '../../types'
+import { normalizeUrl } from '../../utils'
 import { getPastSponsors } from './get-past-sponsors'
 
 const API = 'https://api.github.com/graphql'
@@ -64,6 +65,7 @@ export async function fetchGitHubSponsors(
     .map((raw: any): Sponsorship => ({
       sponsor: {
         ...raw.sponsorEntity,
+        websiteUrl: normalizeUrl(raw.sponsorEntity.websiteUrl),
         linkUrl: `https://github.com/${raw.sponsorEntity.login}`,
         __typename: undefined,
         type: raw.sponsorEntity.__typename,
