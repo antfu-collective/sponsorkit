@@ -1,5 +1,6 @@
 import { $fetch } from 'ofetch'
 import type { Provider, Sponsorship } from '../types'
+import { normalizeUrl } from '../utils'
 
 interface SocialLink {
   type: string
@@ -156,7 +157,7 @@ function createSponsorFromOrder(order: any): [string, Sponsorship] | undefined {
       type: getAccountType(order.fromAccount.type),
       login: slug,
       avatarUrl: order.fromAccount.imageUrl,
-      websiteUrl: getBestUrl(order.fromAccount.socialLinks),
+      websiteUrl: normalizeUrl(getBestUrl(order.fromAccount.socialLinks)),
       linkUrl: `https://opencollective.com/${slug}`,
       socialLogins: getSocialLogins(order.fromAccount.socialLinks, slug),
     },
@@ -198,7 +199,7 @@ function createSponsorFromTransaction(transaction: any, excludeOrders: string[])
       type: getAccountType(transaction.fromAccount.type),
       login: slug,
       avatarUrl: transaction.fromAccount.imageUrl,
-      websiteUrl: getBestUrl(transaction.fromAccount.socialLinks),
+      websiteUrl: normalizeUrl(getBestUrl(transaction.fromAccount.socialLinks)),
       linkUrl: `https://opencollective.com/${slug}`,
       socialLogins: getSocialLogins(transaction.fromAccount.socialLinks, slug),
     },
