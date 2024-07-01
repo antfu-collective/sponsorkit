@@ -11,27 +11,43 @@ export const PolarProvider: Provider = {
 export async function fetchPolarSponsors(token: string, organization?: string): Promise<Sponsorship[]> {
   if (!token)
     throw new Error('Polar token is required')
+  if (!organization)
+    throw new Error('Polar organization is required')
 
   const apiFetch = ofetch.create({
-    baseURL: 'https://api.polar.sh/api/v1',
+    baseURL: 'https://api.polar.sh/v1',
     headers: { Authorization: `Bearer ${token}` },
   })
 
   /**
-   * First fetch the list of all subscriptions. This is a paginated
+   * Get the organization by config name. Fetching the ID for future API calls.
+   *
+   * For backward compatability with existing configs, improved readability & DX,
+   * we keep config.polar.organization vs. introducing config.polar.organization_id even
+   * though we only need the ID.
+   */
+  const org = await apiFetch('/organizations', {
+    params: {
+      name: organization,
+    },
+  })
+  const orgId = org.items?.[0]?.id
+  if (!orgId)
+    throw new Error(`Polar organization "${organization}" not found`)
+
+  /**
+   * Fetch the list of all subscriptions. This is a paginated
    * endpoint so loop through all the pages
    */
   let page = 1
   let pages = 1
   const subscriptions = []
   do {
-    const params: Record<string, any> = { page }
-    if (organization) {
-      params.organization_name = organization
-      // Polar only supports GitHub for now
-      params.platform = 'github'
+    const params: Record<string, any> = {
+      organization_id: orgId,
+      page,
     }
-    const subs = await apiFetch('/subscriptions/subscriptions/search', { params })
+    const subs = await apiFetch('/subscriptions', { params })
     subscriptions.push(...subs.items)
 
     pages = subs.pagination.max_page
