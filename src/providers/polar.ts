@@ -15,7 +15,7 @@ export async function fetchPolarSponsors(token: string, organization?: string): 
     throw new Error('Polar organization is required')
 
   const apiFetch = ofetch.create({
-    baseURL: 'https://api.polar.sh/api/v1',
+    baseURL: 'https://api.polar.sh/v1',
     headers: { Authorization: `Bearer ${token}` },
   })
 
