@@ -28,7 +28,7 @@ export async function fetchPolarSponsors(token: string, organization?: string): 
    */
   const org = await apiFetch('/organizations', {
     params: {
-      name: organization,
+      slug: organization,
     },
   })
   const orgId = org.items?.[0]?.id
