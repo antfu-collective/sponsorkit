@@ -62,6 +62,7 @@ export async function fetchGitHubSponsors(
   } while (cursor)
 
   const processed = sponsors
+    .filter((raw: any) => !!raw.tier)
     .map((raw: any): Sponsorship => ({
       sponsor: {
         ...raw.sponsorEntity,
