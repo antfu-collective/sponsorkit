@@ -1,6 +1,6 @@
 import { $fetch } from 'ofetch'
-import type { Provider, Sponsorship } from '../types'
 import { normalizeUrl } from '../utils'
+import type { Provider, Sponsorship } from '../types'
 
 interface SocialLink {
   type: string

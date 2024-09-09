@@ -1,12 +1,12 @@
 import { loadConfig as _loadConfig } from 'unconfig'
-import type { SponsorkitConfig, Sponsorship, Tier, TierPartition } from '../types'
-import { FALLBACK_AVATAR } from './fallback'
-import { loadEnv } from './env'
 import { defaultConfig } from './defaults'
+import { loadEnv } from './env'
+import { FALLBACK_AVATAR } from './fallback'
+import type { SponsorkitConfig, Sponsorship, Tier, TierPartition } from '../types'
 
-export * from './tier-presets'
-export * from './fallback'
 export * from './defaults'
+export * from './fallback'
+export * from './tier-presets'
 
 export function defineConfig(config: SponsorkitConfig): SponsorkitConfig {
   return config

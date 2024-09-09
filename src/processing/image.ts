@@ -1,7 +1,7 @@
 import { Buffer } from 'node:buffer'
+import { consola } from 'consola'
 import { $fetch } from 'ofetch'
 import sharp from 'sharp'
-import { consola } from 'consola'
 import { version } from '../../package.json'
 import type { SponsorkitConfig, Sponsorship } from '../types'
 

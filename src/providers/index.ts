@@ -1,9 +1,9 @@
-import type { Provider, ProviderName, SponsorkitConfig } from '../types'
-import { GitHubProvider } from './github'
-import { PatreonProvider } from './patreon'
-import { OpenCollectiveProvider } from './opencollective'
 import { AfdianProvider } from './afdian'
+import { GitHubProvider } from './github'
+import { OpenCollectiveProvider } from './opencollective'
+import { PatreonProvider } from './patreon'
 import { PolarProvider } from './polar'
+import type { Provider, ProviderName, SponsorkitConfig } from '../types'
 
 export * from './github'
 

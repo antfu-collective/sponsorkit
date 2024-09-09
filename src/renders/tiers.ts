@@ -1,7 +1,7 @@
-import type { SponsorkitConfig, SponsorkitRenderer, Sponsorship } from '../types'
-import { SvgComposer } from '../processing/svg'
 import { partitionTiers } from '../configs'
 import { tierPresets } from '../configs/tier-presets'
+import { SvgComposer } from '../processing/svg'
+import type { SponsorkitConfig, SponsorkitRenderer, Sponsorship } from '../types'
 
 export const tiersRenderer: SponsorkitRenderer = {
   name: 'sponsorkit:tiers',

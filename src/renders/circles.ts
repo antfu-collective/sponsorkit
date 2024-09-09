@@ -1,6 +1,6 @@
-import type { Sponsor, SponsorkitRenderer, Sponsorship } from '../types'
-import { SvgComposer, generateBadge } from '../processing/svg'
 import { base64ToArrayBuffer, pngToDataUri, round } from '../processing/image'
+import { generateBadge, SvgComposer } from '../processing/svg'
+import type { Sponsor, SponsorkitRenderer, Sponsorship } from '../types'
 
 export const circlesRenderer: SponsorkitRenderer = {
   name: 'sponsorkit:circles',

@@ -1,24 +1,25 @@
-import { dirname, join, relative, resolve } from 'node:path'
-import process from 'node:process'
+/* eslint-disable unicorn/consistent-function-scoping */
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
+import { dirname, join, relative, resolve } from 'node:path'
+import process from 'node:process'
+import { notNullish } from '@antfu/utils'
 import { consola } from 'consola'
 import c from 'picocolors'
-import { notNullish } from '@antfu/utils'
 import { version } from '../package.json'
 import { loadConfig } from './configs'
 import { resolveAvatars, svgToPng } from './processing/image'
-import type { SponsorMatcher, SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderOptions, SponsorkitRenderer, Sponsorship } from './types'
 import { guessProviders, resolveProviders } from './providers'
 import { builtinRenderers } from './renders'
+import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderer, SponsorkitRenderOptions, SponsorMatcher, Sponsorship } from './types'
 
 export {
+  tiersComposer as defaultComposer,
+  tiersComposer,
+
   // default
   tiersRenderer as defaultRenderer,
-  tiersComposer as defaultComposer,
-
   tiersRenderer,
-  tiersComposer,
 } from './renders/tiers'
 
 function r(path: string) {

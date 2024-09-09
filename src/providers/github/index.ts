@@ -1,7 +1,7 @@
 import { $fetch } from 'ofetch'
-import type { Provider, SponsorkitConfig, Sponsorship } from '../../types'
 import { normalizeUrl } from '../../utils'
 import { getPastSponsors } from './get-past-sponsors'
+import type { Provider, SponsorkitConfig, Sponsorship } from '../../types'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
