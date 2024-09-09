@@ -40,10 +40,8 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
     })
     sponsors.push(
       ...sponsorshipData.data
-        .filter((membership: any) => {
-          // Filter out "declined" and "never pledged" members
-          return membership.attributes.patron_status !== 'declined_patron' && membership.attributes.patron_status !== null
-        })
+        // Filter out "never pledged" members
+        .filter((membership: any) => membership.attributes.patron_status !== null)
         .map((membership: any) => ({
           membership,
           patron: sponsorshipData.included.find(
@@ -64,7 +62,8 @@ export async function fetchPatreonSponsors(token: string): Promise<Sponsorship[]
         linkUrl: raw.patron.attributes.url,
       },
       isOneTime: false, // One-time pledges not supported
-      monthlyDollars: raw.membership.attributes.patron_status === 'former_patron' ? -1 : Math.floor(raw.membership.attributes.currently_entitled_amount_cents / 100),
+      // The "former_patron" and "declined_patron" both is past sponsors
+      monthlyDollars: ['former_patron', 'declined_patron'].includes(raw.membership.attributes.patron_status) ? -1 : Math.floor(raw.membership.attributes.currently_entitled_amount_cents / 100),
       privacyLevel: 'PUBLIC', // Patreon is all public
       tierName: 'Patreon',
       createdAt: raw.membership.attributes.pledge_relationship_start,
