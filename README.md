@@ -132,7 +132,13 @@ You can also use SponsorKit programmatically:
 ```ts
 import { fetchSponsors } from 'sponsorkit'
 
-const sponsors = await fetchSponsors(token, login)
+const sponsors = await fetchSponsors({
+  github: {
+    token,
+    login,
+  },
+  // ...
+})
 ```
 
 Check the type definition or source code for more utils available.
