@@ -1,6 +1,38 @@
 import { $fetch } from 'ofetch'
 import { normalizeUrl } from '../utils'
-import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship } from '../types'
+import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship, Tier } from '../types'
+
+function getMonthDifference(startDate: Date, endDate: Date) {
+  return (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth())
+}
+
+function getCurrentMonthTier(
+  dateNow: Date,
+  sponsorDate: Date,
+  tiers: Tier[],
+  monthlyDollars: number,
+) {
+  let currentMonths = 0
+
+  for (const tier of tiers) {
+    // Calculate how many full months this tier can be funded for
+    const monthsAtTier = Math.floor(monthlyDollars / tier.monthlyDollars!)
+    if (monthsAtTier === 0) {
+      continue
+    }
+
+    // Check if the current date falls within the months covered by this tier
+    if (currentMonths + monthsAtTier > getMonthDifference(sponsorDate, dateNow)) {
+      return tier.monthlyDollars!
+    }
+
+    // Deduct the used amount for these months and update the current month counter
+    monthlyDollars -= monthsAtTier * tier.monthlyDollars!
+    currentMonths += monthsAtTier
+  }
+
+  return -1
+}
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
@@ -33,6 +65,7 @@ export async function fetchGitHubSponsors(
   const sponsors: Sponsorship[] = []
   let cursor
 
+  const tiers = config.tiers?.filter(tier => tier.monthlyDollars && tier.monthlyDollars > 0).sort((a, b) => b.monthlyDollars! - a.monthlyDollars!)
   do {
     const query = makeQuery(login, type, !config.includePastSponsors, cursor)
     const data = await $fetch(API, {
@@ -60,22 +93,41 @@ export async function fetchGitHubSponsors(
       cursor = undefined
   } while (cursor)
 
+  const dateNow = new Date()
   const processed = sponsors
     .filter((raw: any) => !!raw.tier)
-    .map((raw: any): Sponsorship => ({
-      sponsor: {
-        ...raw.sponsorEntity,
-        websiteUrl: normalizeUrl(raw.sponsorEntity.websiteUrl),
-        linkUrl: `https://github.com/${raw.sponsorEntity.login}`,
-        __typename: undefined,
-        type: raw.sponsorEntity.__typename,
-      },
-      isOneTime: raw.tier.isOneTime,
-      monthlyDollars: raw.isActive ? raw.tier.monthlyPriceInDollars : -1,
-      privacyLevel: raw.privacyLevel,
-      tierName: raw.tier.name,
-      createdAt: raw.createdAt,
-    }))
+    .map((raw: any): Sponsorship => {
+      let monthlyDollars: number = raw.tier.monthlyPriceInDollars
+
+      if (!raw.isActive) {
+        if (tiers && raw.tier.isOneTime && config.prorateOnetime) {
+          monthlyDollars = getCurrentMonthTier(
+            dateNow,
+            new Date(raw.createdAt),
+            tiers,
+            monthlyDollars,
+          )
+        }
+        else {
+          monthlyDollars = -1
+        }
+      }
+
+      return {
+        sponsor: {
+          ...raw.sponsorEntity,
+          websiteUrl: normalizeUrl(raw.sponsorEntity.websiteUrl),
+          linkUrl: `https://github.com/${raw.sponsorEntity.login}`,
+          __typename: undefined,
+          type: raw.sponsorEntity.__typename,
+        },
+        isOneTime: raw.tier.isOneTime,
+        monthlyDollars,
+        privacyLevel: raw.privacyLevel,
+        tierName: raw.tier.name,
+        createdAt: raw.createdAt,
+      }
+    })
 
   return processed
 }

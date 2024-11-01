@@ -388,6 +388,11 @@ export interface SponsorkitConfig extends ProvidersConfig, SponsorkitRenderOptio
    * Configs for multiple renders
    */
   renders?: SponsorkitRenderOptions[]
+
+  /**
+   * Prorates one-time to the current month's tier
+   */
+  prorateOnetime?: boolean
 }
 
 export interface SponsorMatcher extends Partial<Pick<Sponsor, 'login' | 'name' | 'type'>> {
