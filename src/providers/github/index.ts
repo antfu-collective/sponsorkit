@@ -1,7 +1,7 @@
 import { $fetch } from 'ofetch'
 import { normalizeUrl } from '../../utils'
 import { getPastSponsors } from './get-past-sponsors'
-import type { Provider, SponsorkitConfig, Sponsorship } from '../../types'
+import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship } from '../../types'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
@@ -21,7 +21,7 @@ export const GitHubProvider: Provider = {
 export async function fetchGitHubSponsors(
   token: string,
   login: string,
-  type: string,
+  type: GitHubAccountType,
   config: SponsorkitConfig,
 ): Promise<Sponsorship[]> {
   if (!token)
@@ -90,7 +90,7 @@ export async function fetchGitHubSponsors(
   return processed
 }
 
-export function makeQuery(login: string, type: string, cursor?: string) {
+export function makeQuery(login: string, type: GitHubAccountType, cursor?: string) {
   return graphql`{
   ${type}(login: "${login}") {
     sponsorshipsAsMaintainer(first: 100${cursor ? ` after: "${cursor}"` : ''}) {
