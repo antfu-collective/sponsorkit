@@ -1,6 +1,6 @@
 import { $fetch } from 'ofetch'
-import { normalizeUrl } from '../../utils'
-import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship } from '../../types'
+import { normalizeUrl } from '../utils'
+import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship } from '../types'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
