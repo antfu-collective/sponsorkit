@@ -76,6 +76,8 @@ export type OutputFormat = 'svg' | 'png' | 'json'
 
 export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar'
 
+export type GitHubAccountType = 'user' | 'organization'
+
 export interface ProvidersConfig {
   github?: {
     /**
@@ -98,7 +100,7 @@ export interface ProvidersConfig {
      * Possible values are `user`(default) and `organization`.
      * Will read from `SPONSORKIT_GITHUB_TYPE` environment variable if not set.
      */
-    type?: string
+    type?: GitHubAccountType
   }
   patreon?: {
     /**
