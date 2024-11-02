@@ -1,7 +1,8 @@
+import { dataWebpBase64 } from './image'
 import type { BadgePreset, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
 
-export function genSvgImage(x: number, y: number, size: number, url: string) {
-  return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${url}"/>`
+export function genSvgImage(x: number, y: number, size: number, base64image: string, radius: number) {
+  return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${dataWebpBase64 + base64image}" clip-path="inset(0% round ${radius}%)"/>`
 }
 
 export function generateBadge(
@@ -9,6 +10,7 @@ export function generateBadge(
   y: number,
   sponsor: Sponsor,
   preset: BadgePreset,
+  radius: number,
 ) {
   const size = preset.avatar.size
   const { login } = sponsor
@@ -33,7 +35,7 @@ export function generateBadge(
   ${preset.name
     ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsorkit-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>
   `
-    : ''}${genSvgImage(x, y, size, avatarUrl)}
+    : ''}${genSvgImage(x, y, size, avatarUrl, radius)}
 </a>`.trim()
 }
 
@@ -69,7 +71,8 @@ export class SvgComposer {
       .map((s, i) => {
         const x = offsetX + preset.boxWidth * i
         const y = this.height
-        return generateBadge(x, y, s.sponsor, preset)
+        const radius = s.sponsor.type === 'Organization' ? 10 : 50
+        return generateBadge(x, y, s.sponsor, preset, radius)
       })
       .join('\n')
     this.height += preset.boxHeight

@@ -1,4 +1,4 @@
-import { svgToPng } from '../processing/image'
+import { svgToPng } from '../processing/svg-to-png'
 
 const fallback = `
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 135.47 135.47">
