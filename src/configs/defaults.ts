@@ -33,7 +33,7 @@ text {
   font-weight: 300;
   font-size: 14px;
   fill: #777777;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 .sponsorkit-link {
   cursor: pointer;
