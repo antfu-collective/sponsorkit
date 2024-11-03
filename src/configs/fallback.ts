@@ -1,4 +1,4 @@
-import { svgToPng } from '../processing/svg-to-png'
+import { rasterizeSvg } from '../processing/rasterize-svg'
 
 const fallback = `
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 135.47 135.47">
@@ -7,4 +7,4 @@ const fallback = `
 </svg>
 `
 
-export const FALLBACK_AVATAR = svgToPng(fallback)
+export const FALLBACK_AVATAR = rasterizeSvg(fallback, 'webp')

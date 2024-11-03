@@ -72,7 +72,7 @@ export interface Sponsorship {
   raw?: any
 }
 
-export type OutputFormat = 'svg' | 'png' | 'json'
+export type OutputFormat = 'svg' | 'png' | 'webp' | 'json'
 
 export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar'
 
