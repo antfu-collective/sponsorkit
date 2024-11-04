@@ -1,7 +1,6 @@
 import { $fetch } from 'ofetch'
-import { normalizeUrl } from '../../utils'
-import { getPastSponsors } from './get-past-sponsors'
-import type { Provider, SponsorkitConfig, Sponsorship } from '../../types'
+import { normalizeUrl } from '../utils'
+import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship } from '../types'
 
 const API = 'https://api.github.com/graphql'
 const graphql = String.raw
@@ -21,7 +20,7 @@ export const GitHubProvider: Provider = {
 export async function fetchGitHubSponsors(
   token: string,
   login: string,
-  type: string,
+  type: GitHubAccountType,
   config: SponsorkitConfig,
 ): Promise<Sponsorship[]> {
   if (!token)
@@ -35,7 +34,7 @@ export async function fetchGitHubSponsors(
   let cursor
 
   do {
-    const query = makeQuery(login, type, cursor)
+    const query = makeQuery(login, type, !config.includePastSponsors, cursor)
     const data = await $fetch(API, {
       method: 'POST',
       body: { query },
@@ -72,28 +71,24 @@ export async function fetchGitHubSponsors(
         type: raw.sponsorEntity.__typename,
       },
       isOneTime: raw.tier.isOneTime,
-      monthlyDollars: raw.tier.monthlyPriceInDollars,
+      monthlyDollars: raw.isActive ? raw.tier.monthlyPriceInDollars : -1,
       privacyLevel: raw.privacyLevel,
       tierName: raw.tier.name,
       createdAt: raw.createdAt,
     }))
 
-  if (config.includePastSponsors) {
-    try {
-      processed.push(...await getPastSponsors(login))
-    }
-    catch (e) {
-      console.error('Failed to fetch past sponsors:', e)
-    }
-  }
-
   return processed
 }
 
-export function makeQuery(login: string, type: string, cursor?: string) {
+export function makeQuery(
+  login: string,
+  type: GitHubAccountType,
+  activeOnly = true,
+  cursor?: string,
+) {
   return graphql`{
   ${type}(login: "${login}") {
-    sponsorshipsAsMaintainer(first: 100${cursor ? ` after: "${cursor}"` : ''}) {
+    sponsorshipsAsMaintainer(activeOnly: ${Boolean(activeOnly)}, first: 100${cursor ? ` after: "${cursor}"` : ''}) {
       totalCount
       pageInfo {
         endCursor
@@ -102,6 +97,7 @@ export function makeQuery(login: string, type: string, cursor?: string) {
       nodes {
         createdAt
         privacyLevel
+        isActive
         tier {
           name
           isOneTime
