@@ -1,6 +1,6 @@
 import process from 'node:process'
 import dotenv from 'dotenv'
-import type { SponsorkitConfig } from '../types'
+import type { GitHubAccountType, SponsorkitConfig } from '../types'
 
 function getDeprecatedEnv(name: string, replacement: string) {
   const value = process.env[name]
@@ -16,7 +16,7 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     github: {
       login: process.env.SPONSORKIT_GITHUB_LOGIN || process.env.GITHUB_LOGIN || getDeprecatedEnv('SPONSORKIT_LOGIN', 'SPONSORKIT_GITHUB_LOGIN'),
       token: process.env.SPONSORKIT_GITHUB_TOKEN || process.env.GITHUB_TOKEN || getDeprecatedEnv('SPONSORKIT_TOKEN', 'SPONSORKIT_GITHUB_TOKEN'),
-      type: process.env.SPONSORKIT_GITHUB_TYPE || process.env.GITHUB_TYPE,
+      type: (process.env.SPONSORKIT_GITHUB_TYPE || process.env.GITHUB_TYPE) as GitHubAccountType | undefined,
     },
     patreon: {
       token: process.env.SPONSORKIT_PATREON_TOKEN || process.env.PATREON_TOKEN,
