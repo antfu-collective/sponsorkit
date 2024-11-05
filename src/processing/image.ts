@@ -45,10 +45,20 @@ export async function resolveAvatars(
 
     if (data) {
       const radius = ship.sponsor.type === 'Organization' ? 0.1 : 0.5
-      ship.sponsor.avatarBuffer = arrayBufferToBase64(data)
-      ship.sponsor.avatarUrlHighRes = pngToDataUri(await round(data, radius, 120))
-      ship.sponsor.avatarUrlMediumRes = pngToDataUri(await round(data, radius, 80))
-      ship.sponsor.avatarUrlLowRes = pngToDataUri(await round(data, radius, 50))
+      const [
+        highRes,
+        mediumRes,
+        lowRes,
+      ] = await Promise.all([
+        round(data, radius, 120),
+        round(data, radius, 80),
+        round(data, radius, 50),
+      ])
+
+      ship.sponsor.avatarBuffer = highRes.toString('base64')
+      ship.sponsor.avatarUrlHighRes = pngToDataUri(highRes)
+      ship.sponsor.avatarUrlMediumRes = pngToDataUri(mediumRes)
+      ship.sponsor.avatarUrlLowRes = pngToDataUri(lowRes)
     }
   })))
 }
