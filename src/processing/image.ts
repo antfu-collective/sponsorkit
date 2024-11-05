@@ -55,8 +55,10 @@ export async function resolveAvatars(
         round(data, radius, 50),
       ])
 
-      ship.sponsor.avatarBuffer = highRes.toString('base64')
-      ship.sponsor.avatarUrlHighRes = pngToDataUri(highRes)
+      const highResBase64 = highRes.toString('base64')
+
+      ship.sponsor.avatarBuffer = highResBase64
+      ship.sponsor.avatarUrlHighRes = `data:image/png;base64,${highResBase64}`
       ship.sponsor.avatarUrlMediumRes = pngToDataUri(mediumRes)
       ship.sponsor.avatarUrlLowRes = pngToDataUri(lowRes)
     }

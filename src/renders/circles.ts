@@ -67,11 +67,21 @@ async function getRoundedAvatars(sponsor: Sponsor) {
     return sponsor
 
   const data = base64ToArrayBuffer(sponsor.avatarBuffer)
+  const [
+    highRes,
+    mediumRes,
+    lowRes,
+  ] = await Promise.all([
+    round(data, 0.5, 120),
+    round(data, 0.5, 80),
+    round(data, 0.5, 50),
+  ])
+
   /// keep-sorted
   return {
     ...sponsor,
-    avatarUrlHighRes: pngToDataUri(await round(data, 0.5, 120)),
-    avatarUrlLowRes: pngToDataUri(await round(data, 0.5, 50)),
-    avatarUrlMediumRes: pngToDataUri(await round(data, 0.5, 80)),
+    avatarUrlHighRes: pngToDataUri(highRes),
+    avatarUrlLowRes: pngToDataUri(mediumRes),
+    avatarUrlMediumRes: pngToDataUri(lowRes),
   }
 }
