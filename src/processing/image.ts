@@ -18,7 +18,7 @@ export async function resolveAvatars(
     return undefined
   })()
 
-  const fallbackDataUri = fallbackAvatar && pngToDataUri(await round(fallbackAvatar, 0.5, 100))
+  const fallbackDataUri = fallbackAvatar && (await round(fallbackAvatar, 0.5, 100)).toString('base64')
 
   const pLimit = await import('p-limit').then(r => r.default)
   const limit = pLimit(15)
@@ -58,9 +58,9 @@ export async function resolveAvatars(
       const highResBase64 = highRes.toString('base64')
 
       ship.sponsor.avatarBuffer = highResBase64
-      ship.sponsor.avatarUrlHighRes = `data:image/png;base64,${highResBase64}`
-      ship.sponsor.avatarUrlMediumRes = pngToDataUri(mediumRes)
-      ship.sponsor.avatarUrlLowRes = pngToDataUri(lowRes)
+      ship.sponsor.avatarUrlHighRes = highResBase64
+      ship.sponsor.avatarUrlMediumRes = mediumRes.toString('base64')
+      ship.sponsor.avatarUrlLowRes = lowRes.toString('base64')
     }
   })))
 }
@@ -113,8 +113,4 @@ export function svgToPng(svg: string) {
   return sharp(Buffer.from(svg), { density: 150 })
     .png({ quality: 90 })
     .toBuffer()
-}
-
-export function pngToDataUri(png: Buffer) {
-  return `data:image/png;base64,${png.toString('base64')}`
 }

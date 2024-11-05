@@ -1,4 +1,4 @@
-import { base64ToArrayBuffer, pngToDataUri, round } from '../processing/image'
+import { base64ToArrayBuffer, round } from '../processing/image'
 import { generateBadge, SvgComposer } from '../processing/svg'
 import type { Sponsor, SponsorkitRenderer, Sponsorship } from '../types'
 
@@ -80,8 +80,8 @@ async function getRoundedAvatars(sponsor: Sponsor) {
   /// keep-sorted
   return {
     ...sponsor,
-    avatarUrlHighRes: pngToDataUri(highRes),
-    avatarUrlLowRes: pngToDataUri(mediumRes),
-    avatarUrlMediumRes: pngToDataUri(lowRes),
+    avatarUrlHighRes: highRes.toString('base64'),
+    avatarUrlLowRes: mediumRes.toString('base64'),
+    avatarUrlMediumRes: lowRes.toString('base64'),
   }
 }
