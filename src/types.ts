@@ -72,7 +72,9 @@ export interface Sponsorship {
   raw?: any
 }
 
-export type OutputFormat = 'svg' | 'png' | 'json'
+export const outputFormats = ['svg', 'png', 'json'] as const
+
+export type OutputFormat = typeof outputFormats[number]
 
 export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar'
 

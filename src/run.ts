@@ -6,11 +6,13 @@ import process from 'node:process'
 import { notNullish } from '@antfu/utils'
 import { consola } from 'consola'
 import c from 'picocolors'
+import type { Buffer } from 'node:buffer'
 import { version } from '../package.json'
 import { loadConfig } from './configs'
 import { resolveAvatars, svgToPng } from './processing/image'
 import { guessProviders, resolveProviders } from './providers'
 import { builtinRenderers } from './renders'
+import { outputFormats } from './types'
 import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderer, SponsorkitRenderOptions, SponsorMatcher, Sponsorship } from './types'
 
 export {
@@ -273,16 +275,24 @@ export async function applyRenderer(
   let svg = await renderer.renderSVG(renderOptions, sponsors)
   svg = await renderOptions.onSvgGenerated?.(svg) || svg
 
-  if (renderOptions.formats?.includes('svg')) {
-    const path = join(dir, `${renderOptions.name}.svg`)
-    await fsp.writeFile(path, svg, 'utf-8')
-    t.success(`${logPrefix} Wrote to ${r(path)}`)
-  }
+  if (renderOptions.formats) {
+    await Promise.all([
+      renderOptions.formats.map(async (format) => {
+        if (!outputFormats.includes(format))
+          throw new Error(`Unsupported format: ${format}`)
 
-  if (renderOptions.formats?.includes('png')) {
-    const path = join(dir, `${renderOptions.name}.png`)
-    await fsp.writeFile(path, await svgToPng(svg))
-    t.success(`${logPrefix} Wrote to ${r(path)}`)
+        const path = join(dir, `${renderOptions.name}.${format}`)
+
+        let data: string | Buffer = svg
+        if (format === 'png') {
+          data = await svgToPng(svg)
+        }
+
+        await fsp.writeFile(path, data)
+
+        t.success(`${logPrefix} Wrote to ${r(path)}`)
+      }),
+    ])
   }
 }
 
