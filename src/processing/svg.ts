@@ -1,10 +1,20 @@
-import { round } from './image'
+import { resizeImage } from './image'
 import type { BadgePreset, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
 
-const dataImagePngBase64 = `data:image/png;base64,`
-
-export function genSvgImage(x: number, y: number, size: number, base64Image: string) {
-  return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${dataImagePngBase64}${base64Image}"/>`
+let id = 0
+export function genSvgImage(
+  x: number,
+  y: number,
+  size: number,
+  base64Image: string,
+  radius: number,
+) {
+  const cropId = `c${id++}`
+  return `
+  <clipPath id="${cropId}">
+    <rect x="${x}" y="${y}" width="${size}" height="${size}" rx="${size * radius}" ry="${size * radius}" />
+  </clipPath>
+  <image x="${x}" y="${y}" width="${size}" height="${size}" href="data:image/png;base64,${base64Image}" clip-path="url(#${cropId})"/>`
 }
 
 export async function generateBadge(
@@ -28,13 +38,13 @@ export async function generateBadge(
 
   let avatar
   if (size < 50) {
-    avatar = await round(sponsor.avatarBuffer!, radius, 50)
+    avatar = await resizeImage(sponsor.avatarBuffer!, 50)
   }
   else if (size < 90) {
-    avatar = await round(sponsor.avatarBuffer!, radius, 80)
+    avatar = await resizeImage(sponsor.avatarBuffer!, 80)
   }
   else {
-    avatar = await round(sponsor.avatarBuffer!, radius, 120)
+    avatar = await resizeImage(sponsor.avatarBuffer!, 120)
   }
 
   avatar = avatar.toString('base64')
@@ -43,7 +53,7 @@ export async function generateBadge(
   ${preset.name
     ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsorkit-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>
   `
-    : ''}${genSvgImage(x, y, size, avatar)}
+    : ''}${genSvgImage(x, y, size, avatar, radius)}
 </a>`.trim()
 }
 

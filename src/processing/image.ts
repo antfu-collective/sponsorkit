@@ -46,42 +46,33 @@ export async function resolveAvatars(
     })
 
     if (pngBuffer) {
-      const radius = ship.sponsor.type === 'Organization' ? 0.1 : 0.5
-
       // Store the highest resolution version we use of the original image
-      ship.sponsor.avatarBuffer = await round(pngBuffer, radius, 120)
+      ship.sponsor.avatarBuffer = await resizeImage(pngBuffer, 120)
     }
   })))
 }
 
-const cache = new Map<string, Map<Buffer, Buffer>>()
-export async function round(image: Buffer, radius = 0.5, size = 100) {
-  const cacheKey = `${radius}:${size}`
-  if (cache.has(cacheKey)) {
-    const cacheHit = cache.get(cacheKey)!.get(image)
+const cache = new Map<Buffer, Map<number, Buffer>>()
+export async function resizeImage(
+  image: Buffer,
+  size = 100,
+) {
+  if (cache.has(image)) {
+    const cacheHit = cache.get(image)!.get(size)
     if (cacheHit) {
       return cacheHit
     }
   }
 
-  const rect = Buffer.from(
-    `<svg><rect x="0" y="0" width="${size}" height="${size}" rx="${size * radius}" ry="${size * radius}"/></svg>`,
-  )
-
   const result = await sharp(image)
     .resize(size, size, { fit: sharp.fit.cover })
-    .composite([{
-      blend: 'dest-in',
-      input: rect,
-      density: 72,
-    }])
     .png({ quality: 80, compressionLevel: 8 })
     .toBuffer()
 
-  if (!cache.has(cacheKey)) {
-    cache.set(cacheKey, new Map())
+  if (!cache.has(image)) {
+    cache.set(image, new Map())
   }
-  cache.get(cacheKey)!.set(image, result)
+  cache.get(image)!.set(size, result)
 
   return result
 }
