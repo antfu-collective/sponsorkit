@@ -47,6 +47,7 @@ export const circlesRenderer: SponsorkitRenderer = {
           },
         },
         0.5,
+        config.imageFormat,
       ))
     }
 

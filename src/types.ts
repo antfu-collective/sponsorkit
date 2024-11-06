@@ -1,6 +1,8 @@
 import type { Buffer } from 'node:buffer'
 import type { SvgComposer } from './processing/svg'
 
+export type ImageFormat = 'png' | 'webp'
+
 export interface BadgePreset {
   boxWidth: number
   boxHeight: number
@@ -280,6 +282,13 @@ export interface SponsorkitRenderOptions {
    * @default auto detect based on tiers
    */
   includePastSponsors?: boolean
+
+  /**
+   * Format of embedded images
+   *
+   * @default 'webp'
+   */
+  imageFormat?: ImageFormat
 
   /**
    * Hook to modify sponsors data before rendering.
