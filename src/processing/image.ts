@@ -89,3 +89,9 @@ export function svgToPng(svg: string) {
     .png({ quality: 90 })
     .toBuffer()
 }
+
+export function svgToWebp(svg: string) {
+  return sharp(Buffer.from(svg), { density: 150 })
+    .webp()
+    .toBuffer()
+}

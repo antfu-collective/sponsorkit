@@ -72,7 +72,7 @@ export interface Sponsorship {
   raw?: any
 }
 
-export const outputFormats = ['svg', 'png', 'json'] as const
+export const outputFormats = ['svg', 'png', 'webp', 'json'] as const
 
 export type OutputFormat = typeof outputFormats[number]
 
