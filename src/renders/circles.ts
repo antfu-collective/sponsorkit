@@ -1,7 +1,5 @@
-import { Buffer } from 'node:buffer'
-import { round } from '../processing/image'
 import { generateBadge, SvgComposer } from '../processing/svg'
-import type { Sponsor, SponsorkitRenderer, Sponsorship } from '../types'
+import type { SponsorkitRenderer, Sponsorship } from '../types'
 
 export const circlesRenderer: SponsorkitRenderer = {
   name: 'sponsorkit:circles',
