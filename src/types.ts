@@ -35,10 +35,7 @@ export interface Sponsor {
   login: string
   name: string
   avatarUrl: string
-  avatarBuffer?: string
-  avatarUrlHighRes?: string
-  avatarUrlMediumRes?: string
-  avatarUrlLowRes?: string
+  avatarBuffer?: Buffer
   websiteUrl?: string
   linkUrl?: string
   /**

@@ -36,10 +36,10 @@ export const circlesRenderer: SponsorkitRenderer = {
     const circles = p(root as any).descendants().slice(1)
 
     for (const circle of circles) {
-      composer.addRaw(generateBadge(
+      composer.addRaw(await generateBadge(
         circle.x - circle.r,
         circle.y - circle.r,
-        await getRoundedAvatars(circle.data.sponsor),
+        circle.data.sponsor,
         {
           name: false,
           boxHeight: circle.r * 2,
@@ -48,6 +48,7 @@ export const circlesRenderer: SponsorkitRenderer = {
             size: circle.r * 2,
           },
         },
+        0.5,
       ))
     }
 
@@ -61,28 +62,4 @@ function lerp(a: number, b: number, t: number) {
   if (t < 0)
     return a
   return a + (b - a) * t
-}
-
-async function getRoundedAvatars(sponsor: Sponsor) {
-  if (!sponsor.avatarBuffer || sponsor.type === 'User')
-    return sponsor
-
-  const data = Buffer.from(sponsor.avatarBuffer, 'base64')
-  const [
-    highRes,
-    mediumRes,
-    lowRes,
-  ] = await Promise.all([
-    round(data, 0.5, 120),
-    round(data, 0.5, 80),
-    round(data, 0.5, 50),
-  ])
-
-  /// keep-sorted
-  return {
-    ...sponsor,
-    avatarUrlHighRes: highRes.toString('base64'),
-    avatarUrlLowRes: mediumRes.toString('base64'),
-    avatarUrlMediumRes: lowRes.toString('base64'),
-  }
 }

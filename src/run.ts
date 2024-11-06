@@ -8,6 +8,7 @@ import { consola } from 'consola'
 import c from 'picocolors'
 import type { Buffer } from 'node:buffer'
 import { version } from '../package.json'
+import { parseCache, stringifyCache } from './cache'
 import { loadConfig } from './configs'
 import { resolveAvatars, svgToPng, svgToWebp } from './processing/image'
 import { guessProviders, resolveProviders } from './providers'
@@ -202,10 +203,10 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
     t.success('Avatars resolved')
 
     await fsp.mkdir(dirname(cacheFile), { recursive: true })
-    await fsp.writeFile(cacheFile, JSON.stringify(allSponsors, null, 2))
+    await fsp.writeFile(cacheFile, stringifyCache(allSponsors))
   }
   else {
-    allSponsors = JSON.parse(await fsp.readFile(cacheFile, 'utf-8'))
+    allSponsors = parseCache(await fsp.readFile(cacheFile, 'utf8'))
     t.success(`Loaded from cache ${r(cacheFile)}`)
   }
 

@@ -1,3 +1,4 @@
+import { round } from './image'
 import type { BadgePreset, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
 
 const dataImagePngBase64 = `data:image/png;base64,`
@@ -6,11 +7,12 @@ export function genSvgImage(x: number, y: number, size: number, base64Image: str
   return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${dataImagePngBase64}${base64Image}"/>`
 }
 
-export function generateBadge(
+export async function generateBadge(
   x: number,
   y: number,
   sponsor: Sponsor,
   preset: BadgePreset,
+  radius: number,
 ) {
   const size = preset.avatar.size
   const { login } = sponsor
@@ -24,18 +26,24 @@ export function generateBadge(
       name = `${name.slice(0, preset.name.maxLength - 3)}...`
   }
 
-  const avatarUrl = (size < 50
-    ? sponsor.avatarUrlLowRes
-    : size < 90
-      ? sponsor.avatarUrlMediumRes
-      : sponsor.avatarUrlHighRes
-  ) || sponsor.avatarUrl
+  let avatar
+  if (size < 50) {
+    avatar = await round(sponsor.avatarBuffer!, radius, 50)
+  }
+  else if (size < 90) {
+    avatar = await round(sponsor.avatarBuffer!, radius, 80)
+  }
+  else {
+    avatar = await round(sponsor.avatarBuffer!, radius, 120)
+  }
+
+  avatar = avatar.toString('base64')
 
   return `<a ${url ? `href="${url}" ` : ''}class="${preset.classes || 'sponsorkit-link'}" target="_blank" id="${login}">
   ${preset.name
     ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsorkit-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>
   `
-    : ''}${genSvgImage(x, y, size, avatarUrl)}
+    : ''}${genSvgImage(x, y, size, avatar)}
 </a>`.trim()
 }
 
@@ -65,26 +73,26 @@ export class SvgComposer {
     return this
   }
 
-  addSponsorLine(sponsors: Sponsorship[], preset: BadgePreset) {
+  async addSponsorLine(sponsors: Sponsorship[], preset: BadgePreset) {
     const offsetX = (this.config.width - sponsors.length * preset.boxWidth) / 2 + (preset.boxWidth - preset.avatar.size) / 2
-    this.body += sponsors
-      .map((s, i) => {
+    const sponsorLine = await Promise.all(sponsors
+      .map(async (s, i) => {
         const x = offsetX + preset.boxWidth * i
         const y = this.height
-        return generateBadge(x, y, s.sponsor, preset)
-      })
-      .join('\n')
+        const radius = s.sponsor.type === 'Organization' ? 0.1 : 0.5
+        return await generateBadge(x, y, s.sponsor, preset, radius)
+      }))
+
+    this.body += sponsorLine.join('\n')
     this.height += preset.boxHeight
   }
 
-  addSponsorGrid(sponsors: Sponsorship[], preset: BadgePreset) {
+  async addSponsorGrid(sponsors: Sponsorship[], preset: BadgePreset) {
     const perLine = Math.floor((this.config.width - (preset.container?.sidePadding || 0) * 2) / preset.boxWidth)
 
-    Array.from({ length: Math.ceil(sponsors.length / perLine) })
-      .fill(0)
-      .forEach((_, i) => {
-        this.addSponsorLine(sponsors.slice(i * perLine, (i + 1) * perLine), preset)
-      })
+    for (let i = 0; i < Math.ceil(sponsors.length / perLine); i++) {
+      await this.addSponsorLine(sponsors.slice(i * perLine, (i + 1) * perLine), preset)
+    }
 
     return this
   }
