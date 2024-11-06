@@ -1,4 +1,5 @@
-import { base64ToArrayBuffer, pngToDataUri, round } from '../processing/image'
+import { Buffer } from 'node:buffer'
+import { round } from '../processing/image'
 import { generateBadge, SvgComposer } from '../processing/svg'
 import type { Sponsor, SponsorkitRenderer, Sponsorship } from '../types'
 
@@ -66,12 +67,22 @@ async function getRoundedAvatars(sponsor: Sponsor) {
   if (!sponsor.avatarBuffer || sponsor.type === 'User')
     return sponsor
 
-  const data = base64ToArrayBuffer(sponsor.avatarBuffer)
+  const data = Buffer.from(sponsor.avatarBuffer, 'base64')
+  const [
+    highRes,
+    mediumRes,
+    lowRes,
+  ] = await Promise.all([
+    round(data, 0.5, 120),
+    round(data, 0.5, 80),
+    round(data, 0.5, 50),
+  ])
+
   /// keep-sorted
   return {
     ...sponsor,
-    avatarUrlHighRes: pngToDataUri(await round(data, 0.5, 120)),
-    avatarUrlLowRes: pngToDataUri(await round(data, 0.5, 50)),
-    avatarUrlMediumRes: pngToDataUri(await round(data, 0.5, 80)),
+    avatarUrlHighRes: highRes.toString('base64'),
+    avatarUrlLowRes: mediumRes.toString('base64'),
+    avatarUrlMediumRes: lowRes.toString('base64'),
   }
 }

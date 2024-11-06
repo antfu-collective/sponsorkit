@@ -1,7 +1,9 @@
 import type { BadgePreset, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
 
-export function genSvgImage(x: number, y: number, size: number, url: string) {
-  return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${url}"/>`
+const dataImagePngBase64 = `data:image/png;base64,`
+
+export function genSvgImage(x: number, y: number, size: number, base64Image: string) {
+  return `<image x="${x}" y="${y}" width="${size}" height="${size}" href="${dataImagePngBase64}${base64Image}"/>`
 }
 
 export function generateBadge(
