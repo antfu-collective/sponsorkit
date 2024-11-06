@@ -9,7 +9,7 @@ import c from 'picocolors'
 import type { Buffer } from 'node:buffer'
 import { version } from '../package.json'
 import { loadConfig } from './configs'
-import { resolveAvatars, svgToPng } from './processing/image'
+import { resolveAvatars, svgToPng, svgToWebp } from './processing/image'
 import { guessProviders, resolveProviders } from './providers'
 import { builtinRenderers } from './renders'
 import { outputFormats } from './types'
@@ -286,6 +286,10 @@ export async function applyRenderer(
         let data: string | Buffer = svg
         if (format === 'png') {
           data = await svgToPng(svg)
+        }
+
+        if (format === 'webp') {
+          data = await svgToWebp(svg)
         }
 
         await fsp.writeFile(path, data)
