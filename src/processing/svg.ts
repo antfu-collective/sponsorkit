@@ -1,20 +1,21 @@
 import { resizeImage } from './image'
-import type { BadgePreset, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
+import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
 
 let id = 0
 export function genSvgImage(
   x: number,
   y: number,
   size: number,
-  base64Image: string,
   radius: number,
+  base64Image: string,
+  imageFormat: ImageFormat,
 ) {
   const cropId = `c${id++}`
   return `
   <clipPath id="${cropId}">
     <rect x="${x}" y="${y}" width="${size}" height="${size}" rx="${size * radius}" ry="${size * radius}" />
   </clipPath>
-  <image x="${x}" y="${y}" width="${size}" height="${size}" href="data:image/png;base64,${base64Image}" clip-path="url(#${cropId})"/>`
+  <image x="${x}" y="${y}" width="${size}" height="${size}" href="data:image/${imageFormat};base64,${base64Image}" clip-path="url(#${cropId})"/>`
 }
 
 export async function generateBadge(
@@ -23,8 +24,8 @@ export async function generateBadge(
   sponsor: Sponsor,
   preset: BadgePreset,
   radius: number,
+  imageFormat: ImageFormat,
 ) {
-  const size = preset.avatar.size
   const { login } = sponsor
   let name = (sponsor.name || sponsor.login).trim()
   const url = sponsor.websiteUrl || sponsor.linkUrl
@@ -36,24 +37,25 @@ export async function generateBadge(
       name = `${name.slice(0, preset.name.maxLength - 3)}...`
   }
 
-  let avatar
+  const { size } = preset.avatar
+  let avatar = sponsor.avatarBuffer!
   if (size < 50) {
-    avatar = await resizeImage(sponsor.avatarBuffer!, 50)
+    avatar = await resizeImage(avatar, 50, imageFormat)
   }
-  else if (size < 90) {
-    avatar = await resizeImage(sponsor.avatarBuffer!, 80)
+  else if (size < 80) {
+    avatar = await resizeImage(avatar, 80, imageFormat)
   }
-  else {
-    avatar = await resizeImage(sponsor.avatarBuffer!, 120)
+  else if (imageFormat === 'png') {
+    avatar = await resizeImage(avatar, 120, imageFormat)
   }
 
-  avatar = avatar.toString('base64')
+  const avatarBase64 = avatar.toString('base64')
 
   return `<a ${url ? `href="${url}" ` : ''}class="${preset.classes || 'sponsorkit-link'}" target="_blank" id="${login}">
   ${preset.name
     ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsorkit-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>
   `
-    : ''}${genSvgImage(x, y, size, avatar, radius)}
+    : ''}${genSvgImage(x, y, size, radius, avatarBase64, imageFormat)}
 </a>`.trim()
 }
 
@@ -90,7 +92,7 @@ export class SvgComposer {
         const x = offsetX + preset.boxWidth * i
         const y = this.height
         const radius = s.sponsor.type === 'Organization' ? 0.1 : 0.5
-        return await generateBadge(x, y, s.sponsor, preset, radius)
+        return await generateBadge(x, y, s.sponsor, preset, radius, this.config.imageFormat)
       }))
 
     this.body += sponsorLine.join('\n')

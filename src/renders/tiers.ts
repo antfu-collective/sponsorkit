@@ -3,15 +3,6 @@ import { tierPresets } from '../configs/tier-presets'
 import { SvgComposer } from '../processing/svg'
 import type { SponsorkitConfig, SponsorkitRenderer, Sponsorship } from '../types'
 
-export const tiersRenderer: SponsorkitRenderer = {
-  name: 'sponsorkit:tiers',
-  async renderSVG(config, sponsors) {
-    const composer = new SvgComposer(config)
-    await (config.customComposer || tiersComposer)(composer, sponsors, config)
-    return composer.generateSvg()
-  },
-}
-
 export async function tiersComposer(composer: SvgComposer, sponsors: Sponsorship[], config: SponsorkitConfig) {
   const tierPartitions = partitionTiers(sponsors, config.tiers!, config.includePastSponsors)
 
@@ -43,4 +34,13 @@ export async function tiersComposer(composer: SvgComposer, sponsors: Sponsorship
   }
 
   composer.addSpan(config.padding?.bottom ?? 20)
+}
+
+export const tiersRenderer: SponsorkitRenderer = {
+  name: 'sponsorkit:tiers',
+  async renderSVG(config, sponsors) {
+    const composer = new SvgComposer(config)
+    await (config.customComposer || tiersComposer)(composer, sponsors, config)
+    return composer.generateSvg()
+  },
 }

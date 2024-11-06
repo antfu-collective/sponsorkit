@@ -3,7 +3,7 @@ import { consola } from 'consola'
 import { $fetch } from 'ofetch'
 import sharp from 'sharp'
 import { version } from '../../package.json'
-import type { SponsorkitConfig, Sponsorship } from '../types'
+import type { ImageFormat, SponsorkitConfig, Sponsorship } from '../types'
 
 async function fetchImage(url: string) {
   const arrayBuffer = await $fetch(url, {
@@ -47,32 +47,39 @@ export async function resolveAvatars(
 
     if (pngBuffer) {
       // Store the highest resolution version we use of the original image
-      ship.sponsor.avatarBuffer = await resizeImage(pngBuffer, 120)
+      // Stored in webp to save space
+      ship.sponsor.avatarBuffer = await resizeImage(pngBuffer, 120, 'webp')
     }
   })))
 }
 
-const cache = new Map<Buffer, Map<number, Buffer>>()
+const cache = new Map<Buffer, Map<string, Buffer>>()
 export async function resizeImage(
   image: Buffer,
   size = 100,
+  format: ImageFormat,
 ) {
+  const cacheKey = `${size}:${format}`
   if (cache.has(image)) {
-    const cacheHit = cache.get(image)!.get(size)
+    const cacheHit = cache.get(image)!.get(cacheKey)
     if (cacheHit) {
       return cacheHit
     }
   }
 
-  const result = await sharp(image)
+  let processing = sharp(image)
     .resize(size, size, { fit: sharp.fit.cover })
-    .png({ quality: 80, compressionLevel: 8 })
-    .toBuffer()
+
+  processing = (format === 'webp')
+    ? processing.webp()
+    : processing.png({ quality: 80, compressionLevel: 8 })
+
+  const result = await processing.toBuffer()
 
   if (!cache.has(image)) {
     cache.set(image, new Map())
   }
-  cache.get(image)!.set(size, result)
+  cache.get(image)!.set(cacheKey, result)
 
   return result
 }

@@ -272,11 +272,23 @@ export async function applyRenderer(
   if (!renderOptions.includePrivate)
     sponsors = sponsors.filter(s => s.privacyLevel !== 'PRIVATE')
 
+  if (!renderOptions.imageFormat)
+    renderOptions.imageFormat = 'webp'
+
   t.info(`${logPrefix} Composing SVG...`)
-  let svg = await renderer.renderSVG(renderOptions, sponsors)
-  svg = await renderOptions.onSvgGenerated?.(svg) || svg
+
+  const processingSvg = (async () => {
+    let svgWebp = await renderer.renderSVG(renderOptions, sponsors)
+
+    if (renderOptions.onSvgGenerated) {
+      svgWebp = await renderOptions.onSvgGenerated(svgWebp) || svgWebp
+    }
+    return svgWebp
+  })()
 
   if (renderOptions.formats) {
+    let svgPng: Promise<string> | undefined
+
     await Promise.all([
       renderOptions.formats.map(async (format) => {
         if (!outputFormats.includes(format))
@@ -284,16 +296,32 @@ export async function applyRenderer(
 
         const path = join(dir, `${renderOptions.name}.${format}`)
 
-        let data: string | Buffer = svg
-        if (format === 'png') {
-          data = await svgToPng(svg)
+        let data: string | Buffer
+
+        if (format === 'svg') {
+          data = await processingSvg
         }
 
-        if (format === 'webp') {
-          data = await svgToWebp(svg)
+        if (format === 'png' || format === 'webp') {
+          if (!svgPng) {
+            // Sharp can't render embedded Webp so re-generate with png
+            // https://github.com/lovell/sharp/issues/4254
+            svgPng = renderer.renderSVG({
+              ...renderOptions,
+              imageFormat: 'png',
+            }, sponsors)
+          }
+
+          if (format === 'png') {
+            data = await svgToPng(await svgPng)
+          }
+
+          if (format === 'webp') {
+            data = await svgToWebp(await svgPng)
+          }
         }
 
-        await fsp.writeFile(path, data)
+        await fsp.writeFile(path, data!)
 
         t.success(`${logPrefix} Wrote to ${r(path)}`)
       }),
