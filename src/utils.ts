@@ -4,7 +4,12 @@ export function normalizeUrl(url: string | undefined): string | undefined {
   if (!url)
     return undefined
 
-  return _normalizeUrl(url, {
-    defaultProtocol: 'https',
-  })
+  try {
+    return _normalizeUrl(url, {
+      defaultProtocol: 'https',
+    })
+  }
+  catch {
+    return url
+  }
 }
