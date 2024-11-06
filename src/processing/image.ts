@@ -54,12 +54,21 @@ export async function resolveAvatars(
   })))
 }
 
+const cache = new Map<string, Map<Buffer, Buffer>>()
 export async function round(image: Buffer, radius = 0.5, size = 100) {
+  const cacheKey = `${radius}:${size}`
+  if (cache.has(cacheKey)) {
+    const cacheHit = cache.get(cacheKey)!.get(image)
+    if (cacheHit) {
+      return cacheHit
+    }
+  }
+
   const rect = Buffer.from(
     `<svg><rect x="0" y="0" width="${size}" height="${size}" rx="${size * radius}" ry="${size * radius}"/></svg>`,
   )
 
-  return await sharp(image)
+  const result = await sharp(image)
     .resize(size, size, { fit: sharp.fit.cover })
     .composite([{
       blend: 'dest-in',
@@ -68,6 +77,13 @@ export async function round(image: Buffer, radius = 0.5, size = 100) {
     }])
     .png({ quality: 80, compressionLevel: 8 })
     .toBuffer()
+
+  if (!cache.has(cacheKey)) {
+    cache.set(cacheKey, new Map())
+  }
+  cache.get(cacheKey)!.set(image, result)
+
+  return result
 }
 
 export function svgToPng(svg: string) {
