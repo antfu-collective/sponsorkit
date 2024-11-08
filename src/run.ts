@@ -298,7 +298,7 @@ export async function applyRenderer(
 
         let data: string | Buffer
 
-        if (format === 'svg') {
+        if (format === 'svg' || format === 'json') {
           data = await processingSvg
         }
 
