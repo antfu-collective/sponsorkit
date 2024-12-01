@@ -9,7 +9,7 @@ Supports:
 - [**GitHub Sponsors**](https://github.com/sponsors)
 - [**Patreon**](https://www.patreon.com/)
 - [**OpenCollective**](https://opencollective.com/)
-- [**Afdian**](https://afdian.net/)
+- [**Afdian**](https://afdian.com/)
 - [**Polar**](https://polar.sh/)
 
 ## Usage
@@ -40,9 +40,9 @@ SPONSORKIT_OPENCOLLECTIVE_GH_HANDLE=
 SPONSORKIT_OPENCOLLECTIVE_TYPE=
 
 ; Afdian provider.
-; Get user_id at https://afdian.net/dashboard/dev
+; Get user_id at https://afdian.com/dashboard/dev
 SPONSORKIT_AFDIAN_USER_ID=
-; Create token at https://afdian.net/dashboard/dev
+; Create token at https://afdian.com/dashboard/dev
 SPONSORKIT_AFDIAN_TOKEN=
 
 ; Polar provider.
