@@ -1,5 +1,6 @@
 import { AfdianProvider } from './afdian'
 import { GitHubProvider } from './github'
+import { LiberapayProvider } from "./liberapay"
 import { OpenCollectiveProvider } from './opencollective'
 import { PatreonProvider } from './patreon'
 import { PolarProvider } from './polar'
@@ -13,6 +14,7 @@ export const ProvidersMap = {
   opencollective: OpenCollectiveProvider,
   afdian: AfdianProvider,
   polar: PolarProvider,
+  liberapay: LiberapayProvider,
 }
 
 export function guessProviders(config: SponsorkitConfig) {
@@ -31,6 +33,9 @@ export function guessProviders(config: SponsorkitConfig) {
 
   if (config.polar && config.polar.token)
     items.push('polar')
+
+  if (config.liberapay && config.liberapay.login)
+    items.push('liberapay')
 
   // fallback
   if (!items.length)

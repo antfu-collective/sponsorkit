@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "@antfu/utils": "^0.7.10",
+    "@fast-csv/parse": "^5.0.2",
     "consola": "^3.2.3",
     "d3-hierarchy": "^3.1.2",
     "dotenv": "^16.4.5",

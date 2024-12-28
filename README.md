@@ -11,6 +11,7 @@ Supports:
 - [**OpenCollective**](https://opencollective.com/)
 - [**Afdian**](https://afdian.com/)
 - [**Polar**](https://polar.sh/)
+- [**Liberapay**](https://liberapay.com/)
 
 ## Usage
 
@@ -50,6 +51,10 @@ SPONSORKIT_AFDIAN_TOKEN=
 SPONSORKIT_POLAR_TOKEN=
 ; The name of the organization to fetch sponsorships from.
 SPONSORKIT_POLAR_ORGANIZATION=
+
+; Liberapay provider.
+; The name of the profile.
+SPONSORKIT_LIBERAPAY_LOGIN=
 ```
 
 > Only one provider is required to be configured.
@@ -85,6 +90,9 @@ export default defineConfig({
     // ...
   },
   polar: {
+    // ...
+  },
+  liberapay: {
     // ...
   },
 
