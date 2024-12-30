@@ -38,6 +38,9 @@ export async function resolveAvatars(
     }
 
     const pngBuffer = await fetchImage(ship.sponsor.avatarUrl).catch((e) => {
+      // Liberapay avatar URLs can return 404 Not Found
+      if (ship.provider === 'liberapay' && e.toString().includes('404 Not Found') && fallbackAvatar)
+        return fallbackAvatar
       t.error(`Failed to fetch avatar for ${ship.sponsor.login || ship.sponsor.name} [${ship.sponsor.avatarUrl}]`)
       t.error(e)
       if (fallbackAvatar)

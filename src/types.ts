@@ -75,7 +75,7 @@ export const outputFormats = ['svg', 'png', 'webp', 'json'] as const
 
 export type OutputFormat = typeof outputFormats[number]
 
-export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar'
+export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar' | 'liberapay'
 
 export type GitHubAccountType = 'user' | 'organization'
 
@@ -199,6 +199,15 @@ export interface ProvidersConfig {
      * Will read from `SPONSORKIT_POLAR_ORGANIZATION` environment variable if not set.
      */
     organization?: string
+  }
+
+  liberapay?: {
+    /**
+     * The name of the Liberapay profile.
+     *
+     * Will read from `SPONSORKIT_LIBERAPAY_LOGIN` environment variable if not set.
+     */
+    login?: string
   }
 }
 
