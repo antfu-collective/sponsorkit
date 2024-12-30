@@ -1,9 +1,9 @@
+import type { ImageFormat, SponsorkitConfig, Sponsorship } from '../types'
 import { Buffer } from 'node:buffer'
 import { consola } from 'consola'
 import { $fetch } from 'ofetch'
 import sharp from 'sharp'
 import { version } from '../../package.json'
-import type { ImageFormat, SponsorkitConfig, Sponsorship } from '../types'
 
 async function fetchImage(url: string) {
   const arrayBuffer = await $fetch(url, {

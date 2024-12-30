@@ -1,5 +1,5 @@
-import { ofetch } from 'ofetch'
 import type { Provider, Sponsorship } from '../types'
+import { ofetch } from 'ofetch'
 
 export const PolarProvider: Provider = {
   name: 'polar',

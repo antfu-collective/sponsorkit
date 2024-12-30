@@ -1,5 +1,5 @@
-import { $fetch } from 'ofetch'
 import type { Provider, Sponsorship } from '../types'
+import { $fetch } from 'ofetch'
 
 export const PatreonProvider: Provider = {
   name: 'patreon',

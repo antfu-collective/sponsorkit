@@ -1,5 +1,5 @@
-import { Buffer } from 'node:buffer'
 import type { Sponsorship } from './types'
+import { Buffer } from 'node:buffer'
 
 export function stringifyCache(cache: Sponsorship[]): string {
   return JSON.stringify(

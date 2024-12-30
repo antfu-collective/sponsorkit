@@ -1,5 +1,5 @@
-import { generateBadge, SvgComposer } from '../processing/svg'
 import type { SponsorkitRenderer, Sponsorship } from '../types'
+import { generateBadge, SvgComposer } from '../processing/svg'
 
 export const circlesRenderer: SponsorkitRenderer = {
   name: 'sponsorkit:circles',

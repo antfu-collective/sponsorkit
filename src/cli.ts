@@ -1,8 +1,8 @@
+import type { SponsorkitConfig } from './types'
 import process from 'node:process'
 import yargs from 'yargs'
 import { version } from '../package.json'
 import { run } from './run'
-import type { SponsorkitConfig } from './types'
 
 const cli = yargs(process.argv.slice(2))
   .scriptName('sponsors-svg')

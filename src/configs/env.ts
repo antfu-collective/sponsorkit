@@ -1,6 +1,6 @@
+import type { GitHubAccountType, SponsorkitConfig } from '../types'
 import process from 'node:process'
 import dotenv from 'dotenv'
-import type { GitHubAccountType, SponsorkitConfig } from '../types'
 
 function getDeprecatedEnv(name: string, replacement: string) {
   const value = process.env[name]

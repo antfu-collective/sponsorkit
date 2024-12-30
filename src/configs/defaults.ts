@@ -1,5 +1,5 @@
-import { tierPresets } from './tier-presets'
 import type { SponsorkitConfig, Tier } from '../types'
+import { tierPresets } from './tier-presets'
 
 export const defaultTiers: Tier[] = [
   {

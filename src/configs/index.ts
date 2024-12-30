@@ -1,8 +1,8 @@
+import type { SponsorkitConfig, Sponsorship, Tier, TierPartition } from '../types'
 import { loadConfig as _loadConfig } from 'unconfig'
 import { defaultConfig } from './defaults'
 import { loadEnv } from './env'
 import { FALLBACK_AVATAR } from './fallback'
-import type { SponsorkitConfig, Sponsorship, Tier, TierPartition } from '../types'
 
 export * from './defaults'
 export * from './fallback'
