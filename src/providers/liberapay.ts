@@ -1,7 +1,6 @@
-
-import { $fetch } from 'ofetch'
-import { parseString } from '@fast-csv/parse'
 import type { Provider, Sponsorship } from '../types'
+import { parseString } from '@fast-csv/parse'
+import { $fetch } from 'ofetch'
 
 export const LiberapayProvider: Provider = {
   name: 'liberapay',
@@ -48,7 +47,7 @@ export async function fetchLiberapaySponsors(login?: string): Promise<Sponsorshi
       ignoreEmpty: true,
       trim: true,
     })
-      .on('data', (row) => rows.push(row))
+      .on('data', row => rows.push(row))
       .on('end', resolve)
   })
 
@@ -65,7 +64,7 @@ export async function fetchLiberapaySponsors(login?: string): Promise<Sponsorshi
       avatarUrl: row.patron_avatar_url,
       linkUrl: `https://liberapay.com/${row.patron_username}`,
     },
-    monthlyDollars: getMonthlyDollarAmount(parseFloat(row.weekly_amount), row.donation_currency, exchangeRates),
+    monthlyDollars: getMonthlyDollarAmount(Number.parseFloat(row.weekly_amount), row.donation_currency, exchangeRates),
     privacyLevel: 'PUBLIC',
     createdAt: new Date(row.pledge_date).toISOString(),
     provider: 'liberapay',

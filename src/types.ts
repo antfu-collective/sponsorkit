@@ -207,8 +207,8 @@ export interface ProvidersConfig {
      *
      * Will read from `SPONSORKIT_LIBERAPAY_LOGIN` environment variable if not set.
      */
-    login?: string;
-};
+    login?: string
+  }
 }
 
 export interface SponsorkitRenderOptions {

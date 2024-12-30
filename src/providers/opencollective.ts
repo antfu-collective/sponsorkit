@@ -1,6 +1,6 @@
+import type { Provider, Sponsorship } from '../types'
 import { $fetch } from 'ofetch'
 import { normalizeUrl } from '../utils'
-import type { Provider, Sponsorship } from '../types'
 
 interface SocialLink {
   type: string
@@ -375,8 +375,8 @@ function getAccountType(type: string): 'User' | 'Organization' {
 function getBestUrl(socialLinks: SocialLink[]): string | undefined {
   const urls = socialLinks
     .filter(i => i.type === 'WEBSITE' || i.type === 'GITHUB' || i.type === 'GITLAB' || i.type === 'TWITTER'
-    || i.type === 'FACEBOOK' || i.type === 'YOUTUBE' || i.type === 'INSTAGRAM'
-    || i.type === 'LINKEDIN' || i.type === 'DISCORD' || i.type === 'TUMBLR')
+      || i.type === 'FACEBOOK' || i.type === 'YOUTUBE' || i.type === 'INSTAGRAM'
+      || i.type === 'LINKEDIN' || i.type === 'DISCORD' || i.type === 'TUMBLR')
     .map(i => i.url)
 
   return urls[0]
