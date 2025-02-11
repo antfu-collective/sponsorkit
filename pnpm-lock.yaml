@@ -17,6 +17,9 @@ importers:
       '@fast-csv/parse':
         specifier: ^5.0.2
         version: 5.0.2
+      ansis:
+        specifier: ^3.12.0
+        version: 3.12.0
       consola:
         specifier: ^3.4.0
         version: 3.4.0
@@ -35,9 +38,6 @@ importers:
       p-limit:
         specifier: ^6.2.0
         version: 6.2.0
-      picocolors:
-        specifier: ^1.1.1
-        version: 1.1.1
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
@@ -1247,6 +1247,10 @@ packages:
   ansi-styles@4.3.0:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
     engines: {node: '>=8'}
+
+  ansis@3.12.0:
+    resolution: {integrity: sha512-SxhlInpMkv9QCyI2yHyrhVrTF8dH93M/S86DT5f9brFgr92uJLOCg0RNmtx3YKWKcRmNAaU+gyUfHMdUiqxvFw==}
+    engines: {node: '>=14'}
 
   are-docs-informative@0.0.2:
     resolution: {integrity: sha512-ixiS0nLNNG5jNQzgZJNoUpBKdo9yTYZMGJ+QgT2jmjR7G7+QHRCc4v6LQ3NgE7EBJq+o0ams3waJwkrlBom8Ig==}
@@ -4099,6 +4103,8 @@ snapshots:
   ansi-styles@4.3.0:
     dependencies:
       color-convert: 2.0.1
+
+  ansis@3.12.0: {}
 
   are-docs-informative@0.0.2: {}
 
