@@ -5,8 +5,8 @@ import fsp from 'node:fs/promises'
 import { dirname, join, relative, resolve } from 'node:path'
 import process from 'node:process'
 import { notNullish } from '@antfu/utils'
+import c from 'ansis'
 import { consola } from 'consola'
-import c from 'picocolors'
 import { version } from '../package.json'
 import { parseCache, stringifyCache } from './cache'
 import { loadConfig } from './configs'
@@ -29,7 +29,7 @@ function r(path: string) {
 }
 
 export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
-  t.log(`\n${c.magenta(c.bold('SponsorKit'))} ${c.dim(`v${version}`)}\n`)
+  t.log(`\n${c.magenta.bold`SponsorKit`} ${c.dim`v${version}`}\n`)
 
   const fullConfig = await loadConfig(inlineConfig)
   const config = fullConfig as Required<SponsorkitMainConfig>
@@ -157,7 +157,7 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
         const sorted = [...group]
           .sort((a, b) => allSponsors.indexOf(a) - allSponsors.indexOf(b))
 
-        t.info(`Merging ${sorted.map(i => c.cyan(`@${i.sponsor.login}(${i.provider})`)).join(' + ')}`)
+        t.info(`Merging ${sorted.map(i => c.cyan`@${i.sponsor.login}(${i.provider})`).join(' + ')}`)
 
         for (const s of sorted.slice(1))
           removeSponsors.add(s)
@@ -257,7 +257,7 @@ export async function applyRenderer(
   sponsors = [...sponsors]
   sponsors = await renderOptions.onBeforeRenderer?.(sponsors) || sponsors
 
-  const logPrefix = c.dim(`[${renderOptions.name}]`)
+  const logPrefix = c.dim`[${renderOptions.name}]`
   const dir = resolve(process.cwd(), config.outputDir)
   await fsp.mkdir(dir, { recursive: true })
   if (renderOptions.formats?.includes('json')) {
