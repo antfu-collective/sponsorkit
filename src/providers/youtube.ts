@@ -1,7 +1,7 @@
 import type { Provider, Sponsorship } from '../types'
 import { $fetch } from 'ofetch'
 
-export const PatreonProvider: Provider = {
+export const YoutubeProvider: Provider = {
   name: 'youtube',
   fetchSponsors(config) {
     return fetchYouTubeMembers({
@@ -80,7 +80,7 @@ async function fetchYouTubeMembersWithToken(accessToken: string): Promise<Sponso
           pageToken: nextPageToken,
         },
         headers: {
-          Authorization: `Bearer ${accessToken}`, // OAuth 2.0 required
+          Authorization: `Bearer ${accessToken}`,
           Accept: 'application/json',
         },
       })

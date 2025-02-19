@@ -5,6 +5,7 @@ import { LiberapayProvider } from './liberapay'
 import { OpenCollectiveProvider } from './opencollective'
 import { PatreonProvider } from './patreon'
 import { PolarProvider } from './polar'
+import { YoutubeProvider } from './youtube'
 
 export * from './github'
 
@@ -15,6 +16,7 @@ export const ProvidersMap = {
   afdian: AfdianProvider,
   polar: PolarProvider,
   liberapay: LiberapayProvider,
+  youtube: YoutubeProvider,
 }
 
 export function guessProviders(config: SponsorkitConfig) {
@@ -36,6 +38,8 @@ export function guessProviders(config: SponsorkitConfig) {
 
   if (config.liberapay && config.liberapay.login)
     items.push('liberapay')
+  if (config.youtube && config.youtube.clientId)
+    items.push('youtube')
 
   // fallback
   if (!items.length)

@@ -243,23 +243,18 @@ Fetching YouTube members requires OAuth2 authentication and a refresh token. You
 2. Select an existing project or create a new one.
 3. Enable the **YouTube Data API v3** under **APIs & Services**.
 4. Navigate to **APIs & Services** → **Credentials**.
-5. **Click Create Credentials** → **OAuth 2.0 Client ID**.
+5. Click **Create Credentials** → **OAuth 2.0 Client ID**. You may have to configure the OAuth consent screen first.
 6. Choose **"Web Application"** and set:
   * Name: "Sponsorkit OAuth" (or any name you want to use)
   * Authorized Redirect URIs: Add **"http://localhost"** (this doesn't matter and won't be called)
 7. Click **Create**, then save your **Client ID** and **Client Secret**.
 
-Now that you have the oAuth credentials, we need to fetch the refresh token once.
-First, we need to get an Auth Code from the Google OAuth 2.0 Playground. As scope, use the **YouTube Data API v3** → `https://www.googleapis.com/auth/youtube.channel.memberships.creator`, as this is the only information that sponsorkit will request.
+Next, you might have to publish your application. To do so, navigate to **APIs & Services** → **OAuth consent screen** and click **Publish app**.
 
-After obtaining the auth code, you can run the following terminal command, which will send a POST request to the Google OAuth2 API to get the refresh token.
-Please make sure to **replace the placeholders with your actual credentials**:
+Now that you have the oAuth credentials, we need to get a refresh token.
+To do so, open [the Google OAuth 2.0 Playground](https://developers.google.com/oauthplayground/). As scope, use the **YouTube Data API v3** → `https://www.googleapis.com/auth/youtube.channel.memberships.creator`, as this is the only information that sponsorkit will request. Now open the settings panel on the top right via the cog wheel and tick "Use your own OAuth credentials". Enter the **Client ID** and **Client Secret** you obtained earlier. Click "Close" and then "Authorize APIs". You will be redirected to the Google OAuth consent screen. Click "Allow" to grant the permissions. You will be redirected back to the OAuth 2.0 Playground. Now click "Exchange authorization code for tokens". This will give you the **refresh token**.
 
-```bash
-curl -d "client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&redirect_uri=http://localhost&grant_type=authorization_code&code=YOUR_AUTH_CODE" https://oauth2.googleapis.com/token
-```
-
-**Last but not least, make sure to save the resulting `refresh_token` as env variable.**
+**Now, save the refresh token as SPONSORKIT_YOUTUBE_REFRESH_TOKEN env variable.**
 
 ## License
 
