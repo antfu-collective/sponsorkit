@@ -239,7 +239,7 @@ export default defineConfig({
 
 Fetching YouTube members requires OAuth2 authentication and a refresh token. You can follow the steps below to get the required credentials:
 
-1. Go to the Google Cloud Console.
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/).
 2. Select an existing project or create a new one.
 3. Enable the **YouTube Data API v3** under **APIs & Services**.
 4. Navigate to **APIs & Services** → **Credentials**.
