@@ -75,7 +75,7 @@ export const outputFormats = ['svg', 'png', 'webp', 'json'] as const
 
 export type OutputFormat = typeof outputFormats[number]
 
-export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar' | 'liberapay'
+export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar' | 'liberapay' | 'youtube'
 
 export type GitHubAccountType = 'user' | 'organization'
 
@@ -112,6 +112,31 @@ export interface ProvidersConfig {
      * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
      */
     token?: string
+  }
+  youtube?: {
+    /**
+     * Your OAuth client ID from Google's OAuth 2 process (see README.md).
+     *
+     * Will read from `SPONSORKIT_YOUTUBE_CLIENT_ID` environment variable if not set.
+     *
+     */
+    clientId?: string
+    /**
+     * Your OAuth client secret from Google's OAuth 2 process (see README.md).
+     *
+     * Will read from `SPONSORKIT_YOUTUBE_CLIENT_SECRET` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+     */
+    clientSecret?: string
+    /**
+     * Refresh key obtained via Google's OAuth 2 process (see README.md).
+     *
+     * Will read from `SPONSORKIT_YOUTUBE_REFRESH_TOKEN` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+     */
+    refreshToken?: string
   }
   opencollective?: {
     /**

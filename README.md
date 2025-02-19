@@ -55,6 +55,11 @@ SPONSORKIT_POLAR_ORGANIZATION=
 ; Liberapay provider.
 ; The name of the profile.
 SPONSORKIT_LIBERAPAY_LOGIN=
+
+; YouTube provider
+SPONSORKIT_YOUTUBE_CLIENT_ID=
+SPONSORKIT_YOUTUBE_CLIENT_SECRET=
+SPONSORKIT_YOUTUBE_REFRESH_TOKEN=
 ```
 
 > Only one provider is required to be configured.
@@ -93,6 +98,9 @@ export default defineConfig({
     // ...
   },
   liberapay: {
+    // ...
+  },
+  youtube: {
     // ...
   },
 
@@ -224,6 +232,34 @@ export default defineConfig({
   ],
 })
 ```
+
+## Provider Notes
+
+### YouTube
+
+Fetching YouTube members requires OAuth2 authentication and a refresh token. You can follow the steps below to get the required credentials:
+
+1. Go to the Google Cloud Console.
+2. Select an existing project or create a new one.
+3. Enable the **YouTube Data API v3** under **APIs & Services**.
+4. Navigate to **APIs & Services** → **Credentials**.
+5. **Click Create Credentials** → **OAuth 2.0 Client ID**.
+6. Choose **"Web Application"** and set:
+  * Name: "Sponsorkit OAuth" (or any name you want to use)
+  * Authorized Redirect URIs: Add **"http://localhost"** (this doesn't matter and won't be called)
+7. Click **Create**, then save your **Client ID** and **Client Secret**.
+
+Now that you have the oAuth credentials, we need to fetch the refresh token once.
+First, we need to get an Auth Code from the Google OAuth 2.0 Playground. As scope, use the **YouTube Data API v3** → `https://www.googleapis.com/auth/youtube.channel.memberships.creator`, as this is the only information that sponsorkit will request.
+
+After obtaining the auth code, you can run the following terminal command, which will send a POST request to the Google OAuth2 API to get the refresh token.
+Please make sure to ***r*eplace the placeholders with your actual credentials**:
+
+```bash
+curl -d "client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&redirect_uri=http://localhost&grant_type=authorization_code&code=YOUR_AUTH_CODE" https://oauth2.googleapis.com/token
+```
+
+**Last but not least, make sure to save the resulting `refresh_token` as env variable.**
 
 ## License
 

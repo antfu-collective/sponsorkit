@@ -40,6 +40,11 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     liberapay: {
       login: process.env.SPONSORKIT_LIBERAPAY_LOGIN || process.env.LIBERAPAY_LOGIN,
     },
+    youtube: {
+      clientId: process.env.SPONSORKIT_YOUTUBE_CLIENT_ID || process.env.YOUTUBE_CLIENT_ID,
+      clientSecret: process.env.SPONSORKIT_YOUTUBE_CLIENT_SECRET || process.env.YOUTUBE_CLIENT_SECRET,
+      refreshToken: process.env.SPONSORKIT_YOUTUBE_REFRESH_TOKEN || process.env.YOUTUBE_REFRESH_TOKEN,
+    },
     outputDir: process.env.SPONSORKIT_DIR,
   }
 
