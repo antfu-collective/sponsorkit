@@ -253,7 +253,7 @@ Now that you have the oAuth credentials, we need to fetch the refresh token once
 First, we need to get an Auth Code from the Google OAuth 2.0 Playground. As scope, use the **YouTube Data API v3** → `https://www.googleapis.com/auth/youtube.channel.memberships.creator`, as this is the only information that sponsorkit will request.
 
 After obtaining the auth code, you can run the following terminal command, which will send a POST request to the Google OAuth2 API to get the refresh token.
-Please make sure to ***r*eplace the placeholders with your actual credentials**:
+Please make sure to **replace the placeholders with your actual credentials**:
 
 ```bash
 curl -d "client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET&redirect_uri=http://localhost&grant_type=authorization_code&code=YOUR_AUTH_CODE" https://oauth2.googleapis.com/token
