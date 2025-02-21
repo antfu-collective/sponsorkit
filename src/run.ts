@@ -260,11 +260,6 @@ export async function applyRenderer(
   const logPrefix = c.dim`[${renderOptions.name}]`
   const dir = resolve(process.cwd(), config.outputDir)
   await fsp.mkdir(dir, { recursive: true })
-  if (renderOptions.formats?.includes('json')) {
-    const path = join(dir, `${renderOptions.name}.json`)
-    await fsp.writeFile(path, JSON.stringify(sponsors, null, 2))
-    t.success(`${logPrefix} Wrote to ${r(path)}`)
-  }
 
   if (renderOptions.filter)
     sponsors = sponsors.filter(s => renderOptions.filter(s, sponsors) !== false)
@@ -273,8 +268,6 @@ export async function applyRenderer(
 
   if (!renderOptions.imageFormat)
     renderOptions.imageFormat = 'webp'
-
-  t.info(`${logPrefix} Composing SVG...`)
 
   const processingSvg = (async () => {
     let svgWebp = await renderer.renderSVG(renderOptions, sponsors)
@@ -297,8 +290,13 @@ export async function applyRenderer(
 
         let data: string | Buffer
 
-        if (format === 'svg' || format === 'json') {
+        if (format === 'svg') {
+          t.info(`${logPrefix} Composing SVG...`)
           data = await processingSvg
+        }
+
+        if (format ==='json') {
+          data = JSON.stringify(sponsors, null, 2)
         }
 
         if (format === 'png' || format === 'webp') {
