@@ -295,7 +295,7 @@ export async function applyRenderer(
           data = await processingSvg
         }
 
-        if (format ==='json') {
+        if (format === 'json') {
           data = JSON.stringify(sponsors, null, 2)
         }
 
