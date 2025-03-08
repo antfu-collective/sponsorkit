@@ -11,33 +11,18 @@ importers:
 
   .:
     dependencies:
-      '@antfu/utils':
-        specifier: ^9.1.0
-        version: 9.1.0
-      '@fast-csv/parse':
-        specifier: ^5.0.2
-        version: 5.0.2
       ansis:
         specifier: ^3.17.0
         version: 3.17.0
       consola:
         specifier: ^3.4.0
         version: 3.4.0
-      d3-hierarchy:
-        specifier: ^3.1.2
-        version: 3.1.2
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
-      normalize-url:
-        specifier: ^8.0.1
-        version: 8.0.1
       ofetch:
         specifier: ^1.4.1
         version: 1.4.1
-      p-limit:
-        specifier: ^6.2.0
-        version: 6.2.0
       sharp:
         specifier: ^0.33.5
         version: 0.33.5
@@ -54,6 +39,12 @@ importers:
       '@antfu/ni':
         specifier: ^23.3.1
         version: 23.3.1
+      '@antfu/utils':
+        specifier: ^9.1.0
+        version: 9.1.0
+      '@fast-csv/parse':
+        specifier: ^5.0.2
+        version: 5.0.2
       '@types/d3-hierarchy':
         specifier: ^3.1.7
         version: 3.1.7
@@ -66,6 +57,9 @@ importers:
       bumpp:
         specifier: ^10.0.3
         version: 10.0.3
+      d3-hierarchy:
+        specifier: ^3.1.2
+        version: 3.1.2
       eslint:
         specifier: ^9.22.0
         version: 9.22.0(jiti@2.4.2)
@@ -75,6 +69,12 @@ importers:
       jiti:
         specifier: ^2.4.2
         version: 2.4.2
+      normalize-url:
+        specifier: ^8.0.1
+        version: 8.0.1
+      p-limit:
+        specifier: ^6.2.0
+        version: 6.2.0
       typescript:
         specifier: ^5.8.2
         version: 5.8.2

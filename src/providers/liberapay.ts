@@ -1,5 +1,4 @@
 import type { Provider, Sponsorship } from '../types'
-import { parseString } from '@fast-csv/parse'
 import { $fetch } from 'ofetch'
 
 export const LiberapayProvider: Provider = {
@@ -41,6 +40,8 @@ export async function fetchLiberapaySponsors(login?: string): Promise<Sponsorshi
   const csvUrl = `https://liberapay.com/${login}/patrons/public.csv`
   const csvResponse = await $fetch<string>(csvUrl)
   const rows: LiberapayRow[] = []
+
+  const { parseString } = await import('@fast-csv/parse')
   await new Promise((resolve) => {
     parseString(csvResponse, {
       headers: true,
