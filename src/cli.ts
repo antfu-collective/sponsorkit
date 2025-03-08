@@ -1,64 +1,33 @@
 import type { SponsorkitConfig } from './types'
-import process from 'node:process'
-import yargs from 'yargs'
+import cac from 'cac'
 import { version } from '../package.json'
 import { run } from './run'
 
-const cli = yargs(process.argv.slice(2))
-  .scriptName('sponsors-svg')
-  .usage('$0 [args]')
+const cli = cac('sponsors-svg')
   .version(version)
-  .strict()
-  .showHelpOnFail(false)
-  .alias('h', 'help')
-  .alias('v', 'version')
+  .help()
 
-cli.command(
-  '*',
-  'Generate',
-  args => args
-    .option('width', {
-      alias: 'w',
-      type: 'number',
-      default: 800,
-    })
-    .option('fallbackAvatar', {
-      type: 'string',
-      alias: 'fallback',
-    })
-    .option('force', {
-      alias: 'f',
-      default: false,
-      type: 'boolean',
-    })
-    .option('name', {
-      type: 'string',
-    })
-    .option('filter', {
-      type: 'string',
-    })
-    .option('outputDir', {
-      type: 'string',
-      alias: ['o', 'dir'],
-    })
-    .strict()
-    .help(),
-  async (options) => {
+cli
+  .command('[outputDir]', 'Generate sponsors SVG')
+  .option('--width, -w <width>', 'SVG width', { default: 800 })
+  .option('--fallback-avatar, --fallback <url>', 'Fallback avatar URL')
+  .option('--force, -f', 'Force regeneration', { default: false })
+  .option('--name <name>', 'Name')
+  .option('--filter <filter>', 'Filter sponsors')
+  .option('--output-dir, -o, --dir <dir>', 'Output directory')
+  .action(async (outputDir: string, options) => {
     const config = options as SponsorkitConfig
 
-    if (options._[0])
-      config.outputDir = options._[0] as string
+    if (outputDir)
+      config.outputDir = outputDir
 
     if (options.filter)
       config.filter = createFilterFromString(options.filter)
 
     await run(config)
-  },
-)
+  })
 
-cli
-  .help()
-  .parse()
+cli.parse()
 
 /**
  * Create filter function from templates like
