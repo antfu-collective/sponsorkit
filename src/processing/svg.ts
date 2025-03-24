@@ -10,7 +10,7 @@ export function genSvgImage(
   base64Image: string,
   imageFormat: ImageFormat,
 ) {
-  const cropId = `c${crypto.createHash('md5').update(base64Image).digest('hex').slice(0, 8)}`
+  const cropId = `c${crypto.createHash('md5').update(base64Image).digest('hex').slice(0, 6)}`
   return `
   <clipPath id="${cropId}">
     <rect x="${x}" y="${y}" width="${size}" height="${size}" rx="${size * radius}" ry="${size * radius}" />
