@@ -1,7 +1,7 @@
-import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
+import crypto from 'node:crypto'
 import { resizeImage } from './image'
+import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
 
-let id = 0
 export function genSvgImage(
   x: number,
   y: number,
@@ -10,7 +10,7 @@ export function genSvgImage(
   base64Image: string,
   imageFormat: ImageFormat,
 ) {
-  const cropId = `c${id++}`
+  const cropId = `c${crypto.createHash('md5').update(base64Image).digest('hex').slice(0, 8)}`
   return `
   <clipPath id="${cropId}">
     <rect x="${x}" y="${y}" width="${size}" height="${size}" rx="${size * radius}" ry="${size * radius}" />
