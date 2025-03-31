@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Sponsorship } from '../../src/types'
+import type { Sponsorship } from 'sponsorkit'
 import data from '../../sponsorkit/sponsors.json'
 
 const sponsors = data as any as Sponsorship[]
