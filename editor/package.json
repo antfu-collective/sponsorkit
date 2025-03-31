@@ -14,6 +14,8 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
     "@vue/tsconfig": "^0.7.0",
+    "opencc": "^1.1.8",
+    "simplecc-wasm": "^1.1.0",
     "sponsorkit": "workspace:*",
     "typescript": "~5.7.2",
     "unocss": "66.1.0-beta.7",

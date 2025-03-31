@@ -9,4 +9,7 @@ export default defineConfig({
     UnoCSS(),
 
   ],
+  optimizeDeps: {
+    exclude: ['simplecc-wasm'],
+  },
 })
