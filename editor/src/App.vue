@@ -9,7 +9,7 @@ const sponsors = data as any as Sponsorship[]
 <template>
   <div relative w-1526px>
     <img src="/frame.png" alt="Lamp" w-1526px>
-    <div flex="~ cols-10 wrap gap-x-6px gap-y-24px" absolute inset-0 pl-172px pt-246px pr-100px>
+    <div flex="~ cols-10 wrap gap-x-6px gap-y-24px" absolute inset-0 pl-172px pr-100px pt-246px>
       <div v-for="sponsor of sponsors" :key="sponsor.sponsor.login">
         <Lamp :sponsor />
       </div>
