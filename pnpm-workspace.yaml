@@ -1,5 +1,5 @@
 packages:
   - example
-  - playground
+  - editor
 onlyBuiltDependencies:
   - esbuild

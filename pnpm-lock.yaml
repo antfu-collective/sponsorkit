@@ -85,13 +85,7 @@ importers:
         specifier: ^3.0.8
         version: 3.0.8(@types/debug@4.1.12)(@types/node@22.13.10)(jiti@2.4.2)(tsx@4.19.3)(yaml@2.7.0)
 
-  example:
-    devDependencies:
-      sponsorkit:
-        specifier: workspace:*
-        version: link:..
-
-  playground:
+  editor:
     dependencies:
       vue:
         specifier: ^3.5.13
@@ -112,6 +106,12 @@ importers:
       vue-tsc:
         specifier: ^2.2.4
         version: 2.2.8(typescript@5.7.3)
+
+  example:
+    devDependencies:
+      sponsorkit:
+        specifier: workspace:*
+        version: link:..
 
 packages:
 
