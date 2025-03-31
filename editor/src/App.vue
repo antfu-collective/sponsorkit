@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import type { Sponsorship } from '../../src/types'
 import data from '../../sponsorkit/sponsors.json'
-// import {} from
 
-// const sponsors = data as Sponsor
+const sponsors = data as any as Sponsorship[]
 </script>
 
 <template>
-  <div>{{ data }}</div>
+  <div v-for="sponsor of sponsors" :key="sponsor.sponsor.login">
+    {{ sponsor.sponsor.name }}
+  </div>
 </template>
