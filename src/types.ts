@@ -170,7 +170,7 @@ export interface ProvidersConfig {
      *
      * @default 6.5
      */
-    exechangeRate?: number
+    exchangeRate?: number
     /**
      * Include one-time purchases
      * @default true
