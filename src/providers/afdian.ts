@@ -88,7 +88,7 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
       // all_sum_amount is based on cny
       monthlyDollars: isExpired
         ? -1
-        : Number.parseFloat(raw.all_sum_amount) / exechangeRate,
+        : Number.parseFloat(raw.current_plan.show_price) / exechangeRate,
       privacyLevel: 'PUBLIC',
       tierName: 'Afdian',
       createdAt: new Date(raw.first_pay_time * 1000).toISOString(),
