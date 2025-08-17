@@ -7,18 +7,35 @@ on:
 
 jobs:
   release:
+    runs-on: ubuntu-latest
     permissions:
       id-token: write
       contents: write
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.1.0
+
       - uses: actions/setup-node@v4
         with:
+          cache: pnpm
           node-version: lts/*
           registry-url: https://registry.npmjs.org/
-      - run: npx changelogithub
+
+      - run: pnpx changelogithub
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Update npm
+        run: npm install -g npm@latest
+
+      - name: Publish to NPM
+        run: pnpm publish --no-git-checks
