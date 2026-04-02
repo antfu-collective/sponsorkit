@@ -10,7 +10,7 @@ function getDeprecatedEnv(name: string, replacement: string) {
 }
 
 export function loadEnv(): Partial<SponsorkitConfig> {
-  dotenv.config()
+  dotenv.config({ quiet: true })
 
   const config: Partial<SponsorkitConfig> = {
     github: {
