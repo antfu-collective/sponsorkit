@@ -169,7 +169,7 @@ export default defineConfig({
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg">
-    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg'/>
+    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.svg' alt="Sponsors"/>
   </a>
 </p>
 
@@ -184,7 +184,7 @@ export default defineConfig({
 
 <p align="center">
   <a href="https://cdn.jsdelivr.net/gh/antfu/static/sponsors.circles.svg">
-    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.circles.svg'/>
+    <img src='https://cdn.jsdelivr.net/gh/antfu/static/sponsors.circles.svg' alt="Sponsors"/>
   </a>
 </p>
 

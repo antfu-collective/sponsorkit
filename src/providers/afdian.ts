@@ -29,7 +29,7 @@ export async function fetchAfdianSponsors(options: SponsorkitConfig['afdian'] = 
   let pages = 1
   do {
     const params = JSON.stringify({ page })
-    const ts = Math.round(+new Date() / 1000)
+    const ts = Math.round(Date.now() / 1000)
     const sign = md5(token, params, ts, userId)
     const sponsorshipData = await $fetch(sponsorshipApi, {
       method: 'POST',

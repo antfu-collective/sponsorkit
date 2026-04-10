@@ -382,11 +382,13 @@ function getBestUrl(socialLinks: SocialLink[]): string | undefined {
   return urls[0]
 }
 
+const RE_GITHUB_URL = /github\.com\/([^/]*)/
+
 function getSocialLogins(socialLinks: SocialLink[] = [], opencollectiveLogin: string): Record<string, string> {
   const socialLogins: Record<string, string> = {}
   for (const link of socialLinks) {
     if (link.type === 'GITHUB') {
-      const login = link.url.match(/github\.com\/([^/]*)/)?.[1]
+      const login = link.url.match(RE_GITHUB_URL)?.[1]
       if (login)
         socialLogins.github = login
     }

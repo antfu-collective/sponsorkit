@@ -29,6 +29,8 @@ cli
 
 cli.parse()
 
+const RE_FILTER = /([<>=]+)(\d+)/
+
 /**
  * Create filter function from templates like
  * - `<10`
@@ -36,7 +38,7 @@ cli.parse()
  * @param template
  */
 function createFilterFromString(template: string): SponsorkitConfig['filter'] {
-  const [_, op, value] = template.split(/([<>=]+)/)
+  const [_, op, value] = template.split(RE_FILTER)
   const num = Number.parseInt(value)
   if (op === '<')
     return s => s.monthlyDollars < num

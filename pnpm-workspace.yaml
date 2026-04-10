@@ -1,8 +1,10 @@
+ignoreWorkspaceRootCheck: true
+shellEmulator: true
+trustPolicy: no-downgrade
+
 packages:
   - example
 
 onlyBuiltDependencies:
   - esbuild
   - sharp
-
-ignoreWorkspaceRootCheck: true
