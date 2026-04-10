@@ -165,7 +165,7 @@ function createSponsorFromOrder(order: any): [string, Sponsorship] | undefined {
     monthlyDollars,
     privacyLevel: order.fromAccount.isIncognito ? 'PRIVATE' : 'PUBLIC',
     tierName: order.tier?.name,
-    createdAt: order.frequency === 'ONETIME' ? order.createdAt : order.order?.createdAt,
+    createdAt: order.createdAt,
     raw: order,
   }
 
@@ -268,6 +268,7 @@ function makeTransactionsQuery(
             tier {
               name
             }
+            createdAt
             amount {
               value
             }
@@ -320,7 +321,6 @@ function makeSubscriptionsQuery(
           totalDonations {
             value
           }
-          createdAt
           fromAccount {
             name
             id
