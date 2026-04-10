@@ -4,6 +4,11 @@ import { $fetch } from 'ofetch'
 export const LiberapayProvider: Provider = {
   name: 'liberapay',
   fetchSponsors(config) {
+    if (config.mode === 'sponsees') {
+      console.warn('[sponsorkit] Liberapay provider does not support `mode: "sponsees"` yet')
+      return Promise.resolve([])
+    }
+
     return fetchLiberapaySponsors(config.liberapay?.login)
   },
 }

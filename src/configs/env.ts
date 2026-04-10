@@ -13,6 +13,7 @@ export function loadEnv(): Partial<SponsorkitConfig> {
   dotenv.config({ quiet: true })
 
   const config: Partial<SponsorkitConfig> = {
+    mode: process.env.SPONSORKIT_MODE as SponsorkitConfig['mode'] | undefined,
     github: {
       login: process.env.SPONSORKIT_GITHUB_LOGIN || process.env.GITHUB_LOGIN || getDeprecatedEnv('SPONSORKIT_LOGIN', 'SPONSORKIT_GITHUB_LOGIN'),
       token: process.env.SPONSORKIT_GITHUB_TOKEN || process.env.GITHUB_TOKEN || getDeprecatedEnv('SPONSORKIT_TOKEN', 'SPONSORKIT_GITHUB_TOKEN'),

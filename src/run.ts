@@ -34,14 +34,19 @@ export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
   const fullConfig = await loadConfig(inlineConfig)
   const config = fullConfig as Required<SponsorkitMainConfig>
   const dir = resolve(process.cwd(), config.outputDir)
-  const cacheFile = resolve(dir, config.cacheFile)
+  const cacheFile = resolve(
+    dir,
+    config.mode === 'sponsees'
+      ? config.cacheFileSponsees
+      : config.cacheFile,
+  )
 
   const providers = resolveProviders(config.providers || guessProviders(config))
 
   if (config.renders?.length) {
     const names = new Set<string>()
     config.renders.forEach((renderOptions, idx) => {
-      const name = renderOptions.name || 'sponsors'
+      const name = renderOptions.name || fullConfig.name || fullConfig.mode
       if (names.has(name))
         throw new Error(`Duplicate render name: ${name} at index ${idx}`)
       names.add(name)

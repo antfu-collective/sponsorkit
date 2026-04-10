@@ -10,6 +10,18 @@ interface SocialLink {
 export const OpenCollectiveProvider: Provider = {
   name: 'opencollective',
   fetchSponsors(config) {
+    if (config.mode === 'sponsees') {
+      const slug = config.opencollective?.slug || config.opencollective?.id
+      return fetchOpenCollectiveSponsors(
+        config.opencollective?.key,
+        undefined,
+        slug,
+        config.opencollective?.githubHandle,
+        true,
+        true,
+      )
+    }
+
     return fetchOpenCollectiveSponsors(
       config.opencollective?.key,
       config.opencollective?.id,
@@ -29,40 +41,43 @@ export async function fetchOpenCollectiveSponsors(
   slug?: string,
   githubHandle?: string,
   includePastSponsors?: boolean,
+  sponseesMode = false,
 ): Promise<Sponsorship[]> {
   if (!key)
     throw new Error('OpenCollective api key is required')
   if (!slug && !id && !githubHandle)
     throw new Error('OpenCollective collective id or slug or GitHub handle is required')
+  includePastSponsors ||= sponseesMode
 
   const sponsors: any[] = []
   const monthlyTransactions: any[] = []
   let offset
-  offset = 0
+  if (!sponseesMode) {
+    offset = 0
+    do {
+      const query = makeSubscriptionsQuery(id, slug, githubHandle, offset, !includePastSponsors)
+      const data = await $fetch(API, {
+        method: 'POST',
+        body: { query },
+        headers: {
+          'Api-Key': `${key}`,
+          'Content-Type': 'application/json',
+        },
+      }) as any
+      const nodes = data.data.account.orders.nodes
+      const totalCount = data.data.account.orders.totalCount
 
-  do {
-    const query = makeSubscriptionsQuery(id, slug, githubHandle, offset, !includePastSponsors)
-    const data = await $fetch(API, {
-      method: 'POST',
-      body: { query },
-      headers: {
-        'Api-Key': `${key}`,
-        'Content-Type': 'application/json',
-      },
-    }) as any
-    const nodes = data.data.account.orders.nodes
-    const totalCount = data.data.account.orders.totalCount
+      sponsors.push(...(nodes || []))
 
-    sponsors.push(...(nodes || []))
-
-    if ((nodes.length) !== 0) {
-      if (totalCount > offset + nodes.length)
-        offset += nodes.length
-      else
-        offset = undefined
-    }
-    else { offset = undefined }
-  } while (offset)
+      if ((nodes.length) !== 0) {
+        if (totalCount > offset + nodes.length)
+          offset += nodes.length
+        else
+          offset = undefined
+      }
+      else { offset = undefined }
+    } while (offset)
+  }
 
   offset = 0
   do {
@@ -70,7 +85,7 @@ export async function fetchOpenCollectiveSponsors(
     const dateFrom: Date | undefined = includePastSponsors
       ? undefined
       : new Date(now.getFullYear(), now.getMonth(), 1)
-    const query = makeTransactionsQuery(id, slug, githubHandle, offset, dateFrom)
+    const query = makeTransactionsQuery(id, slug, githubHandle, offset, dateFrom, undefined, sponseesMode)
     const data = await $fetch(API, {
       method: 'POST',
       body: { query },
@@ -97,8 +112,28 @@ export async function fetchOpenCollectiveSponsors(
     .filter((sponsorship): sponsorship is [string, Sponsorship] => sponsorship !== null)
 
   const monthlySponsorships: [string, Sponsorship][] = monthlyTransactions
-    .map(t => createSponsorFromTransaction(t, sponsorships.map(i => i[1].raw.id)))
+    .map(t => createSponsorFromTransaction(t, sponsorships.map(i => i[1].raw.id), sponseesMode))
     .filter((sponsorship): sponsorship is [string, Sponsorship] => sponsorship !== null && sponsorship !== undefined)
+
+  if (sponseesMode) {
+    const processed: Map<string, Sponsorship> = sponsorships
+      .concat(monthlySponsorships)
+      .reduce((map, [id, sponsor]) => {
+        const existingSponsor = map.get(id)
+        if (existingSponsor) {
+          existingSponsor.monthlyDollars += sponsor.monthlyDollars
+          existingSponsor.isOneTime = Boolean(existingSponsor.isOneTime && sponsor.isOneTime)
+          if (sponsor.createdAt && (!existingSponsor.createdAt || sponsor.createdAt.localeCompare(existingSponsor.createdAt) < 0))
+            existingSponsor.createdAt = sponsor.createdAt
+        }
+        else {
+          map.set(id, sponsor)
+        }
+        return map
+      }, new Map())
+
+    return Array.from(processed.values())
+  }
 
   const transactionsBySponsorId: Map<string, Sponsorship> = monthlySponsorships.reduce((map, [id, sponsor]) => {
     const existingSponsor = map.get(id)
@@ -172,8 +207,12 @@ function createSponsorFromOrder(order: any): [string, Sponsorship] | undefined {
   return [order.fromAccount.id, sponsor]
 }
 
-function createSponsorFromTransaction(transaction: any, excludeOrders: string[]): [string, Sponsorship] | undefined {
-  const slug = transaction.fromAccount.slug
+function createSponsorFromTransaction(transaction: any, excludeOrders: string[], sponseesMode = false): [string, Sponsorship] | undefined {
+  const account = sponseesMode ? transaction.toAccount : transaction.fromAccount
+  if (!account?.slug)
+    return undefined
+
+  const slug = account.slug
   if (slug === 'github-sponsors') // ignore github sponsors
     return undefined
 
@@ -181,7 +220,10 @@ function createSponsorFromTransaction(transaction: any, excludeOrders: string[])
     return undefined
 
   let monthlyDollars: number = transaction.amount.value
-  if (transaction.order?.status !== 'ACTIVE') {
+  if (sponseesMode) {
+    monthlyDollars = Math.abs(transaction.amount.value)
+  }
+  else if (transaction.order?.status !== 'ACTIVE') {
     const firstDayOfCurrentMonth = new Date(new Date().getUTCFullYear(), new Date().getUTCMonth(), 1)
     if (new Date(transaction.createdAt) < firstDayOfCurrentMonth)
       monthlyDollars = -1
@@ -195,23 +237,27 @@ function createSponsorFromTransaction(transaction: any, excludeOrders: string[])
 
   const sponsor: Sponsorship = {
     sponsor: {
-      name: transaction.fromAccount.name,
-      type: getAccountType(transaction.fromAccount.type),
+      name: account.name,
+      type: getAccountType(account.type),
       login: slug,
-      avatarUrl: transaction.fromAccount.imageUrl,
-      websiteUrl: normalizeUrl(getBestUrl(transaction.fromAccount.socialLinks)),
+      avatarUrl: account.imageUrl,
+      websiteUrl: normalizeUrl(getBestUrl(account.socialLinks || [])),
       linkUrl: `https://opencollective.com/${slug}`,
-      socialLogins: getSocialLogins(transaction.fromAccount.socialLinks, slug),
+      socialLogins: getSocialLogins(account.socialLinks || [], slug),
     },
     isOneTime: transaction.order?.frequency === 'ONETIME',
     monthlyDollars,
-    privacyLevel: transaction.fromAccount.isIncognito ? 'PRIVATE' : 'PUBLIC',
-    tierName: transaction.tier?.name,
-    createdAt: transaction.order?.frequency === 'ONETIME' ? transaction.createdAt : transaction.order?.createdAt,
+    privacyLevel: sponseesMode ? 'PUBLIC' : (account.isIncognito ? 'PRIVATE' : 'PUBLIC'),
+    tierName: transaction.order?.tier?.name || transaction.tier?.name,
+    createdAt: sponseesMode
+      ? transaction.createdAt
+      : transaction.order?.frequency === 'ONETIME'
+        ? transaction.createdAt
+        : transaction.order?.createdAt,
     raw: transaction,
   }
 
-  return [transaction.fromAccount.id, sponsor]
+  return [account.id || slug, sponsor]
 }
 
 /**
@@ -247,13 +293,16 @@ function makeTransactionsQuery(
   offset?: number,
   dateFrom?: Date,
   dateTo?: Date,
+  sponseesMode = false,
 ) {
   const accountQueryPartial = makeAccountQueryPartial(id, slug, githubHandle)
   const dateFromParam = dateFrom ? `, dateFrom: "${dateFrom.toISOString()}"` : ''
   const dateToParam = dateTo ? `, dateTo: "${dateTo.toISOString()}"` : ''
+  const type = sponseesMode ? 'DEBIT' : 'CREDIT'
+  const accountField = sponseesMode ? 'toAccount' : 'fromAccount'
   return graphql`{
     account(${accountQueryPartial}) {
-      transactions(limit: 1000, offset:${offset}, type: CREDIT ${dateFromParam} ${dateToParam}) {
+      transactions(limit: 1000, offset:${offset}, type: ${type} ${dateFromParam} ${dateToParam}) {
         offset
         limit
         totalCount
@@ -277,7 +326,7 @@ function makeTransactionsQuery(
           amount {
             value
           }
-          fromAccount {
+          ${accountField} {
             name
             id
             slug
