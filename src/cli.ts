@@ -3,6 +3,7 @@ import cac from 'cac'
 import { version } from '../package.json'
 import { run } from './run'
 
+const RE_FILTER = /([<>=]+)(\d+)/
 const cli = cac('sponsors-svg')
   .version(version)
   .help()
@@ -28,8 +29,6 @@ cli
   })
 
 cli.parse()
-
-const RE_FILTER = /([<>=]+)(\d+)/
 
 /**
  * Create filter function from templates like
