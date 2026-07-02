@@ -67,10 +67,10 @@ export async function fetchOpenCollectiveSponsors(
       if (errors?.length) {
         throw new Error(`OpenCollective subscriptions query errors: ${errors.map((e: Error) => e.message).join('; ')}`)
       }
-      const nodes = data.account.orders.nodes
+      const nodes = data.account.orders.nodes || []
       const totalCount = data.account.orders.totalCount
 
-      sponsors.push(...(nodes || []))
+      sponsors.push(...nodes)
 
       if ((nodes.length) !== 0) {
         if (totalCount > offset + nodes.length)
@@ -100,10 +100,10 @@ export async function fetchOpenCollectiveSponsors(
     if (errors?.length) {
       throw new Error(`OpenCollective transactions query errors: ${errors.map((e: Error) => e.message).join('; ')}`)
     }
-    const nodes = data.account.transactions.nodes
+    const nodes = data.account.transactions.nodes || []
     const totalCount = data.account.transactions.totalCount
 
-    monthlyTransactions.push(...(nodes || []))
+    monthlyTransactions.push(...nodes)
     if ((nodes.length) !== 0) {
       if (totalCount > offset + nodes.length)
         offset += nodes.length
