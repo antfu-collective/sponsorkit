@@ -56,16 +56,19 @@ export async function fetchOpenCollectiveSponsors(
     offset = 0
     do {
       const query = makeSubscriptionsQuery(id, slug, githubHandle, offset, !includePastSponsors)
-      const data = await $fetch(API, {
+      const { data, errors } = await $fetch(API, {
         method: 'POST',
         body: { query },
         headers: {
           'Api-Key': `${key}`,
           'Content-Type': 'application/json',
         },
-      }) as any
-      const nodes = data.data.account.orders.nodes
-      const totalCount = data.data.account.orders.totalCount
+      })
+      if (errors?.length) {
+        throw new Error(`OpenCollective subscriptions query errors: ${errors.map((e: Error) => e.message).join('; ')}`)
+      }
+      const nodes = data.account.orders.nodes
+      const totalCount = data.account.orders.totalCount
 
       sponsors.push(...(nodes || []))
 
@@ -86,16 +89,19 @@ export async function fetchOpenCollectiveSponsors(
       ? undefined
       : new Date(now.getFullYear(), now.getMonth(), 1)
     const query = makeTransactionsQuery(id, slug, githubHandle, offset, dateFrom, undefined, sponseesMode)
-    const data = await $fetch(API, {
+    const { data, errors } = await $fetch(API, {
       method: 'POST',
       body: { query },
       headers: {
         'Api-Key': `${key}`,
         'Content-Type': 'application/json',
       },
-    }) as any
-    const nodes = data.data.account.transactions.nodes
-    const totalCount = data.data.account.transactions.totalCount
+    })
+    if (errors?.length) {
+      throw new Error(`OpenCollective transactions query errors: ${errors.map((e: Error) => e.message).join('; ')}`)
+    }
+    const nodes = data.account.transactions.nodes
+    const totalCount = data.account.transactions.totalCount
 
     monthlyTransactions.push(...(nodes || []))
     if ((nodes.length) !== 0) {
