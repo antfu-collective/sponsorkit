@@ -1,5 +1,4 @@
 import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
-import crypto from 'node:crypto'
 import { resizeImage } from './image'
 
 export function genSvgImage(
@@ -9,8 +8,8 @@ export function genSvgImage(
   radius: number,
   base64Image: string,
   imageFormat: ImageFormat,
+  cropId: string,
 ) {
-  const cropId = `c${crypto.createHash('md5').update(base64Image).digest('hex').slice(0, 6)}`
   return `
   <clipPath id="${cropId}">
     <rect x="${x}" y="${y}" width="${size}" height="${size}" rx="${size * radius}" ry="${size * radius}" />
@@ -25,6 +24,7 @@ export async function generateBadge(
   preset: BadgePreset,
   radius: number,
   imageFormat: ImageFormat,
+  cropId: string,
 ) {
   const { login } = sponsor
   let name = (sponsor.name || sponsor.login).trim()
@@ -55,15 +55,20 @@ export async function generateBadge(
   ${preset.name
     ? `<text x="${x + size / 2}" y="${y + size + 18}" text-anchor="middle" class="${preset.name.classes || 'sponsorkit-name'}" fill="${preset.name.color || 'currentColor'}">${encodeHtmlEntities(name)}</text>
   `
-    : ''}${genSvgImage(x, y, size, radius, avatarBase64, imageFormat)}
+    : ''}${genSvgImage(x, y, size, radius, avatarBase64, imageFormat, cropId)}
 </a>`.trim()
 }
 
 export class SvgComposer {
   height = 0
   body = ''
+  private cropId = 0
 
   constructor(public readonly config: Required<SponsorkitRenderOptions>) {}
+
+  getNextCropId() {
+    return `c${this.cropId++}`
+  }
 
   addSpan(height = 0) {
     this.height += height
@@ -92,7 +97,8 @@ export class SvgComposer {
         const x = offsetX + preset.boxWidth * i
         const y = this.height
         const radius = s.sponsor.type === 'Organization' ? 0.1 : 0.5
-        return await generateBadge(x, y, s.sponsor, preset, radius, this.config.imageFormat)
+        const cropId = this.getNextCropId()
+        return await generateBadge(x, y, s.sponsor, preset, radius, this.config.imageFormat, cropId)
       }))
 
     this.body += sponsorLine.join('\n')
