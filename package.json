@@ -50,7 +50,7 @@
     "consola": "^3.4.2",
     "dotenv": "^17.4.2",
     "ofetch": "^1.5.1",
-    "sharp": "^0.34.5",
+    "sharp": "^0.35.3",
     "unconfig": "^7.5.0"
   },
   "devDependencies": {
