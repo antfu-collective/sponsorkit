@@ -75,7 +75,7 @@ export const outputFormats = ['svg', 'png', 'webp', 'json'] as const
 
 export type OutputFormat = typeof outputFormats[number]
 
-export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar' | 'liberapay'
+export type ProviderName = 'github' | 'patreon' | 'opencollective' | 'afdian' | 'polar' | 'liberapay' | 'kofi'
 
 export type GitHubAccountType = 'user' | 'organization'
 export type SponsorshipMode = 'sponsors' | 'sponsees'
@@ -209,6 +209,38 @@ export interface ProvidersConfig {
      * Will read from `SPONSORKIT_LIBERAPAY_LOGIN` environment variable if not set.
      */
     login?: string
+  }
+
+  kofi?: {
+    /**
+     * Verification token included in Ko-fi webhook requests.
+     *
+     * Will read from `SPONSORKIT_KOFI_VERIFICATION_TOKEN` environment variable if not set.
+     *
+     * @deprecated It's not recommended set this value directly, pass from env or use `.env` file.
+     */
+    verificationToken?: string
+    /**
+     * Local event store populated by the `kofi-webhook` command.
+     *
+     * @default './sponsorkit/kofi-events.json'
+     */
+    dataFile?: string
+    /**
+     * Number of days one-time tips affect the current sponsorship tier.
+     * Set to 0 to keep them active indefinitely.
+     *
+     * @default 30
+     */
+    tipEffectivity?: number
+    /**
+     * Number of days after a subscription payment the membership is considered active.
+     * Ko-fi does not send an event when a membership ends.
+     * Set to 0 to keep subscriptions active indefinitely.
+     *
+     * @default 35
+     */
+    subscriptionEffectivity?: number
   }
 }
 

@@ -41,6 +41,10 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     liberapay: {
       login: process.env.SPONSORKIT_LIBERAPAY_LOGIN || process.env.LIBERAPAY_LOGIN,
     },
+    kofi: {
+      verificationToken: process.env.SPONSORKIT_KOFI_VERIFICATION_TOKEN || process.env.KOFI_VERIFICATION_TOKEN,
+      dataFile: process.env.SPONSORKIT_KOFI_DATA_FILE,
+    },
     outputDir: process.env.SPONSORKIT_DIR,
   }
 

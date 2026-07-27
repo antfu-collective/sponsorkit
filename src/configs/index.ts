@@ -56,6 +56,11 @@ export async function loadConfig(inlineConfig: SponsorkitConfig = {}): Promise<R
       ...config.afdian,
       ...inlineConfig.afdian,
     },
+    kofi: {
+      ...env.kofi,
+      ...config.kofi,
+      ...inlineConfig.kofi,
+    },
   } as Required<SponsorkitConfig>
 
   if (!['sponsors', 'sponsees'].includes(resolved.mode))

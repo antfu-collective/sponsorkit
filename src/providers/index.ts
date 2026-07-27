@@ -1,12 +1,14 @@
 import type { Provider, ProviderName, SponsorkitConfig } from '../types'
 import { AfdianProvider } from './afdian'
 import { GitHubProvider } from './github'
+import { KofiProvider } from './kofi'
 import { LiberapayProvider } from './liberapay'
 import { OpenCollectiveProvider } from './opencollective'
 import { PatreonProvider } from './patreon'
 import { PolarProvider } from './polar'
 
 export * from './github'
+export * from './kofi'
 
 export const ProvidersMap = {
   github: GitHubProvider,
@@ -15,6 +17,7 @@ export const ProvidersMap = {
   afdian: AfdianProvider,
   polar: PolarProvider,
   liberapay: LiberapayProvider,
+  kofi: KofiProvider,
 }
 
 export function guessProviders(config: SponsorkitConfig) {
@@ -36,6 +39,9 @@ export function guessProviders(config: SponsorkitConfig) {
 
   if (config.liberapay && config.liberapay.login)
     items.push('liberapay')
+
+  if (config.kofi && (config.kofi.verificationToken || config.kofi.dataFile))
+    items.push('kofi')
 
   // fallback
   if (!items.length)
