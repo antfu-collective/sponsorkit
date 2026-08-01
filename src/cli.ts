@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import type { SponsorkitConfig } from './types'
 import cac from 'cac'
 import { version } from '../package.json'

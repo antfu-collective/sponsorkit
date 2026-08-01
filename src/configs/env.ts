@@ -1,6 +1,5 @@
 import type { GitHubAccountType, SponsorkitConfig } from '../types'
 import process from 'node:process'
-import dotenv from 'dotenv'
 
 function getDeprecatedEnv(name: string, replacement: string) {
   const value = process.env[name]
@@ -10,7 +9,7 @@ function getDeprecatedEnv(name: string, replacement: string) {
 }
 
 export function loadEnv(): Partial<SponsorkitConfig> {
-  dotenv.config({ quiet: true })
+  process.loadEnvFile('.env')
 
   const config: Partial<SponsorkitConfig> = {
     mode: process.env.SPONSORKIT_MODE as SponsorkitConfig['mode'] | undefined,
