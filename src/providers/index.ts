@@ -1,12 +1,12 @@
-import type { Provider, ProviderName, SponsorkitConfig } from '../types'
-import { AfdianProvider } from './afdian'
-import { GitHubProvider } from './github'
-import { LiberapayProvider } from './liberapay'
-import { OpenCollectiveProvider } from './opencollective'
-import { PatreonProvider } from './patreon'
-import { PolarProvider } from './polar'
+import type { Provider, ProviderName, SponsorkitConfig } from '../types.ts'
+import { AfdianProvider } from './afdian.ts'
+import { GitHubProvider } from './github.ts'
+import { LiberapayProvider } from './liberapay.ts'
+import { OpenCollectiveProvider } from './opencollective.ts'
+import { PatreonProvider } from './patreon.ts'
+import { PolarProvider } from './polar.ts'
 
-export * from './github'
+export * from './github.ts'
 
 export const ProvidersMap = {
   github: GitHubProvider,

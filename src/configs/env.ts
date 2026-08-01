@@ -1,4 +1,4 @@
-import type { GitHubAccountType, SponsorkitConfig } from '../types'
+import type { GitHubAccountType, SponsorkitConfig } from '../types.ts'
 import process from 'node:process'
 
 function getDeprecatedEnv(name: string, replacement: string) {
@@ -9,7 +9,10 @@ function getDeprecatedEnv(name: string, replacement: string) {
 }
 
 export function loadEnv(): Partial<SponsorkitConfig> {
-  process.loadEnvFile('.env')
+  try {
+    process.loadEnvFile('.env')
+  }
+  catch {}
 
   const config: Partial<SponsorkitConfig> = {
     mode: process.env.SPONSORKIT_MODE as SponsorkitConfig['mode'] | undefined,

@@ -1,15 +1,15 @@
-import type { ImageFormat, SponsorkitConfig, Sponsorship } from '../types'
+import type { ImageFormat, SponsorkitConfig, Sponsorship } from '../types.ts'
 import { Buffer } from 'node:buffer'
 import { consola } from 'consola'
 import { $fetch } from 'ofetch'
 import sharp from 'sharp'
-import { version } from '../../package.json'
+import pkg from '../../package.json' with { type: 'json' }
 
 async function fetchImage(url: string) {
   const arrayBuffer = await $fetch(url, {
     responseType: 'arrayBuffer',
     headers: {
-      'User-Agent': `Mozilla/5.0 Chrome/124.0.0.0 Safari/537.36 Sponsorkit/${version}`,
+      'User-Agent': `Mozilla/5.0 Chrome/124.0.0.0 Safari/537.36 Sponsorkit/${pkg.version}`,
     },
   })
   return Buffer.from(arrayBuffer)

@@ -32,6 +32,10 @@
     "bin",
     "dist"
   ],
+  "engines": {
+    "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
+
+  },
   "scripts": {
     "build": "tsdown",
     "dev": "tsx src/cli.ts",
@@ -65,9 +69,6 @@
     "typescript": "^6.0.3",
     "vite": "^8.2.0",
     "vitest": "^4.1.10"
-  },
-  "resolutions": {
-    "sponsorkit": "workspace:*"
   },
   "inlinedDependencies": {
     "@antfu/utils": "9.3.0",
