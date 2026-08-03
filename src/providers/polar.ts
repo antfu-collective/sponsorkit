@@ -1,4 +1,4 @@
-import type { Provider, Sponsorship } from '../types'
+import type { Provider, Sponsorship } from '../types.ts'
 import { ofetch } from 'ofetch'
 
 export const PolarProvider: Provider = {

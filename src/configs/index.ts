@@ -1,12 +1,12 @@
-import type { SponsorkitConfig, Sponsorship, Tier, TierPartition } from '../types'
+import type { SponsorkitConfig, Sponsorship, Tier, TierPartition } from '../types.ts'
 import { loadConfig as _loadConfig } from 'unconfig'
-import { defaultConfig } from './defaults'
-import { loadEnv } from './env'
-import { FALLBACK_AVATAR } from './fallback'
+import { defaultConfig } from './defaults.ts'
+import { loadEnv } from './env.ts'
+import { FALLBACK_AVATAR } from './fallback.ts'
 
-export * from './defaults'
-export * from './fallback'
-export * from './tier-presets'
+export * from './defaults.ts'
+export * from './fallback.ts'
+export * from './tier-presets.ts'
 
 export function defineConfig(config: SponsorkitConfig): SponsorkitConfig {
   return config

@@ -1,6 +1,6 @@
-import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
+import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types.ts'
 import crypto from 'node:crypto'
-import { resizeImage } from './image'
+import { resizeImage } from './image.ts'
 
 export function genSvgImage(
   x: number,
@@ -63,7 +63,11 @@ export class SvgComposer {
   height = 0
   body = ''
 
-  constructor(public readonly config: Required<SponsorkitRenderOptions>) {}
+  readonly config: Required<SponsorkitRenderOptions>
+
+  constructor(config: Required<SponsorkitRenderOptions>) {
+    this.config = config
+  }
 
   addSpan(height = 0) {
     this.height += height

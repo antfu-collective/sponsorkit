@@ -1,5 +1,5 @@
 import type { Buffer } from 'node:buffer'
-import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderer, SponsorkitRenderOptions, SponsorMatcher, Sponsorship } from './types'
+import type { SponsorkitConfig, SponsorkitMainConfig, SponsorkitRenderer, SponsorkitRenderOptions, SponsorMatcher, Sponsorship } from './types.ts'
 import fs from 'node:fs'
 import fsp from 'node:fs/promises'
 import { dirname, join, relative, resolve } from 'node:path'
@@ -7,13 +7,13 @@ import process from 'node:process'
 import { notNullish } from '@antfu/utils'
 import c from 'ansis'
 import { consola } from 'consola'
-import { version } from '../package.json'
-import { parseCache, stringifyCache } from './cache'
-import { loadConfig } from './configs'
-import { resolveAvatars, svgToPng, svgToWebp } from './processing/image'
-import { guessProviders, resolveProviders } from './providers'
-import { builtinRenderers } from './renders'
-import { outputFormats } from './types'
+import pkg from '../package.json' with { type: 'json' }
+import { parseCache, stringifyCache } from './cache.ts'
+import { loadConfig } from './configs/index.ts'
+import { resolveAvatars, svgToPng, svgToWebp } from './processing/image.ts'
+import { guessProviders, resolveProviders } from './providers/index.ts'
+import { builtinRenderers } from './renders/index.ts'
+import { outputFormats } from './types.ts'
 
 export {
   tiersComposer as defaultComposer,
@@ -22,14 +22,14 @@ export {
 
   tiersComposer,
   tiersRenderer,
-} from './renders/tiers'
+} from './renders/tiers.ts'
 
 function r(path: string) {
   return `./${relative(process.cwd(), path)}`
 }
 
 export async function run(inlineConfig?: SponsorkitConfig, t = consola) {
-  t.log(`\n${c.magenta.bold`SponsorKit`} ${c.dim`v${version}`}\n`)
+  t.log(`\n${c.magenta.bold`SponsorKit`} ${c.dim`v${pkg.version}`}\n`)
 
   const fullConfig = await loadConfig(inlineConfig)
   const config = fullConfig as Required<SponsorkitMainConfig>

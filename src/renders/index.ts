@@ -1,5 +1,5 @@
-import { circlesRenderer } from './circles'
-import { tiersRenderer } from './tiers'
+import { circlesRenderer } from './circles.ts'
+import { tiersRenderer } from './tiers.ts'
 
 export const builtinRenderers = {
   tiers: tiersRenderer,

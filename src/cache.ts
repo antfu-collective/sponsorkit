@@ -1,4 +1,4 @@
-import type { Sponsorship } from './types'
+import type { Sponsorship } from './types.ts'
 import { Buffer } from 'node:buffer'
 
 export function stringifyCache(cache: Sponsorship[]): string {

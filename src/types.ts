@@ -1,5 +1,5 @@
 import type { Buffer } from 'node:buffer'
-import type { SvgComposer } from './processing/svg'
+import type { SvgComposer } from './processing/svg.ts'
 
 export type ImageFormat = 'png' | 'webp'
 

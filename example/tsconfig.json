@@ -1,0 +1,12 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "paths": {
+      "sponsorkit": [
+        "../src/index.ts"
+      ]
+    },
+    "declaration": false
+  },
+  "exclude": []
+}

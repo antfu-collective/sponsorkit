@@ -8,7 +8,7 @@ import {
   parseKofiWebhookBody,
   startKofiWebhookServer,
   storeKofiEvent,
-} from './kofi'
+} from './kofi.ts'
 
 const servers: Awaited<ReturnType<typeof startKofiWebhookServer>>[] = []
 

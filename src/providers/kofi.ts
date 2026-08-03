@@ -1,5 +1,5 @@
 import type { IncomingMessage, Server, ServerResponse } from 'node:http'
-import type { Provider, SponsorkitConfig, Sponsorship } from '../types'
+import type { Provider, SponsorkitConfig, Sponsorship } from '../types.ts'
 import { Buffer } from 'node:buffer'
 import { createHash, timingSafeEqual } from 'node:crypto'
 import { promises as fsp } from 'node:fs'
