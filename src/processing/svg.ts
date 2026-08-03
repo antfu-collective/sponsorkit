@@ -1,5 +1,5 @@
-import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types'
-import { resizeImage } from './image'
+import type { BadgePreset, ImageFormat, Sponsor, SponsorkitRenderOptions, Sponsorship } from '../types.ts'
+import { resizeImage } from './image.ts'
 
 export function genSvgImage(
   x: number,
@@ -64,7 +64,11 @@ export class SvgComposer {
   body = ''
   private cropId = 0
 
-  constructor(public readonly config: Required<SponsorkitRenderOptions>) {}
+  readonly config: Required<SponsorkitRenderOptions>
+
+  constructor(config: Required<SponsorkitRenderOptions>) {
+    this.config = config
+  }
 
   getNextCropId() {
     return `c${this.cropId++}`

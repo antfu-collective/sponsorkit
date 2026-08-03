@@ -1,4 +1,4 @@
-import type { Provider, SponsorkitConfig, Sponsorship } from '../types'
+import type { Provider, SponsorkitConfig, Sponsorship } from '../types.ts'
 import { createHash } from 'node:crypto'
 import { $fetch } from 'ofetch'
 

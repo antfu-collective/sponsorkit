@@ -12,6 +12,7 @@ Supports:
 - [**Afdian**](https://afdian.com/)
 - [**Polar**](https://polar.sh/)
 - [**Liberapay**](https://liberapay.com/)
+- [**Ko-fi**](https://ko-fi.com/)
 
 ## Usage
 
@@ -59,6 +60,12 @@ SPONSORKIT_POLAR_ORGANIZATION=
 ; Liberapay provider.
 ; The name of the profile.
 SPONSORKIT_LIBERAPAY_LOGIN=
+
+; Ko-fi provider.
+; Copy the verification token from https://ko-fi.com/manage/webhooks
+SPONSORKIT_KOFI_VERIFICATION_TOKEN=
+; Optional event store path populated by `sponsorkit kofi-webhook`.
+SPONSORKIT_KOFI_DATA_FILE=./sponsorkit/kofi-events.json
 ```
 
 > Only one provider is required to be configured.
@@ -102,6 +109,9 @@ export default defineConfig({
     // ...
   },
   liberapay: {
+    // ...
+  },
+  kofi: {
     // ...
   },
 
@@ -159,6 +169,31 @@ const sponsors = await fetchSponsors({
 ```
 
 Check the type definition or source code for more utils available.
+
+### Ko-fi Webhooks
+
+Ko-fi provides payment webhooks instead of an API for listing sponsors. Start the
+SponsorKit receiver:
+
+```bash
+npx sponsorkit kofi-webhook
+```
+
+Expose `http://127.0.0.1:3456/kofi` through an HTTPS tunnel, then set that public
+URL on the [Ko-fi webhooks page](https://ko-fi.com/manage/webhooks). SponsorKit
+verifies the webhook token, removes the token and email before persistence,
+deduplicates retries by `message_id`, and stores events in
+`./sponsorkit/kofi-events.json`.
+
+After Ko-fi sends a payment or test payment, generate the sponsor output normally:
+
+```bash
+npx sponsorkit --force
+```
+
+Ko-fi does not send an event when a membership ends. SponsorKit therefore treats
+subscription payments as active for 35 days by default. Configure
+`kofi.subscriptionEffectivity` to change this window.
 
 ### Renderers
 

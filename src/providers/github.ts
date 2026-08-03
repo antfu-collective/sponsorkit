@@ -1,6 +1,6 @@
-import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship, Tier } from '../types'
+import type { GitHubAccountType, Provider, SponsorkitConfig, Sponsorship, Tier } from '../types.ts'
 import { $fetch } from 'ofetch'
-import { normalizeUrl } from '../utils'
+import { normalizeUrl } from '../utils.ts'
 
 function getMonthDifference(startDate: Date, endDate: Date) {
   return (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth())

@@ -1,6 +1,6 @@
-import type { Provider, Sponsorship } from '../types'
+import type { Provider, Sponsorship } from '../types.ts'
 import { $fetch } from 'ofetch'
-import { normalizeUrl } from '../utils'
+import { normalizeUrl } from '../utils.ts'
 
 interface SocialLink {
   type: string

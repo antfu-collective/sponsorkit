@@ -1,6 +1,5 @@
-import type { GitHubAccountType, SponsorkitConfig } from '../types'
+import type { GitHubAccountType, SponsorkitConfig } from '../types.ts'
 import process from 'node:process'
-import dotenv from 'dotenv'
 
 function getDeprecatedEnv(name: string, replacement: string) {
   const value = process.env[name]
@@ -10,7 +9,10 @@ function getDeprecatedEnv(name: string, replacement: string) {
 }
 
 export function loadEnv(): Partial<SponsorkitConfig> {
-  dotenv.config({ quiet: true })
+  try {
+    process.loadEnvFile('.env')
+  }
+  catch {}
 
   const config: Partial<SponsorkitConfig> = {
     mode: process.env.SPONSORKIT_MODE as SponsorkitConfig['mode'] | undefined,
@@ -40,6 +42,10 @@ export function loadEnv(): Partial<SponsorkitConfig> {
     },
     liberapay: {
       login: process.env.SPONSORKIT_LIBERAPAY_LOGIN || process.env.LIBERAPAY_LOGIN,
+    },
+    kofi: {
+      verificationToken: process.env.SPONSORKIT_KOFI_VERIFICATION_TOKEN || process.env.KOFI_VERIFICATION_TOKEN,
+      dataFile: process.env.SPONSORKIT_KOFI_DATA_FILE,
     },
     outputDir: process.env.SPONSORKIT_DIR,
   }

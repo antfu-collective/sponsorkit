@@ -1,12 +1,14 @@
-import type { Provider, ProviderName, SponsorkitConfig } from '../types'
-import { AfdianProvider } from './afdian'
-import { GitHubProvider } from './github'
-import { LiberapayProvider } from './liberapay'
-import { OpenCollectiveProvider } from './opencollective'
-import { PatreonProvider } from './patreon'
-import { PolarProvider } from './polar'
+import type { Provider, ProviderName, SponsorkitConfig } from '../types.ts'
+import { AfdianProvider } from './afdian.ts'
+import { GitHubProvider } from './github.ts'
+import { KofiProvider } from './kofi.ts'
+import { LiberapayProvider } from './liberapay.ts'
+import { OpenCollectiveProvider } from './opencollective.ts'
+import { PatreonProvider } from './patreon.ts'
+import { PolarProvider } from './polar.ts'
 
-export * from './github'
+export * from './github.ts'
+export * from './kofi.ts'
 
 export const ProvidersMap = {
   github: GitHubProvider,
@@ -15,6 +17,7 @@ export const ProvidersMap = {
   afdian: AfdianProvider,
   polar: PolarProvider,
   liberapay: LiberapayProvider,
+  kofi: KofiProvider,
 }
 
 export function guessProviders(config: SponsorkitConfig) {
@@ -36,6 +39,9 @@ export function guessProviders(config: SponsorkitConfig) {
 
   if (config.liberapay && config.liberapay.login)
     items.push('liberapay')
+
+  if (config.kofi && (config.kofi.verificationToken || config.kofi.dataFile))
+    items.push('kofi')
 
   // fallback
   if (!items.length)

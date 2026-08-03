@@ -1,19 +1,19 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["esnext"],
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "paths": {
-      "sponsorkit": [
-        "./src/index.ts"
-      ]
-    },
+    "lib": ["es2024"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "resolveJsonModule": true,
+    "allowImportingTsExtensions": true,
     "strict": true,
     "strictNullChecks": true,
+    "declaration": true,
+    "noEmit": true,
     "esModuleInterop": true,
+    "erasableSyntaxOnly": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true
-  }
+  },
+  "exclude": ["example"]
 }
