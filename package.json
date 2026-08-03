@@ -39,7 +39,8 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsx src/cli.ts",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm run build",
