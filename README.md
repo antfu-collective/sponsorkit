@@ -29,8 +29,9 @@ SPONSORKIT_GITHUB_LOGIN=
 SPONSORKIT_MODE=sponsors
 
 ; Patreon provider.
-; Create v2 API key at https://www.patreon.com/portal/registration/register-clients
-; and use the "Creator’s Access Token".
+; Uses the Patreon API v2 (the v1 API was retired on 2026-10-07).
+; Register a v2 client at https://www.patreon.com/portal/registration/register-clients.
+; Uses the "Creator's Access Token", which carries every v2 scope.
 SPONSORKIT_PATREON_TOKEN=
 
 ; OpenCollective provider.
