@@ -8,11 +8,7 @@ export default defineConfig({
   deps: {
     onlyBundle: [
       '@antfu/utils',
-
       '@fast-csv/parse',
-      'lodash.escaperegexp',
-      'lodash.uniq',
-      'lodash.groupby',
     ],
   },
   exports: true,
