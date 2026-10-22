@@ -1,14 +1,15 @@
 ignoreWorkspaceRootCheck: true
-minimumReleaseAgeExclude:
-  - '@types/node@25.9.1'
-  - tsx@4.22.3
-shellEmulator: true
+minimumReleaseAgeExcludePrune: true
 trustPolicy: no-downgrade
+shellEmulator: true
+
 packages:
   - example
-onlyBuiltDependencies:
-  - esbuild
-  - sharp
+
 allowBuilds:
   esbuild: true
   sharp: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - sharp

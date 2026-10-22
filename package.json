@@ -34,7 +34,6 @@
   ],
   "engines": {
     "node": "^22.18.0 || ^24.11.0 || >=26.0.0"
-
   },
   "scripts": {
     "build": "tsdown",
@@ -47,35 +46,32 @@
     "release": "bumpp"
   },
   "dependencies": {
-    "ansis": "^4.3.1",
-    "cac": "^7.0.0",
+    "ansis": "^4.4.0",
+    "cac": "^7.1.0",
     "consola": "^3.4.2",
     "d3-hierarchy": "^3.1.2",
-    "normalize-url": "^9.0.1",
+    "normalize-url": "^10.0.0",
     "ofetch": "^1.5.1",
-    "p-limit": "^7.3.1",
-    "sharp": "^0.35.3",
+    "p-limit": "^7.3.3",
+    "sharp": "^0.35.5",
     "unconfig": "^7.5.0"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^9.2.0",
-    "@antfu/ni": "^30.3.0",
+    "@antfu/eslint-config": "^9.5.1",
+    "@antfu/ni": "^30.6.0",
     "@antfu/utils": "^9.3.0",
-    "@fast-csv/parse": "^5.0.7",
+    "@fast-csv/parse": "^5.0.8",
     "@types/d3-hierarchy": "^3.1.7",
-    "@types/node": "^26.1.2",
-    "bumpp": "^12.1.1",
-    "eslint": "^10.8.0",
-    "tsdown": "^0.22.14",
+    "@types/node": "^26.6.5",
+    "bumpp": "^12.3.0",
+    "eslint": "^10.13.0",
+    "tsdown": "^0.23.1",
     "typescript": "^6.0.3",
-    "vite": "^8.2.0",
-    "vitest": "^4.1.10"
+    "vite": "^8.3.4",
+    "vitest": "^5.0.5"
   },
   "inlinedDependencies": {
     "@antfu/utils": "9.3.0",
-    "@fast-csv/parse": "5.0.7",
-    "lodash.escaperegexp": "4.1.2",
-    "lodash.groupby": "4.6.0",
-    "lodash.uniq": "4.5.0"
+    "@fast-csv/parse": "5.0.8"
   }
 }
